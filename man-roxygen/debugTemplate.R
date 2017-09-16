@@ -1,8 +1,9 @@
 #' @param debug an integer specifying whether debugging information is
-#' to be printed during the processing. This is a general parameter that
-#' is used by many \code{oce} functions. Generally, setting \code{debug=0}
-#' turns off the printing, while higher values suggest that more information
-#' be printed. If one function calls another, it usually reduces the value of
-#' \code{debug} first, so that a user can often obtain deeper debugging
-#' by specifying higher \code{debug} values.
+#' to be printed during processing. The printing is done by
+#' a call to \code{\link{dacDebug}}.  Setting \code{debug=0}
+#' turns off this form of debugging, while higher values yield
+#' more information. If one \code{dac} function calls another, it
+#' passes the value of \code{debug} but decreased by 1, which means
+#' that the value of \code{debug} controls not just the breadth
+#' of debugging, but also the depth.
 
