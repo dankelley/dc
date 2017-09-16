@@ -4,8 +4,8 @@
 \alias{download.met}
 \title{Download and Cache a Meteorology File}
 \usage{
-download.met(id, year, month, deltat, destdir = "~/data/met", destfile,
-  debug = getOption("dacDebug"))
+download.met(id, year, month, deltat = "hour", destdir = ".", destfile,
+  force = FALSE, debug = getOption("dacDebug"))
 }
 \arguments{
 \item{id}{A number giving the "Station ID" of the station of interest. If not
@@ -25,13 +25,20 @@ If \code{deltat} is not given, it defaults to \code{"hour"}.}
 
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.}
+is stored in the present working directory.  It can be 
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
+to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
-If not supplied, the file name is constructed from the other
-parameters of the function call, so subsequent calls with the same
-parameters will yield the same result, thus providing the key
-to the caching scheme.}
+If not supplied, then the file name is constructed from the other
+parameters of the function call, so that subsequent calls with
+the same parameters will yield the same result; this is useful
+for caching.}
+
+\item{force}{A logical value that indicates whether to force the download,
+even if the pathname constructed from \code{destdir} and \code{destfile}
+already exists.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
@@ -47,6 +54,8 @@ String indicating the full pathname to the downloaded file.
 }
 \description{
 Data are downloaded from \url{http://climate.weather.gc.ca} and cached locally.
+Unless \code{force} is \code{TRUE}, data with identical filenames are not
+overwritten.
 }
 \details{
 The data are downloaded with \code{\link[utils]{download.file}}
@@ -81,7 +90,7 @@ many important metadata blank.
 library(dac)
 ## Download data for Halifax International Airport, in September
 ## of 2003. (This dataset is used for data(met) provided with oce.)
-metFile <- download.met(6358, 2003, 9, destdir=".")
+metFile <- download.met(6358, 2003, 9)
 library(oce)
 met <- read.met(metFile)
 plot(met)

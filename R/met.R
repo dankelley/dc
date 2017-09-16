@@ -1,8 +1,11 @@
 #' Download and Cache a Meteorology File
 #'
-#' Data are downloaded from \url{http://climate.weather.gc.ca} and cached locally.
+#' @description
+#'
+#' @template downloadIntroTemplate
 #'
 #' @details
+#'
 #' The data are downloaded with \code{\link[utils]{download.file}}
 #' pointed to the Environment Canada website [1]
 #' using queries that had to be devised by reverse-engineering, since the agency
@@ -45,7 +48,7 @@
 #' desired dataset. This may be \code{"hour"} or \code{"month"}.
 #' If \code{deltat} is not given, it defaults to \code{"hour"}.
 #'
-#' @template downloadDestTemplate
+#' @template downloadTemplate
 #'
 #' @template debugTemplate
 #'
@@ -58,7 +61,7 @@
 #' library(dac)
 #' ## Download data for Halifax International Airport, in September
 #' ## of 2003. (This dataset is used for data(met) provided with oce.)
-#' metFile <- download.met(6358, 2003, 9, destdir=".")
+#' metFile <- download.met(6358, 2003, 9)
 #' library(oce)
 #' met <- read.met(metFile)
 #' plot(met)
@@ -73,16 +76,13 @@
 #' 2. Gavin Simpon's \code{canadaHCD} package on GitHub
 #' \url{https://github.com/gavinsimpson/canadaHCD}
 #'
-#' @family functions that download files
-#' @family things related to \code{met} data
-download.met <- function(id, year, month, deltat, destdir="~/data/met", destfile,
+download.met <- function(id, year, month, deltat="hour",
+                         destdir=".", destfile, force=FALSE,
                          debug=getOption("dacDebug"))
 {
     if (missing(id))
-        id <- 6358
+        stop("must provide a station identifier, as the 'id' argument")
     id <- as.integer(id)
-    if (missing(deltat))
-        deltat <- "hour"
     deltatChoices <- c("hour", "month") # FIXME: add "day"
     deltatIndex <- pmatch(deltat, deltatChoices)
     if (is.na(deltatIndex))
