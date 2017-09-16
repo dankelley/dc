@@ -5,12 +5,10 @@
 \title{Download and Cache a Meteorology File}
 \usage{
 download.met(id, year, month, deltat = "hour", destdir = ".", destfile,
-  force = FALSE, debug = getOption("dacDebug"))
+  force = FALSE, debug = getOption("dacDebug", 0))
 }
 \arguments{
-\item{id}{A number giving the "Station ID" of the station of interest. If not
-provided, \code{id} defaults to 6358, for Halifax International Airport. See
-\dQuote{Details}.}
+\item{id}{A number giving the "Station ID" of the station of interest.}
 
 \item{year}{A number giving the year of interest. Ignored unless \code{deltat}
 is \code{"hour"}. If \code{year} is not given, it defaults to the present year.}
@@ -20,7 +18,7 @@ is \code{"hour"}. If \code{month} is not given, it defaults to the present
 month.}
 
 \item{deltat}{Optional character string indicating the time step of the
-desired dataset. This may be \code{"hour"} or \code{"month"}.
+desired dataset. Only \code{"hour"} or \code{"month"} are permitted.
 If \code{deltat} is not given, it defaults to \code{"hour"}.}
 
 \item{destdir}{Optional string indicating the directory in which to store
@@ -53,9 +51,10 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-Data are downloaded from \url{http://climate.weather.gc.ca} and cached locally.
-Unless \code{force} is \code{TRUE}, data with identical filenames are not
-overwritten.
+
+
+The data are downloaded, and a simple filename convention permits a caching scheme
+in which subsequent calls provide access to these downloaded data.
 }
 \details{
 The data are downloaded with \code{\link[utils]{download.file}}
@@ -76,7 +75,7 @@ Given these difficulties with Station ID, users are advised to consult
 the Environment Canada website [1] before downloading any data,
 and to check it from time to time
 during the course of a research project, to see if the Station ID has changed.
-Another approach would be to use Gavin Simpson's
+It can be very helpful to use Gavin Simpson's
 \code{canadaHCD} package [2] to look up Station IDs. This package maintains
 a copy of the Environment Canada listing of stations, and its
 \code{find_station} function provides an easy way to determine Station IDs.
@@ -87,10 +86,9 @@ many important metadata blank.
 }
 \examples{
 \dontrun{
-library(dac)
 ## Download data for Halifax International Airport, in September
-## of 2003. (This dataset is used for data(met) provided with oce.)
-metFile <- download.met(6358, 2003, 9)
+## of 2003. (This dataset is used for data(met) in the oce package.)
+metFile <- dac::download.met(6358, 2003, 9)
 library(oce)
 met <- read.met(metFile)
 plot(met)

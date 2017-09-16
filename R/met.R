@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' @template downloadIntroTemplate
+#' @template intro
 #'
 #' @details
 #'
@@ -24,7 +24,7 @@
 #' the Environment Canada website [1] before downloading any data,
 #' and to check it from time to time
 #' during the course of a research project, to see if the Station ID has changed.
-#' Another approach would be to use Gavin Simpson's
+#' It can be very helpful to use Gavin Simpson's
 #' \code{canadaHCD} package [2] to look up Station IDs. This package maintains
 #' a copy of the Environment Canada listing of stations, and its
 #' \code{find_station} function provides an easy way to determine Station IDs.
@@ -33,9 +33,7 @@
 #' \code{met} class with \code{\link{as.met}}, although doing so leaves
 #' many important metadata blank.
 #'
-#' @param id A number giving the "Station ID" of the station of interest. If not
-#' provided, \code{id} defaults to 6358, for Halifax International Airport. See
-#' \dQuote{Details}.
+#' @param id A number giving the "Station ID" of the station of interest.
 #'
 #' @param year A number giving the year of interest. Ignored unless \code{deltat}
 #' is \code{"hour"}. If \code{year} is not given, it defaults to the present year.
@@ -45,12 +43,12 @@
 #' month.
 #'
 #' @param deltat Optional character string indicating the time step of the
-#' desired dataset. This may be \code{"hour"} or \code{"month"}.
+#' desired dataset. Only \code{"hour"} or \code{"month"} are permitted.
 #' If \code{deltat} is not given, it defaults to \code{"hour"}.
 #'
-#' @template downloadTemplate
+#' @template filenames
 #'
-#' @template debugTemplate
+#' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
 #'
@@ -58,10 +56,9 @@
 #'
 #' @examples
 #'\dontrun{
-#' library(dac)
 #' ## Download data for Halifax International Airport, in September
-#' ## of 2003. (This dataset is used for data(met) provided with oce.)
-#' metFile <- download.met(6358, 2003, 9)
+#' ## of 2003. (This dataset is used for data(met) in the oce package.)
+#' metFile <- dac::download.met(6358, 2003, 9)
 #' library(oce)
 #' met <- read.met(metFile)
 #' plot(met)
@@ -78,7 +75,7 @@
 #'
 download.met <- function(id, year, month, deltat="hour",
                          destdir=".", destfile, force=FALSE,
-                         debug=getOption("dacDebug"))
+                         debug=getOption("dacDebug", 0))
 {
     if (missing(id))
         stop("must provide a station identifier, as the 'id' argument")
@@ -119,7 +116,7 @@ download.met <- function(id, year, month, deltat="hour",
     }
     destination <- paste(destdir, destfile, sep="/")
     dacDebug(debug, "url:", url, "\n")
-    if (1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+    if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
         dacDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
     } else {
         download.file(url, destination)

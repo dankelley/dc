@@ -2,10 +2,11 @@
 % Please edit documentation in R/topo.R
 \name{download.topo}
 \alias{download.topo}
-\title{Download and Cache a topo File}
+\title{Download and Cache a Topographic File}
 \usage{
 download.topo(west, east, south, north, resolution, format, server,
-  destdir = ".", destfile, force = FALSE, debug = getOption("dacDebug"))
+  destdir = ".", destfile, force = FALSE, debug = getOption("dacDebug",
+  0))
 }
 \arguments{
 \item{west, east}{Longitudes of the western and eastern sides of the box.}
@@ -55,17 +56,20 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-Data are downloaded (from \samp{https://maps.ngdc.noaa.gov/viewers/wcs-client/}, by
-default) and a string containing the full path to the downloaded file is returned.
-Typically, this return value is used with \code{\link{read.topo}} to read the
-data. Subsequent calls to \code{download.topo}
-with identical parameters will simply return the name of the cached file,
-assuming the user has not deleted it in the meantime.
-For convenience, if \code{destfile} is not
-given, then \code{download.topo} will construct a filename from the other arguments,
-rounding longitude and latitude limits to 0.01 degrees.
+
+
+The data are downloaded, and a simple filename convention permits a caching scheme
+in which subsequent calls provide access to these downloaded data.
 }
 \details{
+Data are downloaded (from \samp{https://maps.ngdc.noaa.gov/viewers/wcs-client/}, by
+default) and a string containing the full path
+to the downloaded file is returned. If \code{destfile} is not supplied,
+then the filename is constructed from the query, which means that 
+subsequent calls to \code{download.topo}  with identical parameters will
+simply return the name of the cached file, assuming the user has not
+deleted it in the meantime. 
+
 The data are downloaded with \code{\link[utils]{download.file}}, using a URL
 devised from reverse engineering web-based queries constructed by
 the default \code{server} used here. Note that the data source is "etopo1",
@@ -113,10 +117,8 @@ which is also forced to track the moving target that is NOAA.
 
 \examples{
 \dontrun{
-library(dac)
+topoFile <- dac::download.topo(west=-64, east=-60, south=43, north=46)
 library(oce)
-topoFile <- dac::download.topo(west=-64, east=-60, south=43, north=46,
-                               resolution=1, destdir="~/data/topo")
 topo <- read.topo(topoFile)
 imagep(topo, zlim=c(-400, 400), drawTriangles=TRUE)
 data(coastlineWorldFine, package="ocedata")

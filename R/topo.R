@@ -1,8 +1,12 @@
 ## vim:textwidth=128:expandtab:shiftwidth=4:softtabstop=4
 
-#' Download and Cache a topo File
+#' Download and Cache a Topographic File
 #'
-#' @template downloadIntroTemplate
+#' @description
+#'
+#' @template intro
+#'
+#' @details
 #'
 #' Data are downloaded (from \samp{https://maps.ngdc.noaa.gov/viewers/wcs-client/}, by
 #' default) and a string containing the full path
@@ -50,9 +54,9 @@
 #' \samp{"https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"}
 #' will be used.
 #'
-#' @template downloadTemplate
+#' @template filenames
 #'
-#' @template debugTemplate
+#' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
 #'
@@ -60,10 +64,8 @@
 #'
 #' @examples
 #'\dontrun{
-#' library(dac)
+#' topoFile <- dac::download.topo(west=-64, east=-60, south=43, north=46)
 #' library(oce)
-#' topoFile <- dac::download.topo(west=-64, east=-60, south=43, north=46,
-#'                                resolution=1, destdir="~/data/topo")
 #' topo <- read.topo(topoFile)
 #' imagep(topo, zlim=c(-400, 400), drawTriangles=TRUE)
 #' data(coastlineWorldFine, package="ocedata")
@@ -103,7 +105,7 @@
 #' [access date: Aug 30, 2017].
 download.topo <- function(west, east, south, north, resolution, format, server,
                            destdir=".", destfile, force=FALSE,
-                           debug=getOption("dacDebug"))
+                           debug=getOption("dacDebug", 0))
 {
     if (missing(server)) {
         server <- "https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
@@ -161,7 +163,7 @@ download.topo <- function(west, east, south, north, resolution, format, server,
     url <- sprintf("%s?filename=%s&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=%s&resx=%f&resy=%f&bbox=%f,%f,%f,%f",
                    server, filename, format, res, res, west, south, east, north)
     dacDebug(debug, "source url:", url, "\n")
-    if (1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+    if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
         dacDebug(debug, "Not downloading", destfile, "because it is already present in", destdir, "\n")
     } else {
         download.file(url, destination)
