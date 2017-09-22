@@ -1,6 +1,6 @@
-Package: dac
+Package: dc
 Type: Package
-Title: Download and cache data files
+Title: Download and Cache Data
 Version: 1.0
 Author: Dan Kelley
 Maintainer: Dan Kelley <dan.kelley@dal.ca>

@@ -66,7 +66,7 @@
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
                          destdir=".", destfile, force=FALSE,
-                         debug=getOption("dacDebug", 0))
+                         debug=getOption("dcDebug", 0))
 {
     if (database != "woa13")
         stop("database must equal \"woa13\"")
@@ -105,12 +105,12 @@ download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1
         stop("unknown field, \"", field, "\"")
     }
     destination <- paste(destdir, destfile, sep="/")
-    dacDebug(debug, "url:", url, "\n")
+    dcDebug(debug, "url:", url, "\n")
     if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-        dacDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+        dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
     } else {
         download.file(url, destination)
-        dacDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
+        dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
     }
     destination
 }

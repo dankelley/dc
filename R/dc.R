@@ -1,13 +1,13 @@
-#' dac: A Package to download and cache data files from the web
+#' dc: A Package to download and cache data files from the web
 #' @docType package
-#' @name dac
+#' @name dc
 NULL
 
 
 #' Possibly print a debugging message
 #'
-#' \code{dacDebug} prints a message, if its first argument exceeds 0. 
-#' Many \code{dac} functions decrease the \code{debug} level by 1 when they call other
+#' \code{dcDebug} prints a message, if its first argument exceeds 0. 
+#' Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
 #' functions, so the effect is a nesting, with more space for deeper function
 #' level. Messages are indented according to the value of the \code{debug+indent}.
 #'
@@ -24,18 +24,18 @@ NULL
 #'
 #' foo <- function(debug=1)
 #' {
-#'    dacDebug(debug, "in foo, about to call bar()\n")
+#'    dcDebug(debug, "in foo, about to call bar()\n")
 #'    bar(debug=debug-1)
-#'    dacDebug(debug, "in foo, after calling bar()\n")
+#'    dcDebug(debug, "in foo, after calling bar()\n")
 #' }
 #' bar <- function(debug=1)
 #' {
-#'    dacDebug(debug, "in bar()\n")
+#'    dcDebug(debug, "in bar()\n")
 #' }
 #' foo(debug=2)
 #' foo(debug=1)
 #' foo(debug=0)
-dacDebug <- function(debug=0, ..., unindent=0)
+dcDebug <- function(debug=0, ..., unindent=0)
 {
     debug <- if (debug > 4) 4 else max(0, floor(debug + 0.5))
     if (debug > 0) {
