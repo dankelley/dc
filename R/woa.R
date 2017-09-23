@@ -12,8 +12,7 @@
 #' moment, there is no choice on which version of the database is used: it is
 #' WOA13 for all variables except salinity and temperature, and in these latter
 #' two, it is WOA13V2, which is said to be an improvement over the initial
-#' release [2]. Also, there is no choice of resolution; the present
-#' version only downloads data on a 1-degree grid.
+#' release [2].
 #'
 #' @param database String indicating the name of the database. This must be
 #' \code{"woa13"} in this version, but other databases can be added if users
@@ -27,8 +26,11 @@
 #' but a future version could allow division into months for some fields
 #' and decades for others.
 #'
-#' @param resolution Number indicating the resolution. This must equal
-#' \code{1} in this version, but a future version may allow other resolutions.
+#' @param resolution Number indicating the resolution, in degrees
+#' of longitude and latitude. The permitted values are 0.25, 1
+#' and 5. The downloaded files are of typical size 634 Mb, 177 Mb
+#' and 4.1 Mb, respectively. The 1-deg resolution is a good
+#' choice for global-scale applications.
 #'
 #' @param field String indicating the variable. This must be one of
 #' the following: \code{"temperature"}, \code{"temperature"},
@@ -45,17 +47,32 @@
 #'
 #' @examples
 #'\dontrun{
+#' ## Example 1: 1-deg grid (177 Mb file)
 #' ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 #' ## in netcdf format, then read the data, and finally, plot sea-surface
 #' ## temperature using oce::imagep() to get an image with a palette.
-#' Tnc <- download.woa(field="temperature")
+#' T1f <- download.woa(field="temperature")
 #' library(ncdf4)
-#' Tf <- nc_open(Tnc) # or nc_open("woa13_decav_t00_01v2.nc")
-#' longitude <- ncvar_get(Tf, "lon")
-#' latitude <- ncvar_get(Tf, "lat")
-#' T <- ncvar_get(Tf, "t_an")
+#' T1nc <- nc_open(T1f) # or nc_open("woa13_decav_t00_01v2.nc")
+#' lon1 <- ncvar_get(T1nc, "lon")
+#' lat1 <- ncvar_get(T1nc, "lat")
+#' T1 <- ncvar_get(T1nc, "t_an")
 #' library(oce)
-#' imagep(longitude, latitude, T[,,1])
+#' imagep(lon1, lat1, T1[,,1])
+#' ##
+#' ## Example 2: 5-deg grid (4.1 Mb file)
+#' ## Note that the variable 't_an' used above must be switched
+#' ## to 't_mn' here. Also, a point of confusion: the metadata
+#' ## in the downloaded file say that t_an is 4D, with the
+#' ## extra dimension being time, but the time vector in the file
+#' ## is of unit length, so ncdf4 appraently demotes it to 3D.
+#' T5f <- download.woa(field="temperature", resolution=5)
+#' T5nc <- nc_open(T5f)
+#' lon5 <- ncvar_get(T5nc, "lon")
+#' lat5 <- ncvar_get(T5nc, "lat")
+#' T5 <- ncvar_get(T5nc, "t_mn")
+#' library(oce)
+#' imagep(lon5, lat5, T5[,,1])
 #'}
 #'
 #' @seealso The work is done with \code{\link[utils]{download.file}}.
@@ -65,52 +82,72 @@
 #'
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
-                         destdir=".", destfile, force=FALSE,
-                         debug=getOption("dcDebug", 0))
+                         destdir=".", destfile, force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
 {
     if (database != "woa13")
         stop("database must equal \"woa13\"")
     if (!is.null(time))
         stop("time must be NULL")
-    if (resolution != 1)
-        stop("resolution must equal 1")
-    fieldAllowed <- c("temperature", "temperature", "salinity", "density",
+    ## set up resolution nicknames (used in the query) and also ensure
+    ## resolution is in permitted list
+    if (0.01 > abs(resolution - 0.25)) {
+        rn1 <- "0.25"
+        rn2 <- "04"
+    } else if (0.01 > abs(resolution - 1)) {
+        rn1 <- "1.00"
+        rn2 <- "01"
+    } else if (0.01 > abs(resolution - 5)) {
+        rn1 <- "5deg"
+        rn2 <- "5d"
+    } else {
+        stop("resolution must equal 0.25, 1, or 5, but it is ", resolution)
+    }
+    ## Expand field, if abbreviated.
+    fieldAllowed <- c("temperature", "salinity", "density",
                       "oxygen", "phosphate", "nitrate", "silicate")
-    if (!(field %in% fieldAllowed))
-        stop("field must be one of: ", paste(fieldAllowed, collapse=" "))
+    fnumber <- pmatch(field, fieldAllowed)
+    if (is.na(fnumber))
+        stop("field '", field, "' is not understood; use one of: ", paste(fieldAllowed, collapse=" "))
+    field <- fieldAllowed[fnumber]
+
     URLv2 <- "https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATAv2"
     URL <- "https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATA"
-    if (field == "temperature") {
-        url <- paste(URLv2, "temperature/netcdf/decav/1.00/woa13_decav_t00_01v2.nc", sep="/")
-        destfile <- "woa13_decav_t00_01v2.nc"
-    } else if (field == "salinity") {
-        url <- paste(URLv2, "salinity/netcdf/decav/1.00/woa13_decav_s00_01v2.nc", sep="/")
-        destfile <- "woa13_decav_s00_01v2.nc"
+    ## https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATAv2/temperature/netcdf/decav/0.25/woa13_decav_t00_04v2.nc
+    ## https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATAv2/temperature/netcdf/decav/1.00/woa13_decav_t00_01v2.nc
+    ## https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATAv2/temperature/netcdf/decav/5deg/woa13_decav_t00_5dv2.nc
+    if (field == "temperature" || field == "salinity") {
+        fn <- if (field == "temperature") "t" else "s"
+        url <- paste(URLv2, "/", field, "/netcdf/decav/", rn1, "/woa13_decav_", fn, "00_", rn2, "v2.nc", sep="")
+        destfile <- paste("woa13_decav_", fn, "00_", rn2, "v2.nc", sep="")
     } else if (field == "oxygen") {
-        url <- paste(URL, "oxygen/netcdf/all/1.00/woa13_all_o00_01.nc", sep="/")
-        destfile <- "woa13_all_o00_01.nc"
+        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_o00_", rn2, ".nc", sep="/")
+        destfile <- paste("woa13_all_o00_", rn2, ".nc", sep="")
     } else if (field == "silicate") {
-        url <- paste(URL, "silicate/netcdf/all/1.00/woa13_all_i00_01.nc", sep="/")
-        destfile <- "woa13_all_i00_01.nc"
+        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_i00_", rn2, ".nc", sep="/")
+        destfile <- paste("woa13_all_i00_", rn2, ".nc", sep="")
     } else if (field == "phosphate") {
-        url <- paste(URL, "phosphate/netcdf/all/1.00/woa13_all_p00_01.nc", sep="/")
-        destfile <- "woa13_all_p00_01.nc"
+        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_p00_", rn2, ".nc", sep="/")
+        destfile <- paste("woa13_all_p00_", rn2, ".nc", sep="")
     } else if (field == "nitrate") {
-        url <- paste(URL, "nitrate/netcdf/all/1.00/woa13_all_n00_01.nc", sep="/")
-        destfile <- "woa13_all_n00_01.nc"
+        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_n00_", rn2, ".nc", sep="/")
+        destfile <- paste("woa13_all_n00_", rn2, ".nc", sep="")
     } else if (field == "density") {
-        url <- paste(url, "/density/netcdf/decav/1.00/woa13_decav_I00_01.nc", sep="/")
-        destfile <- "woa13_decav_I00_01.nc"
+        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_I00_", rn2, ".nc", sep="/")
+        destfile <- paste("woa13_all_I00_", rn2, ".nc", sep="")
     } else {
-        stop("unknown field, \"", field, "\"")
+        stop("unknown field, \"", field, "\"") # we cannot reach this point, but keep it in case of code changes
     }
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "url:", url, "\n")
-    if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-        dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+    if (dryrun) {
+        cat(url, "\n")
     } else {
-        download.file(url, destination)
-        dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
+        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+        } else {
+            download.file(url, destination)
+            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
+        }
     }
     destination
 }

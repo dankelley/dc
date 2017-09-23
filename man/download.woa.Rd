@@ -6,7 +6,7 @@
 \usage{
 download.woa(database = "woa13", version = NULL, time = NULL,
   resolution = 1, field = "temperature", destdir = ".", destfile,
-  force = FALSE, debug = getOption("dcDebug", 0))
+  force = FALSE, dryrun = FALSE, debug = getOption("dcDebug", 0))
 }
 \arguments{
 \item{database}{String indicating the name of the database. This must be
@@ -21,8 +21,11 @@ of either the original or the version-2 data.}
 but a future version could allow division into months for some fields
 and decades for others.}
 
-\item{resolution}{Number indicating the resolution. This must equal
-\code{1} in this version, but a future version may allow other resolutions.}
+\item{resolution}{Number indicating the resolution, in degrees
+of longitude and latitude. The permitted values are 0.25, 1
+and 5. The downloaded files are of typical size 634 Mb, 177 Mb
+and 4.1 Mb, respectively. The 1-deg resolution is a good
+choice for global-scale applications.}
 
 \item{field}{String indicating the variable. This must be one of
 the following: \code{"temperature"}, \code{"temperature"},
@@ -45,6 +48,10 @@ for caching.}
 \item{force}{A logical value that indicates whether to force the download,
 even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
+
+\item{dryrun}{A logical value that indicates whether to return the constructed
+web query, without attempting to download the file. This can be helpful in
+designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
@@ -71,22 +78,36 @@ of links down to a THREDDS server and finally to an HTTPServer.  At the
 moment, there is no choice on which version of the database is used: it is
 WOA13 for all variables except salinity and temperature, and in these latter
 two, it is WOA13V2, which is said to be an improvement over the initial
-release [2]. Also, there is no choice of resolution; the present
-version only downloads data on a 1-degree grid.
+release [2].
 }
 \examples{
 \dontrun{
+## Example 1: 1-deg grid (177 Mb file)
 ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 ## in netcdf format, then read the data, and finally, plot sea-surface
 ## temperature using oce::imagep() to get an image with a palette.
-Tnc <- download.woa(field="temperature")
+T1f <- download.woa(field="temperature")
 library(ncdf4)
-Tf <- nc_open(Tnc) # or nc_open("woa13_decav_t00_01v2.nc")
-longitude <- ncvar_get(Tf, "lon")
-latitude <- ncvar_get(Tf, "lat")
-T <- ncvar_get(Tf, "t_an")
+T1nc <- nc_open(T1f) # or nc_open("woa13_decav_t00_01v2.nc")
+lon1 <- ncvar_get(T1nc, "lon")
+lat1 <- ncvar_get(T1nc, "lat")
+T1 <- ncvar_get(T1nc, "t_an")
 library(oce)
-imagep(longitude, latitude, T[,,1])
+imagep(lon1, lat1, T1[,,1])
+##
+## Example 2: 5-deg grid (4.1 Mb file)
+## Note that the variable 't_an' used above must be switched
+## to 't_mn' here. Also, a point of confusion: the metadata
+## in the downloaded file say that t_an is 4D, with the
+## extra dimension being time, but the time vector in the file
+## is of unit length, so ncdf4 appraently demotes it to 3D.
+T5f <- download.woa(field="temperature", resolution=5)
+T5nc <- nc_open(T5f)
+lon5 <- ncvar_get(T5nc, "lon")
+lat5 <- ncvar_get(T5nc, "lat")
+T5 <- ncvar_get(T5nc, "t_mn")
+library(oce)
+imagep(lon5, lat5, T5[,,1])
 }
 
 }

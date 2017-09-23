@@ -46,6 +46,10 @@ more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
 that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
+
+\item{dryrun}{A logical value that indicates whether to return the constructed
+web query, without attempting to download the file. This can be helpful in
+designing responses to changing URLs.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
