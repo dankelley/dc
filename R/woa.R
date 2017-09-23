@@ -46,8 +46,9 @@
 #' @author Dan Kelley
 #'
 #' @examples
+#' library(dc)
 #'\dontrun{
-#' ## Example 1: 1-deg grid (177 Mb file)
+#' ## Example 1: download and plot 1-deg grid (177 Mb file)
 #' ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 #' ## in netcdf format, then read the data, and finally, plot sea-surface
 #' ## temperature using oce::imagep() to get an image with a palette.
@@ -59,8 +60,8 @@
 #' T1 <- ncvar_get(T1nc, "t_an")
 #' library(oce)
 #' imagep(lon1, lat1, T1[,,1])
-#' ##
-#' ## Example 2: 5-deg grid (4.1 Mb file)
+#'
+#' ## Example 2: download and plot 5-deg grid (4.1 Mb file)
 #' ## Note that the variable 't_an' used above must be switched
 #' ## to 't_mn' here. Also, a point of confusion: the metadata
 #' ## in the downloaded file say that t_an is 4D, with the
@@ -73,6 +74,11 @@
 #' T5 <- ncvar_get(T5nc, "t_mn")
 #' library(oce)
 #' imagep(lon5, lat5, T5[,,1])
+#'
+#' ## Example 3: download all fields on default 1-deg grid
+#' for (field in c("temperature", "salinity", "oxygen", "silicate",
+#'                 "phosphate", "nitrate", "density"))
+#' 	download.woa(field=field)
 #'}
 #'
 #' @seealso The work is done with \code{\link[utils]{download.file}}.
@@ -81,8 +87,11 @@
 #' 1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
 #'
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
+#'
+#' @author Dan Kelley 2017-09-22
 download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
-                         destdir=".", destfile, force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
+                         destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
+                         debug=getOption("dcDebug", 0))
 {
     if (database != "woa13")
         stop("database must equal \"woa13\"")
@@ -120,23 +129,26 @@ download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1
         url <- paste(URLv2, "/", field, "/netcdf/decav/", rn1, "/woa13_decav_", fn, "00_", rn2, "v2.nc", sep="")
         destfile <- paste("woa13_decav_", fn, "00_", rn2, "v2.nc", sep="")
     } else if (field == "oxygen") {
-        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_o00_", rn2, ".nc", sep="/")
+        url <- paste(URL, "/", field, "/netcdf/all/", rn1, "/woa13_all_o00_", rn2, ".nc", sep="")
         destfile <- paste("woa13_all_o00_", rn2, ".nc", sep="")
     } else if (field == "silicate") {
-        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_i00_", rn2, ".nc", sep="/")
+        url <- paste(URL, "/", field, "/netcdf/all/", rn1, "/woa13_all_i00_", rn2, ".nc", sep="")
         destfile <- paste("woa13_all_i00_", rn2, ".nc", sep="")
     } else if (field == "phosphate") {
-        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_p00_", rn2, ".nc", sep="/")
+        url <- paste(URL, "/", field, "/netcdf/all/", rn1, "/woa13_all_p00_", rn2, ".nc", sep="")
         destfile <- paste("woa13_all_p00_", rn2, ".nc", sep="")
     } else if (field == "nitrate") {
-        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_n00_", rn2, ".nc", sep="/")
+        url <- paste(URL, "/", field, "/netcdf/all/", rn1, "/woa13_all_n00_", rn2, ".nc", sep="")
         destfile <- paste("woa13_all_n00_", rn2, ".nc", sep="")
     } else if (field == "density") {
-        url <- paste(URL, field, "/netcdf/all/", rn1, "/woa13_all_I00_", rn2, ".nc", sep="/")
-        destfile <- paste("woa13_all_I00_", rn2, ".nc", sep="")
+        ## https://data.nodc.noaa.gov/thredds/fileServer/woa/WOA13/DATAv2/density/netcdf/decav/1.00/woa13_decav_I00_01.nc
+        url <- paste(URLv2, "/", field, "/netcdf/decav/", rn1, "/woa13_decav_I00_", rn2, ".nc", sep="")
+        destfile <- paste("woa13_decav_I00_", rn2, ".nc", sep="")
     } else {
         stop("unknown field, \"", field, "\"") # we cannot reach this point, but keep it in case of code changes
     }
+    ##
+    ## Below is standard code that should be used at the end of every download.x() function.
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "url:", url, "\n")
     if (dryrun) {
@@ -151,5 +163,4 @@ download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1
     }
     destination
 }
-
 

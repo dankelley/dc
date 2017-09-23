@@ -81,8 +81,9 @@ two, it is WOA13V2, which is said to be an improvement over the initial
 release [2].
 }
 \examples{
+library(dc)
 \dontrun{
-## Example 1: 1-deg grid (177 Mb file)
+## Example 1: download and plot 1-deg grid (177 Mb file)
 ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 ## in netcdf format, then read the data, and finally, plot sea-surface
 ## temperature using oce::imagep() to get an image with a palette.
@@ -94,8 +95,8 @@ lat1 <- ncvar_get(T1nc, "lat")
 T1 <- ncvar_get(T1nc, "t_an")
 library(oce)
 imagep(lon1, lat1, T1[,,1])
-##
-## Example 2: 5-deg grid (4.1 Mb file)
+
+## Example 2: download and plot 5-deg grid (4.1 Mb file)
 ## Note that the variable 't_an' used above must be switched
 ## to 't_mn' here. Also, a point of confusion: the metadata
 ## in the downloaded file say that t_an is 4D, with the
@@ -108,6 +109,11 @@ lat5 <- ncvar_get(T5nc, "lat")
 T5 <- ncvar_get(T5nc, "t_mn")
 library(oce)
 imagep(lon5, lat5, T5[,,1])
+
+## Example 3: download all fields on default 1-deg grid
+for (field in c("temperature", "salinity", "oxygen", "silicate",
+                "phosphate", "nitrate", "density"))
+	download.woa(field=field)
 }
 
 }
@@ -121,4 +127,6 @@ The work is done with \code{\link[utils]{download.file}}.
 }
 \author{
 Dan Kelley
+
+Dan Kelley 2017-09-22
 }

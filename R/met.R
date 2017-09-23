@@ -71,8 +71,9 @@
 #' 2. Gavin Simpon's \code{canadaHCD} package on GitHub
 #' \url{https://github.com/gavinsimpson/canadaHCD}
 #'
+#' @author Dan Kelley 2017-09-16
 download.met <- function(id, year, month, deltat="hour",
-                         destdir=".", destfile, force=FALSE,
+                         destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))
 {
     if (missing(id))
@@ -112,13 +113,19 @@ download.met <- function(id, year, month, deltat="hour",
     } else {
         stop("deltat must be \"hour\" or \"month\"")
     }
+    ##
+    ## Below is standard code that should be used at the end of every download.x() function.
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "url:", url, "\n")
-    if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-        dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+    if (dryrun) {
+        cat(url, "\n")
     } else {
-        download.file(url, destination)
-        dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
+        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+        } else {
+            download.file(url, destination)
+            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
+        }
     }
     destination
 }

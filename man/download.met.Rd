@@ -5,7 +5,7 @@
 \title{Download and Cache a Meteorology File}
 \usage{
 download.met(id, year, month, deltat = "hour", destdir = ".", destfile,
-  force = FALSE, debug = getOption("dcDebug", 0))
+  force = FALSE, dryrun = FALSE, debug = getOption("dcDebug", 0))
 }
 \arguments{
 \item{id}{A number giving the "Station ID" of the station of interest.}
@@ -38,6 +38,10 @@ for caching.}
 even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
+\item{dryrun}{A logical value that indicates whether to return the constructed
+web query, without attempting to download the file. This can be helpful in
+designing responses to changing URLs.}
+
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
 a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
@@ -46,10 +50,6 @@ more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
 that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
-
-\item{dryrun}{A logical value that indicates whether to return the constructed
-web query, without attempting to download the file. This can be helpful in
-designing responses to changing URLs.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
@@ -109,4 +109,6 @@ The work is done with \code{\link[utils]{download.file}}.
 }
 \author{
 Dan Kelley
+
+Dan Kelley 2017-09-16
 }
