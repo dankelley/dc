@@ -1,4 +1,0 @@
-man-roxygen
-^.*\.nc
-^.*\.Rproj$
-^\.Rproj\.user$
