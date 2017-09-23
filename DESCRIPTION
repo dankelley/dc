@@ -1,0 +1,10 @@
+Package: dc
+Type: Package
+Title: Download and Cache Data
+Version: 1.0
+Author: Dan Kelley
+Maintainer: Dan Kelley <dan.kelley@dal.ca>
+Description: The point of this package is to save users from having to look up data-archiving sources, and to learn how to structure web queries to access data from those sources.
+Suggests: oce, marmap
+License: GPL (>= 2)
+RoxygenNote: 6.0.1
