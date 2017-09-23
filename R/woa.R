@@ -52,7 +52,7 @@
 #' ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 #' ## in netcdf format, then read the data, and finally, plot sea-surface
 #' ## temperature using oce::imagep() to get an image with a palette.
-#' T1f <- download.woa(field="temperature")
+#' T1f <- dc.woa(field="temperature")
 #' library(ncdf4)
 #' T1nc <- nc_open(T1f) # or nc_open("woa13_decav_t00_01v2.nc")
 #' lon1 <- ncvar_get(T1nc, "lon")
@@ -67,7 +67,7 @@
 #' ## in the downloaded file say that t_an is 4D, with the
 #' ## extra dimension being time, but the time vector in the file
 #' ## is of unit length, so ncdf4 appraently demotes it to 3D.
-#' T5f <- download.woa(field="temperature", resolution=5)
+#' T5f <- dc.woa(field="temperature", resolution=5)
 #' T5nc <- nc_open(T5f)
 #' lon5 <- ncvar_get(T5nc, "lon")
 #' lat5 <- ncvar_get(T5nc, "lat")
@@ -78,7 +78,7 @@
 #' ## Example 3: download all fields on default 1-deg grid
 #' for (field in c("temperature", "salinity", "oxygen", "silicate",
 #'                 "phosphate", "nitrate", "density"))
-#' 	download.woa(field=field)
+#' 	dc.woa(field=field)
 #'}
 #'
 #' @seealso The work is done with \code{\link[utils]{download.file}}.
@@ -89,7 +89,7 @@
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 #'
 #' @author Dan Kelley 2017-09-22
-download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
+dc.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))
 {
@@ -148,7 +148,7 @@ download.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1
         stop("unknown field, \"", field, "\"") # we cannot reach this point, but keep it in case of code changes
     }
     ##
-    ## Below is standard code that should be used at the end of every download.x() function.
+    ## Below is standard code that should be used at the end of every dc.x() function.
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "url:", url, "\n")
     if (dryrun) {

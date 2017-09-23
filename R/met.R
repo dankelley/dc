@@ -10,7 +10,7 @@
 #' pointed to the Environment Canada website [1]
 #' using queries that had to be devised by reverse-engineering, since the agency
 #' does not provide documentation about how to construct queries. Caution: the
-#' query format changes from time to time, so \code{download.met} may work one
+#' query format changes from time to time, so \code{dc.met} may work one
 #' day, and fail the next.
 #'
 #' The constructed query contains Station ID, as provided in the \code{id} argument.
@@ -56,7 +56,8 @@
 #'\dontrun{
 #' ## Download data for Halifax International Airport, in September
 #' ## of 2003. (This dataset is used for data(met) in the oce package.)
-#' metFile <- dac::download.met(6358, 2003, 9)
+#' library(dc)
+#' metFile <- dc.met(6358, 2003, 9)
 #' library(oce)
 #' met <- read.met(metFile)
 #' plot(met)
@@ -72,7 +73,7 @@
 #' \url{https://github.com/gavinsimpson/canadaHCD}
 #'
 #' @author Dan Kelley 2017-09-16
-download.met <- function(id, year, month, deltat="hour",
+dc.met <- function(id, year, month, deltat="hour",
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))
 {
@@ -114,7 +115,7 @@ download.met <- function(id, year, month, deltat="hour",
         stop("deltat must be \"hour\" or \"month\"")
     }
     ##
-    ## Below is standard code that should be used at the end of every download.x() function.
+    ## Below is standard code that should be used at the end of every dc.x() function.
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "url:", url, "\n")
     if (dryrun) {

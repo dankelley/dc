@@ -12,7 +12,7 @@
 #' default) and a string containing the full path
 #' to the downloaded file is returned. If \code{destfile} is not supplied,
 #' then the filename is constructed from the query, which means that 
-#' subsequent calls to \code{download.topo}  with identical parameters will
+#' subsequent calls to \code{dc.topo}  with identical parameters will
 #' simply return the name of the cached file, assuming the user has not
 #' deleted it in the meantime. 
 #'
@@ -64,7 +64,8 @@
 #'
 #' @examples
 #'\dontrun{
-#' topoFile <- dac::download.topo(west=-64, east=-60, south=43, north=46)
+#' library(dc)
+#' topoFile <- dc.topo(west=-64, east=-60, south=43, north=46)
 #' library(oce)
 #' topo <- read.topo(topoFile)
 #' imagep(topo, zlim=c(-400, 400), drawTriangles=TRUE)
@@ -73,11 +74,11 @@
 #'}
 #'
 #' @section Webserver history:
-#' All versions of \code{download.topo} to date have used a NOAA server as
+#' All versions of \code{dc.topo} to date have used a NOAA server as
 #' the data source, but the URL has not been static. A list of the
 #' servers that have been used is provided below,
 #' in hopes that it can help users to make guesses
-#' for \code{server}, should \code{download.topo} fail because of 
+#' for \code{server}, should \code{dc.topo} fail because of 
 #' a fail to download the data because of a broken link. Another
 #' hint is to look at the source code for
 #' \code{\link[marmap]{getNOAA.bathy}} in the \CRANpkg{marmap} package,
@@ -105,7 +106,7 @@
 #' [access date: Aug 30, 2017].
 #'
 #' @author Dan Kelley 2017-09-16
-download.topo <- function(west, east, south, north, resolution, format, server,
+dc.topo <- function(west, east, south, north, resolution, format, server,
                           destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                           debug=getOption("dcDebug", 0))
 {
@@ -164,7 +165,7 @@ download.topo <- function(west, east, south, north, resolution, format, server,
     url <- sprintf("%s?filename=%s&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=%s&resx=%f&resy=%f&bbox=%f,%f,%f,%f",
                    server, filename, format, res, res, west, south, east, north)
     ##
-    ## Below is standard code that should be used at the end of every download.x() function.
+    ## Below is standard code that should be used at the end of every dc.x() function.
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "source url:", url, "\n")
     if (dryrun) {

@@ -1,4 +1,5 @@
 man-roxygen
+docs
 ^.*\.nc
 ^.*\.Rproj$
 ^\.Rproj\.user$
