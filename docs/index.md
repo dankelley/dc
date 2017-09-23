@@ -14,3 +14,5 @@ resolution in name of the file it downloads, so that a second call to `dc.topo`
 with the same parameters yields the existing filename, without causing a second
 download.
 
+Development of this package takes place on
+[https://github.com/dankelley/dc](https://github.com/dankelley/dc).
