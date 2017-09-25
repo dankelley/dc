@@ -7,12 +7,12 @@
 #' @details
 #'
 #' The data are downloaded with \code{\link[utils]{download.file}}
-#' pointed to links inferred by tracing a NOAA website [1] through a series
+#' pointed to links inferred by tracing a NOAA website [ref 1] through a series
 #' of links down to a THREDDS server and finally to an HTTPServer.  At the
 #' moment, there is no choice on which version of the database is used: it is
 #' WOA13 for all variables except salinity and temperature, and in these latter
 #' two, it is WOA13V2, which is said to be an improvement over the initial
-#' release [2].
+#' release [ref 2].
 #'
 #' @param database String indicating the name of the database. This must be
 #' \code{"woa13"} in this version, but other databases can be added if users
@@ -42,8 +42,6 @@
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
-#'
-#' @author Dan Kelley
 #'
 #' @examples
 #' library(dc)
@@ -88,7 +86,7 @@
 #'
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 #'
-#' @author Dan Kelley 2017-09-22
+#' @author Dan Kelley (2017-09-22)
 dc.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))

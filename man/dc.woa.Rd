@@ -73,12 +73,12 @@ in which subsequent calls provide access to these downloaded data.
 }
 \details{
 The data are downloaded with \code{\link[utils]{download.file}}
-pointed to links inferred by tracing a NOAA website [1] through a series
+pointed to links inferred by tracing a NOAA website [ref 1] through a series
 of links down to a THREDDS server and finally to an HTTPServer.  At the
 moment, there is no choice on which version of the database is used: it is
 WOA13 for all variables except salinity and temperature, and in these latter
 two, it is WOA13V2, which is said to be an improvement over the initial
-release [2].
+release [ref 2].
 }
 \examples{
 library(dc)
@@ -126,7 +126,5 @@ for (field in c("temperature", "salinity", "oxygen", "silicate",
 The work is done with \code{\link[utils]{download.file}}.
 }
 \author{
-Dan Kelley
-
-Dan Kelley 2017-09-22
+Dan Kelley (2017-09-22)
 }
