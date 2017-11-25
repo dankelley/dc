@@ -73,6 +73,7 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))
 {
+    dcDebug(debug, "dc.hydrography(...) {", sep="", "\n", unindent=1)
     if (missing(expocode))
         stop("expocode must be provided. Consult cchdo.ucsd.edu to learn more")
     if (type != "bottle" && type != "ctd")
@@ -122,8 +123,9 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
     if (dryrun) {
         cat(url, "\n")
     } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+        destfileClean <- if (length(grep(".zip$", destfile))) gsub(".zip$", "", destfile) else destfile
+        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfileClean, "$", sep="")))) {
+            dcDebug(debug, "Not downloading \"", destfileClean, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
         } else {
             download.file(url, destination)
             dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
@@ -135,6 +137,7 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
             }
         }
     }
+    dcDebug(debug, "} # dc.hydrography", sep="", "\n", unindent=1)
     destination
 }
 

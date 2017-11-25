@@ -99,7 +99,7 @@ plot(read.section(bottle), which="map")
 ##    a section between Antarctica and Australia
 ctd <- dc.hydrography("09AR20041223", type="ctd")
 secCTD <- read.section(directory=ctd)
-transectCTD <- subset(secCTD, 100 < longitude & longitude < 120))
+transectCTD <- subset(secCTD, 100 < longitude & longitude < 120)
 plot(transectCTD)
 }
 
