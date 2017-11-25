@@ -30,12 +30,6 @@
 #' @param format String indicating data format, either \code{"exchange"}
 #' (the default) or \code{"whp_netcdf"}.
 #'
-#' @param unzip Logical value, \code{TRUE} by default, indicating
-#' whether to unzip any ownloaded files that are in .zip form.
-#' This will construct a new subdirectory to hold the unzipped data,
-#' and sets the return value to the name of that new subdirectory,
-#' instead of the name of the zipfile. The zipfile is retained.
-#'
 #' @param server String indicating the server. The default is
 #' \code{"cchdo.ucsd.edu"}, and it is unlikely that other values
 #' will work correctly, unless they are mirrors of this site, using
@@ -69,7 +63,7 @@
 #' 1. \url{https://cchdo.ucsd.edu}
 #'
 #' @author Dan Kelley (2017-11-25)
-dc.hydrography <- function(expocode, type="bottle", format="exchange", server, unzip=TRUE,
+dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))
 {
@@ -102,14 +96,21 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
     owarn <- options("warn")$warn
     options(warn=-1)
     baseHTML <- readLines(con)
+    dan<<-baseHTML
+    dcDebug(debug, "Examining ", length(baseHTML), " HTML at ", baseURL, " to determine links to data\n", sep="")
     options(warn=owarn)
     close(con)
     baseLook <- grep(paste("<li><h([1-9])>", type, "</h\\1>", sep=""), baseHTML)
+    if (0 == length(baseLook))
+        stop("cannot find general links to data in the HTML source")
+    dcDebug(debug, "The data-links start at HTML line", baseLook[1], "\n")
     examine <- baseHTML[baseLook[1] + 0:10]
     ##print(examine)
     focus <- grep(format, examine)
     if (0 == length(focus))
         stop("cannot determine a URL for \"", format, "\" from code at ", baseURL)
+    focus <- focus[1]
+    dcDebug(debug, "The desired data start at HTML line", baseLook[1]+focus-1, "\n")
     ##print(examine[focus])
     ## "      <li><b>exchange:</b> <a href=\"/data/9582/09AR20041223_hy1.csv\">09AR20041223_hy1.csv</a> (810.2 kB)</li>"
     urlSuffix <- gsub('^.*<a href="(.*)".*$', "\\1", examine[focus])
@@ -125,17 +126,17 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
     } else {
         isZipfile <- 1 == length(grep(".zip$", destfile))
         destfileClean <- if (isZipfile) gsub(".zip$", "", destfile) else destfile
-        destination <- paste(destdir, destfileClean, sep="/")
+        destinationClean <- gsub(".zip$", "", destination)
         if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfileClean, "$", sep="")))) {
             dcDebug(debug, "Not downloading \"", destfileClean, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+            destination <- destinationClean
         } else {
             download.file(url, destination)
             dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-            if (unzip && 1 == length(grep(".zip$", destination))) {
-                exdir <-  gsub(".zip$", "", destination)
-                unzip(destination, exdir=exdir)
-                destination <- exdir
-                dcDebug(debug, "unzipped data into '", destination, "'\n", sep="")
+            if (isZipfile) {
+                unzip(destination, exdir=destinationClean)
+                dcDebug(debug, "unzipped data into '", destinationClean, "'\n", sep="")
+                destination <- destinationClean
             }
         }
     }

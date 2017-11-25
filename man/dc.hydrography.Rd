@@ -5,7 +5,7 @@
 \title{Download and Cache a Hydrographic Dataset}
 \usage{
 dc.hydrography(expocode, type = "bottle", format = "exchange", server,
-  unzip = TRUE, destdir = ".", destfile, force = FALSE, dryrun = FALSE,
+  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
   debug = getOption("dcDebug", 0))
 }
 \arguments{
@@ -21,12 +21,6 @@ default) or \code{"ctd"}.}
 \code{"cchdo.ucsd.edu"}, and it is unlikely that other values
 will work correctly, unless they are mirrors of this site, using
 the same URL structure.}
-
-\item{unzip}{Logical value, \code{TRUE} by default, indicating
-whether to unzip any ownloaded files that are in .zip form.
-This will construct a new subdirectory to hold the unzipped data,
-and sets the return value to the name of that new subdirectory,
-instead of the name of the zipfile. The zipfile is retained.}
 
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
