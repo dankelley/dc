@@ -5,7 +5,7 @@
 \title{Download and Cache a Hydrographic Dataset}
 \usage{
 dc.hydrography(expocode, type = "bottle", format = "exchange", server,
-  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
+  unzip = TRUE, destdir = ".", destfile, force = FALSE, dryrun = FALSE,
   debug = getOption("dcDebug", 0))
 }
 \arguments{
@@ -21,6 +21,12 @@ default) or \code{"ctd"}.}
 \code{"cchdo.ucsd.edu"}, and it is unlikely that other values
 will work correctly, unless they are mirrors of this site, using
 the same URL structure.}
+
+\item{unzip}{Logical value, \code{TRUE} by default, indicating
+whether to unzip any ownloaded files that are in .zip form.
+This will construct a new subdirectory to hold the unzipped data,
+and sets the return value to the name of that new subdirectory,
+instead of the name of the zipfile. The zipfile is retained.}
 
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
@@ -84,21 +90,22 @@ is required even if the desired file has already been downloaded.
 \examples{
 library(dc)
 \dontrun{
-## 1. A cruise between Australia and Antarctica.
-d <- dc.hydrography("09AR20041223")
 library(oce)
-plot(read.section(d), which="map")
+## 1. A cruise between Australia and Antarctica.
+bottle <- dc.hydrography("09AR20041223")
+plot(read.section(bottle), which="map")
+## 2. CTD data from same cruise
+ctd <- dc.hydrography("09AR20041223", type="ctd")
+plot(read.section(directory=ctd), which="map")
 }
 
 }
 \references{
-1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
-
-2. \url{https://www.nodc.noaa.gov/OC5/woa13}
+1. \url{https://cchdo.ucsd.edu}
 }
 \seealso{
 The work is done with \code{\link[utils]{download.file}}.
 }
 \author{
-Dan Kelley (2017-09-22)
+Dan Kelley (2017-11-25)
 }
