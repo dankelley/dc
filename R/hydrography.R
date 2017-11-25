@@ -51,12 +51,16 @@
 #' library(dc)
 #'\dontrun{
 #' library(oce)
-#' ## 1. A cruise between Australia and Antarctica.
+#' ## 1. Bottle stations for a Southern Ocean cruise
 #' bottle <- dc.hydrography("09AR20041223")
 #' plot(read.section(bottle), which="map")
-#' ## 2. CTD data from same cruise
+#' ##
+#' ## 2. CTD data from same cruise, subsetted to
+#' ##    a section between Antarctica and Australia
 #' ctd <- dc.hydrography("09AR20041223", type="ctd")
-#' plot(read.section(directory=ctd), which="map")
+#' secCTD <- read.section(directory=ctd)
+#' transectCTD <- subset(secCTD, 100 < longitude & longitude < 120)
+#' plot(transectCTD)
 #'}
 #'
 #' @seealso The work is done with \code{\link[utils]{download.file}}.
