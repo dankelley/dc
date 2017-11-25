@@ -1,7 +1,7 @@
 Package: dc
 Type: Package
 Title: Download and Cache Data
-Version: 1.0
+Version: 1.1
 Author: Dan Kelley
 Url: <https://dankelley.github.io/dc/index.html>
 Maintainer: Dan Kelley <dan.kelley@dal.ca>
