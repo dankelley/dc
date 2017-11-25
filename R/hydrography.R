@@ -123,7 +123,9 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server, u
     if (dryrun) {
         cat(url, "\n")
     } else {
-        destfileClean <- if (length(grep(".zip$", destfile))) gsub(".zip$", "", destfile) else destfile
+        isZipfile <- 1 == length(grep(".zip$", destfile))
+        destfileClean <- if (isZipfile) gsub(".zip$", "", destfile) else destfile
+        destination <- paste(destdir, destfileClean, sep="/")
         if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfileClean, "$", sep="")))) {
             dcDebug(debug, "Not downloading \"", destfileClean, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
         } else {
