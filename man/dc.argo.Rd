@@ -87,8 +87,14 @@ the mouse and keyboard.
 library(dc)
 \dontrun{
 library(oce)
-## 1. 
-a <- dc.argo(lon=c(-70,-30), lat=c(30,60),time=c("2017-11-26","2017-11-26"))
+## 1. Floats near Nova Scotia on Nov 26, 2017.
+n <- dc.argo(lon=c(-70,-30), lat=c(40,60),time=c("2017-11-26","2017-11-26"))
+a <- read.argo(n[1])
+plotTS(a)
+label <- paste(a[["longitude"]][1], "E ",
+               a[["latitude"]][1], "N ",
+               format(a[["time"]][1], "\%b \%d, \%Y"), sep="")
+mtext(label, side=3)
 }
 
 }

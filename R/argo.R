@@ -47,8 +47,14 @@
 #' library(dc)
 #'\dontrun{
 #' library(oce)
-#' ## 1. 
-#' a <- dc.argo(lon=c(-70,-30), lat=c(30,60),time=c("2017-11-26","2017-11-26"))
+#' ## 1. Floats near Nova Scotia on Nov 26, 2017.
+#' n <- dc.argo(lon=c(-70,-30), lat=c(40,60),time=c("2017-11-26","2017-11-26"))
+#' a <- read.argo(n[1])
+#' plotTS(a)
+#' label <- paste(a[["longitude"]][1], "E ",
+#'                a[["latitude"]][1], "N ",
+#'                format(a[["time"]][1], "%b %d, %Y"), sep="")
+#' mtext(label, side=3)
 #'}
 #'
 #' @references
@@ -126,33 +132,27 @@ dc.argo <- function(longitude, latitude, time, server="www.usgodae.org",
     dcDebug(debug, "profile info found on lines ", paste(profileLines + start[1] - 1, collapse=" "), "\n")
 
     ## <option value=\"meds/4901765/profiles/R4901765_132.nc\">20171126 | 0600 | 40.398N | -66.487E | 4901765 | meds | R4901765_132.nc</option>
-    urls <- gsub('<option value="([^"]*)".*', "\\1", focus[profileLines])
+    url <- gsub('<option value="([^"]*)".*', "\\1", focus[profileLines])
     prefix <- "http://www.usgodae.org/ftp/outgoing/argo/dac/"
-    urls <- paste(prefix, urls, sep="")
-    warning("dc.argo() is NOT downloading the data yet, just finding URLs for the data\n")
-    warning("try e.g.\n\tu<-dc.argo(etc)\n\tdownload.file(u[1],\"test.nc\")\n\ta<-read.oce(\"test.nc\")\n\tplotTS(a)\n")
-    return(urls)
-    dcDebug(debug, "urls: ", paste(urls, collapse=" "), "\n")
-    browser()
+    url <- paste(prefix, url, sep="")
+    destfile <- gsub("^.*/", "", url)
+    dcDebug(debug, "url: ", paste(url, collapse=" "), "\n")
     ## Below is standard code that should be used at the end of every dc.x() function.
     destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "url:", url, "\n")
+    dcDebug(debug, "destfile: ", paste(destfile, collapse=" "), "\n")
     if (dryrun) {
-        cat(url, "\n")
+        cat(paste(url, sep=" "), "\n")
     } else {
-        isZipfile <- 1 == length(grep(".zip$", destfile))
-        destfileClean <- if (isZipfile) gsub(".zip$", "", destfile) else destfile
-        destinationClean <- gsub(".zip$", "", destination)
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfileClean, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfileClean, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-            destination <- destinationClean
-        } else {
-            download.file(url, destination)
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-            if (isZipfile) {
-                unzip(destination, exdir=destinationClean)
-                dcDebug(debug, "unzipped data into '", destinationClean, "'\n", sep="")
-                destination <- destinationClean
+        for (i in seq_along(url)) {
+            ## message(url[i])
+            ## message(destfile[i])
+            ## message(destination[i])
+            ## cat("\n")
+            if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile[i], "$", sep="")))) {
+                dcDebug(debug, "Not downloading \"", destfile[i], "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
+            } else {
+                download.file(url[i], destination[i])
+                dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
             }
         }
     }
