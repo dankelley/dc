@@ -57,8 +57,6 @@
 #' plot(transectCTD)
 #'}
 #'
-#' @seealso The work is done with \code{\link[utils]{download.file}}.
-#'
 #' @references
 #' 1. \url{https://cchdo.ucsd.edu}
 #'
