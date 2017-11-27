@@ -152,7 +152,7 @@ dc.argo <- function(longitude, latitude, time, server="www.usgodae.org",
             if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile[i], "$", sep="")))) {
                 dcDebug(debug, "Not downloading \"", destfile[i], "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
             } else {
-                download.file(url[i], destination[i])
+                download.file(url[i], destination[i], mode="wb")
                 dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
             }
         }
