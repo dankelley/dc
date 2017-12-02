@@ -1,3 +1,3 @@
 exportPattern("^[[:alpha:]]+")
-importFrom("utils", "download.file", "flush.console")
+importFrom("utils", "download.file", "flush.console", "read.csv", "unzip")
 

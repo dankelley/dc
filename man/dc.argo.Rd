@@ -2,13 +2,28 @@
 % Please edit documentation in R/argo.R
 \name{dc.argo}
 \alias{dc.argo}
+\alias{dc.argoID}
+\alias{dc.argoSearch}
 \title{Download and Cache an Argo Dataset}
 \usage{
-dc.argo(longitude, latitude, time, server = "www.usgodae.org",
+dc.argo(id, longitude, latitude, time, server = "www.usgodae.org",
+  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
+  debug = getOption("dcDebug", 0))
+
+dc.argoID(id, server = "www.usgodae.org", destdir = ".", destfile,
+  force = FALSE, dryrun = FALSE, debug = getOption("dcDebug", 0))
+
+dc.argoSearch(id, longitude, latitude, time, server = "www.usgodae.org",
   destdir = ".", destfile, force = FALSE, dryrun = FALSE,
   debug = getOption("dcDebug", 0))
 }
 \arguments{
+\item{id}{A character value indicating the ID of a particular
+argo float. If this is provided, then \code{longitude}
+\code{latitude} and \code{time} are ignored, and \code{dc.argo}
+downloads a file that contains all the profiles for the
+named float.}
+
 \item{longitude}{Two-element numerical vector holding the limits
 of longitude (degrees East) to search for Argo profiles.}
 
@@ -63,38 +78,48 @@ The data are downloaded, and a simple filename convention permits a caching sche
 in which subsequent calls provide access to these downloaded data.
 }
 \details{
-\code{dc.argo} downloads Argo profiles from a USGODAE server [1], by
-constructing queries that are devised based on inspection of queries
-constructed from the GUI-style webpage [2]. Profiles are specified
-in a location-time window.  See \dQuote{Caution} for notes on the
-brittleness of the procedure used here.
+\code{dc.argoId} downloads all data for the float with
+a specified identifier, \code{dc.argoSearch} downloads the
+most recent profile for all floats in a specified longitude,
+latitude, and time box, and \code{dc.argo} is a wrapper that
+calls either of the first two functions, depending on
+whether the \code{id} argument is provided.
+
+In any case, the downloads are made from the USGODAE server [1]
+by default (or from any other server that obeys the same directory
+structure). Since the servers do not provide an API for such
+downloads, the \code{dc.argo*} functions are forced to work by
+constructing URLs that are devised based on inspection of queries
+constructed from a GUI-style webpage [2]. This leads to a
+brittleness that is discussed in \dQuote{Caution}.
 }
 \section{Caution}{
 
-USGODAE does not provide an API for downloading data, and so the
-queries used by \code{dc.argo} will not work properly if USGODAE
-changes their system. For an example, USGODAE presently looks for
-the substring \code{".submit=++Go++"} in the query, but if this
-gets switched to \code{".submit=Go"}, then \code{dc.argo} will
-fail.  It would certainly be preferable to use
-a more formal application-programmer-interface, but until USGODAE
-provide such an API, \code{dc.argo} provides a stopgap measure
-that avoids the requirement to interact with a web interface using
-the mouse and keyboard.
+The queries used by the \code{dc.argo} functions will fail
+if USGODAE changes their system. For an example, USGODAE presently looks
+for the substring \code{".submit=++Go++"} in the query, but if this
+were to be switched to \code{".submit=Go"}, a seemingly trivial
+change, then \code{dc.argo} would fail entirely. For this reason,
+the \code{read.argo*} functions may fail at any time. Users who
+encounter this problem should contact the author, who may be able
+to find a way to reverse-engineer the updated Argo system.
 }
 
 \examples{
 library(dc)
 \dontrun{
 library(oce)
-## 1. Floats near Nova Scotia on Nov 26, 2017.
-n <- dc.argo(lon=c(-70,-30), lat=c(40,60),time=c("2017-11-26","2017-11-26"))
+## 1. Get float profiles near Nova Scotia on Remembrance Day, 2017,
+##    and plot the first one as a CTD.
+n <- dc.argo(longitude=c(-65,-55), latitude=c(40,50),
+             time=c("2017-11-11","2017-11-11"))
 a <- read.argo(n[1])
-plotTS(a)
-label <- paste(a[["longitude"]][1], "E ",
-               a[["latitude"]][1], "N ",
-               format(a[["time"]][1], "\%b \%d, \%Y"), sep="")
-mtext(label, side=3)
+plotTS(as.ctd(a))
+
+## 2. All profiles for a particular float.
+N <- dc.argo(id="4902912")
+A <- read.argo(N)
+plot(A, type="l") # trajectory
 }
 
 }
