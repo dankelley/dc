@@ -34,9 +34,9 @@ latitude limits (degrees North).}
 time limits in YYYY-MM-DD format.}
 
 \item{server}{String indicating the server. The default is
-\code{"cchdo.ucsd.edu"}, and it is unlikely that other values
+\code{"www.usgodae.org"}, and it is unlikely that other values
 will work correctly, unless they are mirrors of this site, using
-the same URL structure.}
+the same URL structure and file formats.}
 
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file

@@ -47,9 +47,9 @@
 #' time limits in YYYY-MM-DD format.
 #'
 #' @param server String indicating the server. The default is
-#' \code{"cchdo.ucsd.edu"}, and it is unlikely that other values
+#' \code{"www.usgodae.org"}, and it is unlikely that other values
 #' will work correctly, unless they are mirrors of this site, using
-#' the same URL structure.
+#' the same URL structure and file formats.
 #'
 #' @template filenames
 #'
