@@ -94,7 +94,6 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
     owarn <- options("warn")$warn
     options(warn=-1)
     baseHTML <- readLines(con)
-    dan<<-baseHTML
     dcDebug(debug, "Examining ", length(baseHTML), " HTML at ", baseURL, " to determine links to data\n", sep="")
     options(warn=owarn)
     close(con)
