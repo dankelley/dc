@@ -63,7 +63,7 @@
 #' plot(met)
 #'}
 #'
-#' @seealso The work is done with \code{\link[utils]{download.file}}.
+#' @seealso The work is done with \code{\link{dc.dc}}.
 #'
 #' @references
 #' 1. Environment Canada website for Historical Climate Data
@@ -114,21 +114,8 @@ dc.met <- function(id, year, month, deltat="hour",
     } else {
         stop("deltat must be \"hour\" or \"month\"")
     }
-    ##
-    ## Below is standard code that should be used at the end of every dc.x() function.
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "url:", url, "\n")
-    if (dryrun) {
-        cat(url, "\n")
-    } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-        } else {
-            download.file(url, destination)
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-        }
-    }
-    destination
+    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    dcDebug(debug, "} # dc.met", sep="", "\n", unindent=1)
+    rval
 }
-
 

@@ -123,7 +123,7 @@ for (field in c("temperature", "salinity", "oxygen", "silicate",
 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 }
 \seealso{
-The work is done with \code{\link[utils]{download.file}}.
+The work is done with \code{\link{dc.dc}}.
 }
 \author{
 Dan Kelley (2017-09-22)

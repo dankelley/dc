@@ -106,7 +106,7 @@ plot(met)
 \url{https://github.com/gavinsimpson/canadaHCD}
 }
 \seealso{
-The work is done with \code{\link[utils]{download.file}}.
+The work is done with \code{\link{dc.dc}}.
 }
 \author{
 Dan Kelley

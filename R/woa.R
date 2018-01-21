@@ -79,7 +79,7 @@
 #' 	dc.woa(field=field)
 #'}
 #'
-#' @seealso The work is done with \code{\link[utils]{download.file}}.
+#' @seealso The work is done with \code{\link{dc.dc}}.
 #'
 #' @references
 #' 1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
@@ -145,20 +145,8 @@ dc.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, fiel
     } else {
         stop("unknown field, \"", field, "\"") # we cannot reach this point, but keep it in case of code changes
     }
-    ##
-    ## Below is standard code that should be used at the end of every dc.x() function.
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "url:", url, "\n")
-    if (dryrun) {
-        cat(url, "\n")
-    } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-        } else {
-            download.file(url, destination)
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-        }
-    }
-    destination
+    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    dcDebug(debug, "} # dc.woa", sep="", "\n", unindent=1)
+    rval
 }
 

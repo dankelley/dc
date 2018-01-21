@@ -63,7 +63,7 @@ in which subsequent calls provide access to these downloaded data.
 }
 \details{
 \code{dc.hydography} downloads hydographic datasets from the CCHDO archive,
-(or mirrors that use the exact same URL structure, apart from the 
+(or mirrors that use the exact same URL structure, apart from the
 server name) based on a specified "expocode" that specifies the
 expedition or cruise. This is convenient, because expocodes are how
 cruises are referred to in the literature. See \dQuote{Limitiations} for

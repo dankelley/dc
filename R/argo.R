@@ -75,10 +75,11 @@
 #'}
 #'
 #' @references
-#' 1. \url{https://www.usgodae.org}
+#' 1. \url{http://www.usgodae.org}
 #'
 #' 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
 #'
+#' @seealso The work is done with \code{\link{dc.dc}}.
 #'
 #' @author Dan Kelley (2017-11-26)
 dc.argo <- function(id,
