@@ -3,10 +3,56 @@
 #' @name dc
 NULL
 
+#' Download and Cache a Dataset
+#'
+#' @description
+#' General function for downloading and caching a dataset. This is called
+#' by e.g. \code{\link{dc.argo}} and the other functions in the \package{dc}
+#' package.
+#'
+#' @template intro
+#' @template filenames
+#' @template debug
+#'
+#' @return String indicating the full pathname to the downloaded file.
+dc.dc <- function(url=NULL, destdir=".", destfile=NULL, force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
+{
+    if (missing(url))
+        stop("missing url")
+    if (missing(destdir))
+        stop("missing destdir")
+    dcDebug(debug, "dc(",
+            "url=c('", paste(url, collapse="', '"), "'), ",
+            "destdir='", destdir, "', ",
+            "destfile=c('", paste(destfile, collapse="', '"), "'), ",
+            "debug=", debug,
+            ") {", sep="", "\n", unindent=1)
+    destination <- paste(destdir, destfile, sep="/")
+    dcDebug(debug, "destination: ", destination, "\n")
+    n <- length(url)
+    if (length(destfile) != n)
+        stop("length(url) must equal length(destfile)")
+    if (dryrun) {
+        for (i in 1:n) {
+            cat("'", url[i], "' -> '", destination[i], "'\n", sep="")
+        }
+    } else {
+        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+            dcDebug(debug, "Skipping \"", destfile, "\" because it is already in \"", destdir, "\n", sep="")
+        } else {
+            for (i in 1:n) {
+                download.file(url[i], destination[i], mode="wb")
+                dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
+            }
+        }
+    }
+    dcDebug(debug, "} # dc()", sep="", "\n", unindent=1)
+    destination
+}
 
 #' Possibly print a debugging message
 #'
-#' \code{dcDebug} prints a message, if its first argument exceeds 0. 
+#' \code{dcDebug} prints a message, if its first argument exceeds 0.
 #' Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
 #' functions, so the effect is a nesting, with more space for deeper function
 #' level. Messages are indented according to the value of the \code{debug+indent}.

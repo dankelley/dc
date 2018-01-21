@@ -152,25 +152,9 @@ dc.argoID<- function(id,
     ## e.g. http://www.usgodae.org/ftp/outgoing/argo/dac/aoml/4902912/4902912_prof.nc
     destfile <- paste(id, "_prof.nc", sep="")
     url <- paste("http://", server, "/ftp/outgoing/argo/dac/", dac, "/", id, "/", destfile, sep="")
-    dcDebug(debug, "infer url \"", url, "\"\n", sep="")
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "destfile: ", paste(destfile, collapse=" "), "\n")
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "destination: ", destination, "\n")
-    if (dryrun) {
-        cat(url, "\n")
-        cat(" ->\n")
-        cat("    ", destination, "\n")
-    } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfile, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-        } else {
-            download.file(url, destination, mode="wb")
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-        }
-    }
+    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.argoID", sep="", "\n", unindent=1)
-    destination
+    rval
 }
 
 #' @rdname dc.argo
@@ -248,28 +232,9 @@ dc.argoSearch <- function(id, longitude, latitude, time,
     prefix <- "http://www.usgodae.org/ftp/outgoing/argo/dac/"
     url <- paste(prefix, url, sep="")
     destfile <- gsub("^.*/", "", url)
-    dcDebug(debug, "destfile: ", paste(destfile, collapse=" "), "\n")
-    dcDebug(debug, "url: ", paste(url, collapse=" "), "\n")
-    ## Below is standard code that should be used at the end of every dc.x() function.
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "destination: ", destination, "\n")
-    if (dryrun) {
-        cat(paste(url, sep=" "), "\n")
-    } else {
-        for (i in seq_along(url)) {
-            ## message(url[i])
-            ## message(destfile[i])
-            ## message(destination[i])
-            ## cat("\n")
-            if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile[i], "$", sep="")))) {
-                dcDebug(debug, "Not downloading \"", destfile[i], "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-            } else {
-                download.file(url[i], destination[i], mode="wb")
-                dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
-            }
-        }
-    }
+    ## Below is standard code that should be mimicked at the end of every dc.x() function.
+    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.argoSearch", sep="", "\n", unindent=1)
-    destination
+    rval
 }
 

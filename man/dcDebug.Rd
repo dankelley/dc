@@ -19,7 +19,7 @@ messages from appearing on the same line.}
 this to \code{-1} for messages about entering or exiting a function.}
 }
 \description{
-\code{dcDebug} prints a message, if its first argument exceeds 0. 
+\code{dcDebug} prints a message, if its first argument exceeds 0.
 Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
 functions, so the effect is a nesting, with more space for deeper function
 level. Messages are indented according to the value of the \code{debug+indent}.
