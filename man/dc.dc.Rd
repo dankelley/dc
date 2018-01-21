@@ -43,7 +43,7 @@ String indicating the full pathname to the downloaded file.
 }
 \description{
 General function for downloading and caching a dataset. This is called
-by e.g. \code{\link{dc.argo}} and the other functions in the \package{dc}
+by e.g. \code{\link{dc.argo}} and the other functions in the \code{dc}
 package.
 
 The data are downloaded, and a simple filename convention permits a caching scheme
