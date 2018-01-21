@@ -10,12 +10,12 @@ dc.argo(id, longitude, latitude, time, server = "www.usgodae.org",
   destdir = ".", destfile, force = FALSE, dryrun = FALSE,
   debug = getOption("dcDebug", 0))
 
-dc.argoID(id, server = "www.usgodae.org", destdir = ".", destfile,
+dc.argoID(id = NULL, server = "www.usgodae.org", destdir = ".", destfile,
   force = FALSE, dryrun = FALSE, debug = getOption("dcDebug", 0))
 
-dc.argoSearch(id, longitude, latitude, time, server = "www.usgodae.org",
-  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
-  debug = getOption("dcDebug", 0))
+dc.argoSearch(id = NULL, longitude, latitude, time,
+  server = "www.usgodae.org", destdir = ".", destfile, force = FALSE,
+  dryrun = FALSE, debug = getOption("dcDebug", 0))
 }
 \arguments{
 \item{id}{A character value indicating the ID of a particular
@@ -40,7 +40,7 @@ the same URL structure and file formats.}
 
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.  It can be 
+is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
 with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}

@@ -112,7 +112,7 @@ dc.argo <- function(id,
 }
 
 #' @rdname dc.argo
-dc.argoID<- function(id,
+dc.argoID<- function(id=NULL,
                      server="www.usgodae.org",
                      destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                      debug=getOption("dcDebug", 0))
@@ -158,7 +158,7 @@ dc.argoID<- function(id,
 }
 
 #' @rdname dc.argo
-dc.argoSearch <- function(id, longitude, latitude, time,
+dc.argoSearch <- function(id=NULL, longitude, latitude, time,
                           server="www.usgodae.org",
                           destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                           debug=getOption("dcDebug", 0))
@@ -191,9 +191,7 @@ dc.argoSearch <- function(id, longitude, latitude, time,
 
     ## http://www.usgodae.org/cgi-bin/argo_select.pl?startyear=2017&startmonth=11&startday=26&endyear=2017&endmonth=11&endday=26&Nlat=60&Wlon=-70&Elon=-30&Slat=30&dac=ALL&floatid=ALL&gentype=txt&.submit=++Go++&.cgifields=endyear&.cgifields=dac&.cgifields=delayed&.cgifields=startyear&.cgifields=endmonth&.cgifields=endday&.cgifields=startday&.cgifields=startmonth&.cgifields=gentype
 
-
-    ## below is hand-cleaned
-    eg <- "http://www.usgodae.org/cgi-bin/argo_select.pl?startyear=2017&startmonth=11&startday=26&endyear=2017&endmonth=11&endday=26&Nlat=60&Wlon=-70&Elon=-30&Slat=30&dac=ALL&floatid=ALL&gentype=txt&.submit=++Go++"
+    ## http://www.usgodae.org/cgi-bin/argo_select.pl?startyear=2017&startmonth=11&startday=26&endyear=2017&endmonth=11&endday=26&Nlat=60&Wlon=-70&Elon=-30&Slat=30&dac=ALL&floatid=ALL&gentype=txt&.submit=++Go++
 
     baseURL <- paste("http://", server, "/cgi-bin/argo_select.pl?", sep="")
     dcDebug(debug, "baseURL: ", baseURL, "\n")

@@ -11,6 +11,8 @@ NULL
 #' package.
 #'
 #' @template intro
+#' @param url String containing the name of the URL from which the data file
+#' is to be downloaded.
 #' @template filenames
 #' @template debug
 #'
