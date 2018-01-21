@@ -44,7 +44,14 @@ dc.dc <- function(url=NULL, destdir=".", destfile=NULL, force=FALSE, dryrun=FALS
         } else {
             for (i in 1:n) {
                 download.file(url[i], destination[i], mode="wb")
-                dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
+                if (1 == length(grep(".zip$", destfile[i]))) {
+                    destinationClean <- gsub(".zip$", "", destination[i])
+                    unzip(destination[i], exdir=destinationClean)
+                    destination[i] <- destinationClean
+                    dcDebug(debug, "Downloaded and unzipped into '", destinationClean, "'\n", sep="")
+                } else {
+                    dcDebug(debug, "Downloaded file stored as '", destination[i], "'\n", sep="")
+                }
             }
         }
     }

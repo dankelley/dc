@@ -113,31 +113,8 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
     urlSuffix <- gsub('^.*<a href="(.*)".*$', "\\1", examine[focus])
     destfile <- gsub("/data/.*/", "", urlSuffix)
     url <- paste("https://", server, "/", urlSuffix, sep="")
-    ##    https://cchdo.ucsd.edu/data/2463/i09s_09AR20041223_nc_ctd.zip
-    ##
-    ## Below is standard code that should be used at the end of every dc.x() function.
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "url:", url, "\n")
-    if (dryrun) {
-        cat(url, "\n")
-    } else {
-        isZipfile <- 1 == length(grep(".zip$", destfile))
-        destfileClean <- if (isZipfile) gsub(".zip$", "", destfile) else destfile
-        destinationClean <- gsub(".zip$", "", destination)
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfileClean, "$", sep="")))) {
-            dcDebug(debug, "Not downloading \"", destfileClean, "\" because it is already present in the \"", destdir, "\" directory\n", sep="")
-            destination <- destinationClean
-        } else {
-            download.file(url, destination)
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-            if (isZipfile) {
-                unzip(destination, exdir=destinationClean)
-                dcDebug(debug, "unzipped data into '", destinationClean, "'\n", sep="")
-                destination <- destinationClean
-            }
-        }
-    }
+    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.hydrography", sep="", "\n", unindent=1)
-    destination
+    rval
 }
 
