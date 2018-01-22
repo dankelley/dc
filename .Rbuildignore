@@ -1,3 +1,5 @@
+*.zip
+*_coastline
 man-roxygen
 docs
 ^.*\.nc
