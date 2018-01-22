@@ -85,5 +85,5 @@ plot(coastline)
 \seealso{
 The work is done with \code{\link[utils]{download.file}}.
 
-The work is done with \code{\link{dc.dc}}.
+The work is done with \code{\link{dc}}.
 }

@@ -44,7 +44,7 @@
 #' plot(coastline)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc.dc}}.
+#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @references
 #' 1. The NaturalEarth server is at \url{http://www.naturalearthdata.com}
@@ -69,7 +69,7 @@ dc.coastline <- function(resolution, item="coastline",
     if (missing(destfile))
         destfile <- filename
     url <- paste(urlBase, "/", resolution, "/physical/", filename, sep="")
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=FALSE, force=FALSE, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=FALSE, force=FALSE, debug=debug-1)
     dcDebug(debug, "} # dc.coastline", sep="", "\n", unindent=1)
     rval
 }

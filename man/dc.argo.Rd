@@ -129,7 +129,7 @@ plot(A, type="l") # trajectory
 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
 }
 \seealso{
-The work is done with \code{\link{dc.dc}}.
+The work is done with \code{\link{dc}}.
 }
 \author{
 Dan Kelley (2017-11-26)

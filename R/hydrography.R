@@ -60,6 +60,8 @@
 #' @references
 #' 1. \url{https://cchdo.ucsd.edu}
 #'
+#' @seealso The work is done with \code{\link{dc}}.
+#'
 #' @author Dan Kelley (2017-11-25)
 dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
@@ -113,7 +115,7 @@ dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
     urlSuffix <- gsub('^.*<a href="(.*)".*$', "\\1", examine[focus])
     destfile <- gsub("/data/.*/", "", urlSuffix)
     url <- paste("https://", server, "/", urlSuffix, sep="")
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.hydrography", sep="", "\n", unindent=1)
     rval
 }

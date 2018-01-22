@@ -63,7 +63,7 @@
 #' plot(met)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc.dc}}.
+#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @references
 #' 1. Environment Canada website for Historical Climate Data
@@ -114,7 +114,7 @@ dc.met <- function(id, year, month, deltat="hour",
     } else {
         stop("deltat must be \"hour\" or \"month\"")
     }
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.met", sep="", "\n", unindent=1)
     rval
 }

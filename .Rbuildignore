@@ -1,5 +1,5 @@
-*.zip
-*_coastline
+^.*\.zip$
+^.*_coastline$
 man-roxygen
 docs
 ^.*\.nc

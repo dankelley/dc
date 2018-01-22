@@ -164,20 +164,8 @@ dc.topo <- function(west, east, south, north, resolution, format, server,
     ## http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy?filename=etopo1.grd&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=gmt&resx=0.016666666666666667&resy=0.016666666666666667&bbox=-63.69873046873296,44.824708282290764,-62.3803710937333,45.259422036342194
     url <- sprintf("%s?filename=%s&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=%s&resx=%f&resy=%f&bbox=%f,%f,%f,%f",
                    server, filename, format, res, res, west, south, east, north)
-    ##
-    ## Below is standard code that should be used at the end of every dc.x() function.
-    destination <- paste(destdir, destfile, sep="/")
-    dcDebug(debug, "source url:", url, "\n")
-    if (dryrun) {
-        cat(url, "\n")
-    } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
-            dcDebug(debug, "Not downloading", destfile, "because it is already present in", destdir, "\n")
-        } else {
-            download.file(url, destination)
-            dcDebug(debug, "Downloaded file stored as '", destination, "'\n", sep="")
-        }
-    }
-    destination
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    dcDebug(debug, "} # dc.topo", sep="", "\n", unindent=1)
+    rval
 }
 

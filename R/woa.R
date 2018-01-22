@@ -79,7 +79,7 @@
 #' 	dc.woa(field=field)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc.dc}}.
+#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @references
 #' 1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
@@ -145,7 +145,7 @@ dc.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, fiel
     } else {
         stop("unknown field, \"", field, "\"") # we cannot reach this point, but keep it in case of code changes
     }
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.woa", sep="", "\n", unindent=1)
     rval
 }

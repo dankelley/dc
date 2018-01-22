@@ -17,7 +17,7 @@ NULL
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
-dc.dc <- function(url=NULL, destdir=".", destfile=NULL, force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
+dc <- function(url=NULL, destdir=".", destfile=NULL, force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
 {
     if (missing(url))
         stop("missing url")

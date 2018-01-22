@@ -79,7 +79,7 @@
 #'
 #' 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
 #'
-#' @seealso The work is done with \code{\link{dc.dc}}.
+#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @author Dan Kelley (2017-11-26)
 dc.argo <- function(id,
@@ -153,7 +153,7 @@ dc.argoID<- function(id=NULL,
     ## e.g. http://www.usgodae.org/ftp/outgoing/argo/dac/aoml/4902912/4902912_prof.nc
     destfile <- paste(id, "_prof.nc", sep="")
     url <- paste("http://", server, "/ftp/outgoing/argo/dac/", dac, "/", id, "/", destfile, sep="")
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.argoID", sep="", "\n", unindent=1)
     rval
 }
@@ -232,7 +232,7 @@ dc.argoSearch <- function(id=NULL, longitude, latitude, time,
     url <- paste(prefix, url, sep="")
     destfile <- gsub("^.*/", "", url)
     ## Below is standard code that should be mimicked at the end of every dc.x() function.
-    rval <- dc.dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.argoSearch", sep="", "\n", unindent=1)
     rval
 }

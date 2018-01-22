@@ -101,6 +101,9 @@ plot(transectCTD)
 \references{
 1. \url{https://cchdo.ucsd.edu}
 }
+\seealso{
+The work is done with \code{\link{dc}}.
+}
 \author{
 Dan Kelley (2017-11-25)
 }
