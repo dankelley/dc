@@ -73,6 +73,8 @@
 #' \url{https://github.com/gavinsimpson/canadaHCD}
 #'
 #' @author Dan Kelley 2017-09-16
+#'
+#' @family functions that download ocean-related data
 dc.met <- function(id, year, month, deltat="hour",
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))

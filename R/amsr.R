@@ -24,8 +24,15 @@
 #' The default is to store in the present directory, but many users find it more
 #' helpful to use something like \code{"~/data/amsr"} for this, to collect all
 #' downloaded amsr files in one place.
+#'
 #' @param server A string naming the server from which data
-#' are to be acquired. See \dQuote{History}.
+#' are to be acquired, sans the final underline and characters
+#' after it. For example, the website
+#' \code{http://data.remss.com/amsr2/bmaps_v08},
+#' is indicated with \code{server="http://data.remss.com/amsr2/bmaps_v08"}.
+#'
+#' @param version Character string indicating the 'version' name in
+#' the files.
 #'
 #' @template filenames
 #'
@@ -50,8 +57,11 @@
 #' \url{http://images.remss.com/amsr/amsr2_data_daily.html}
 #' provides daily images going back to 2012. Three-day,
 #' monthly, and monthly composites are also provided on that site.
+#'
+#' @family functions that download ocean-related data
 dc.amsr <- function(year, month, day,
-                    server="http://data.remss.com/amsr2/bmaps_v08",
+                    server="http://data.remss.com/amsr2/bmaps",
+                    version="v08",
                     destdir=".", destfile, force=FALSE, dryrun=FALSE,
                     debug=getOption("dcDebug", 0))
 {
@@ -68,10 +78,11 @@ dc.amsr <- function(year, month, day,
     year <- as.integer(year)
     month <- as.integer(month)
     day <- as.integer(day)
-    destfile <- sprintf("f34_%4d%02d%02dv8.gz", year, month, day)
+    destfile <- sprintf("f34_%4d%02d%02dv%s.gz", year, month, day, server)
     ## example
     ## http://data.remss.com/amsr2/bmaps_v07.2/y2015/m11/f34_20151101v7.2.gz
-    url <- sprintf("%s/y%4d/m%02d/%s", server, year, month, destfile)
+    ## http://data.remss.com/amsr2/bmaps_v08/y2015/m11/f34_20151101v8.gz
+    url <- sprintf("%s_%s/y%4d/m%02d/%s", server, version, year, month, destfile)
     rval <- dc(url=url, destdir=destdir, destfile=destfile,
                dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.argoSearch", sep="", "\n", unindent=1)

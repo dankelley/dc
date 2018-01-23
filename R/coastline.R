@@ -49,8 +49,7 @@
 #' @references
 #' 1. The NaturalEarth server is at \url{http://www.naturalearthdata.com}
 #'
-#' @family functions that download files
-#' @family things related to \code{coastline} data
+#' @family functions that download ocean-related data
 dc.coastline <- function(resolution, item="coastline",
                          destdir=".", destfile,
                          server="naturalearth",

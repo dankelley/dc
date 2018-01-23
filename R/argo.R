@@ -82,6 +82,8 @@
 #' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @author Dan Kelley (2017-11-26)
+#'
+#' @family functions that download ocean-related data
 dc.argo <- function(id,
                     longitude, latitude, time, server="www.usgodae.org",
                     destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args

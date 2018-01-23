@@ -87,9 +87,12 @@
 #' 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 #'
 #' @author Dan Kelley (2017-09-22)
-dc.woa <- function(database="woa13", version=NULL, time=NULL, resolution=1, field="temperature",
-                         destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
-                         debug=getOption("dcDebug", 0))
+#'
+#' @family functions that download ocean-related data
+dc.woa <- function(database="woa13",
+                   version=NULL, time=NULL, resolution=1, field="temperature",
+                   destdir=".", destfile, force=FALSE, dryrun=FALSE,
+                   debug=getOption("dcDebug", 0))
 {
     if (database != "woa13")
         stop("database must equal \"woa13\"")

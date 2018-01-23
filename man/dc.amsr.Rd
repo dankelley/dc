@@ -4,9 +4,9 @@
 \alias{dc.amsr}
 \title{Download and Cache an AMSR File}
 \usage{
-dc.amsr(year, month, day, server = "http://data.remss.com/amsr2/bmaps_v08",
-  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
-  debug = getOption("dcDebug", 0))
+dc.amsr(year, month, day, server = "http://data.remss.com/amsr2/bmaps",
+  version = "v08", destdir = ".", destfile, force = FALSE,
+  dryrun = FALSE, debug = getOption("dcDebug", 0))
 }
 \arguments{
 \item{year, month, day}{Numerical values of the year, month, and day
@@ -22,7 +22,13 @@ third option, which is to leave \code{day} unspecified, which
 works as though \code{day=3} had been given.}
 
 \item{server}{A string naming the server from which data
-are to be acquired. See \dQuote{History}.}
+are to be acquired, sans the final underline and characters
+after it. For example, the website
+\code{http://data.remss.com/amsr2/bmaps_v08},
+is indicated with \code{server="http://data.remss.com/amsr2/bmaps_v08"}.}
+
+\item{version}{Character string indicating the 'version' name in
+the files.}
 
 \item{destdir}{A string naming the directory in which to cache the downloaded file.
 The default is to store in the present directory, but many users find it more
@@ -91,4 +97,10 @@ mtext(d[["filename"]], side=3, line=0, adj=0)
 \url{http://images.remss.com/amsr/amsr2_data_daily.html}
 provides daily images going back to 2012. Three-day,
 monthly, and monthly composites are also provided on that site.
+}
+\seealso{
+Other functions that download ocean-related data: \code{\link{dc.argo}},
+  \code{\link{dc.coastline}}, \code{\link{dc.hydrography}},
+  \code{\link{dc.met}}, \code{\link{dc.topo}},
+  \code{\link{dc.woa}}
 }

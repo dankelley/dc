@@ -63,6 +63,8 @@
 #' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @author Dan Kelley (2017-11-25)
+#'
+#' @family functions that download ocean-related data
 dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))

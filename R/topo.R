@@ -11,10 +11,10 @@
 #' Data are downloaded (from \samp{https://maps.ngdc.noaa.gov/viewers/wcs-client/}, by
 #' default) and a string containing the full path
 #' to the downloaded file is returned. If \code{destfile} is not supplied,
-#' then the filename is constructed from the query, which means that 
+#' then the filename is constructed from the query, which means that
 #' subsequent calls to \code{dc.topo}  with identical parameters will
 #' simply return the name of the cached file, assuming the user has not
-#' deleted it in the meantime. 
+#' deleted it in the meantime.
 #'
 #' The data are downloaded with \code{\link[utils]{download.file}}, using a URL
 #' devised from reverse engineering web-based queries constructed by
@@ -78,14 +78,14 @@
 #' the data source, but the URL has not been static. A list of the
 #' servers that have been used is provided below,
 #' in hopes that it can help users to make guesses
-#' for \code{server}, should \code{dc.topo} fail because of 
+#' for \code{server}, should \code{dc.topo} fail because of
 #' a fail to download the data because of a broken link. Another
 #' hint is to look at the source code for
 #' \code{\link[marmap]{getNOAA.bathy}} in the \CRANpkg{marmap} package,
 #' which is also forced to track the moving target that is NOAA.
 #'
 #' \itemize{
-#' \item August 2016. 
+#' \item August 2016.
 #' \samp{http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy}
 #'
 #' \item December 2016.
@@ -106,13 +106,15 @@
 #' [access date: Aug 30, 2017].
 #'
 #' @author Dan Kelley 2017-09-16
+#'
+#' @family functions that download ocean-related data
 dc.topo <- function(west, east, south, north, resolution, format, server,
                           destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                           debug=getOption("dcDebug", 0))
 {
     if (missing(server)) {
         server <- "https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
-        ## server <- "http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz" 
+        ## server <- "http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
         ## server <- "http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy"
     }
     if (missing(destdir))
