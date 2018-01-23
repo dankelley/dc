@@ -1,3 +1,6 @@
+# AMSR files
+f34*.gz
+
 .DS_Store
 *_coastline
 *~
