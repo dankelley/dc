@@ -144,8 +144,8 @@ The work is done with \code{\link[utils]{download.file}}.
 
 Other functions that download ocean-related data: \code{\link{dc.amsr}},
   \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.hydrography}}, \code{\link{dc.met}},
-  \code{\link{dc.woa}}
+  \code{\link{dc.g1sst}}, \code{\link{dc.hydrography}},
+  \code{\link{dc.met}}, \code{\link{dc.woa}}
 }
 \author{
 Dan Kelley

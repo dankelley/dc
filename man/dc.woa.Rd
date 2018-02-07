@@ -127,8 +127,8 @@ The work is done with \code{\link{dc}}.
 
 Other functions that download ocean-related data: \code{\link{dc.amsr}},
   \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.hydrography}}, \code{\link{dc.met}},
-  \code{\link{dc.topo}}
+  \code{\link{dc.g1sst}}, \code{\link{dc.hydrography}},
+  \code{\link{dc.met}}, \code{\link{dc.topo}}
 }
 \author{
 Dan Kelley (2017-09-22)

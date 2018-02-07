@@ -106,8 +106,8 @@ The work is done with \code{\link{dc}}.
 
 Other functions that download ocean-related data: \code{\link{dc.amsr}},
   \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.met}}, \code{\link{dc.topo}},
-  \code{\link{dc.woa}}
+  \code{\link{dc.g1sst}}, \code{\link{dc.met}},
+  \code{\link{dc.topo}}, \code{\link{dc.woa}}
 }
 \author{
 Dan Kelley (2017-11-25)

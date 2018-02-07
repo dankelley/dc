@@ -235,7 +235,7 @@ dc.argoSearch <- function(id=NULL, longitude, latitude, time,
     destfile <- gsub("^.*/", "", url)
     ## Below is standard code that should be mimicked at the end of every dc.x() function.
     rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
-    dcDebug(debug, "} # dc.argoSearch", sep="", "\n", unindent=1)
+    dcDebug(debug, "} # dc.argo", sep="", "\n", unindent=1)
     rval
 }
 
