@@ -45,10 +45,14 @@
 #' mtext(d[["time"]], side=3, line=0, adj=0)
 #'}
 #' @references
+#' \enumerate{
+#' \item source URL-construction tutorial \url{https://coastwatch.pfeg.noaa.gov/erddapinfo/index.html}
+#' \item status page \url{https://coastwatch.pfeg.noaa.gov/erddap/status.html}
+#'}
 #'
 #' @family functions that download ocean-related data
 dc.g1sst <- function(year, month, day, lonW, lonE, latS, latN,
-                     server="http://coastwatch.pfeg.noaa.gov/erddap/griddap",
+                     server="https://coastwatch.pfeg.noaa.gov/erddap/griddap",
                      destdir=".", destfile, force=FALSE, dryrun=FALSE,
                      debug=getOption("dcDebug", 0))
 {
@@ -60,12 +64,10 @@ dc.g1sst <- function(year, month, day, lonW, lonE, latS, latN,
         stop("must give latS and latN")
     date <- sprintf("%4d-%02d-%02d", year, month, day)
     destfile <- paste("g1sst_", date, ".nc", sep="")
-    url<- paste("http://coastwatch.pfeg.noaa.gov/erddap/griddap/",
-                "jplG1SST.nc?",
-                "SST%5B(", date, "T12:00:00Z)",
-                "%5D%5B(", latS, "):(", latN, ")",
-                "%5D%5B(", lonW, "):(", lonE, ")",
-                "%5D", sep="")
+    url<- paste(server, "/jplG1SST.nc?SST",
+                "%5B(", date, "T12:00:00Z)%5D",
+                "%5B(", latS, "):(", latN, ")%5D",
+                "%5B(", lonW, "):(", lonE, ")%5D", sep="")
     rval <- dc(url=url, destdir=destdir, destfile=destfile,
                dryrun=dryrun, force=force, debug=debug-1)
     dcDebug(debug, "} # dc.g1sst", sep="", "\n", unindent=1)

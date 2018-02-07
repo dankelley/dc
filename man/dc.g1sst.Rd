@@ -5,7 +5,7 @@
 \title{Download and Cache a G1SST (SST data/model) File}
 \usage{
 dc.g1sst(year, month, day, lonW, lonE, latS, latN,
-  server = "http://coastwatch.pfeg.noaa.gov/erddap/griddap", destdir = ".",
+  server = "https://coastwatch.pfeg.noaa.gov/erddap/griddap", destdir = ".",
   destfile, force = FALSE, dryrun = FALSE, debug = getOption("dcDebug",
   0))
 }
@@ -85,7 +85,10 @@ mtext(d[["time"]], side=3, line=0, adj=0)
 }
 }
 \references{
-
+\enumerate{
+\item source URL-construction tutorial \url{https://coastwatch.pfeg.noaa.gov/erddapinfo/index.html}
+\item status page \url{https://coastwatch.pfeg.noaa.gov/erddap/status.html}
+}
 }
 \seealso{
 Other functions that download ocean-related data: \code{\link{dc.amsr}},
