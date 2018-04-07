@@ -37,7 +37,7 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
         stop("length(url) must equal length(destfile)")
     if (dryrun) {
         for (i in 1:n) {
-            cat("'", url[i], "' -> '", destination[i], "'\n", sep="")
+            cat("download.file(\"", url[i], "\", \"", destination[i], "\")\n", sep="")
         }
     } else {
         if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {

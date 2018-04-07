@@ -85,7 +85,7 @@ dc.amsr <- function(year, month, day,
     url <- sprintf("%s_%s/y%4d/m%02d/%s", server, version, year, month, destfile)
     rval <- dc(url=url, destdir=destdir, destfile=destfile,
                dryrun=dryrun, force=force, debug=debug-1)
-    dcDebug(debug, "} # dc.argoSearch", sep="", "\n", unindent=1)
+    dcDebug(debug, "} # dc.amsr() ", sep="", "\n", unindent=1)
     rval
 }
 
