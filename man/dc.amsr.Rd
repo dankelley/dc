@@ -30,10 +30,12 @@ is indicated with \code{server="http://data.remss.com/amsr2/bmaps_v08"}.}
 \item{version}{Character string indicating the 'version' name in
 the files.}
 
-\item{destdir}{A string naming the directory in which to cache the downloaded file.
-The default is to store in the present directory, but many users find it more
-helpful to use something like \code{"~/data/amsr"} for this, to collect all
-downloaded amsr files in one place.}
+\item{destdir}{Optional string indicating the directory in which to store
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+is stored in the present working directory.  It can be
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
+to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
 If not supplied, then the file name is constructed from the other
@@ -57,13 +59,6 @@ more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
 that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
-
-\item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
-to hold meteorological files).}
 }
 \value{
 String indicating the full pathname to the downloaded file.

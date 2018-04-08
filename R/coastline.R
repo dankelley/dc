@@ -1,4 +1,5 @@
-#' Download a coastline File
+#' Download and Cache a Coastline File
+#'
 #' @name dc.coastline
 #'
 #' @description
@@ -6,6 +7,7 @@
 #' @template intro
 #'
 #' @details
+#'
 #' Constructs a query to the NaturalEarth server [1] to download coastline
 #' data (or lake data, river data, etc) in any of three resolutions.
 #'
@@ -21,6 +23,9 @@
 #' server has other types, and advanced users can discover their names by inspecting
 #' the URLs of links on the NaturalEarth site, and use them for \code{item}.
 #' If \code{item} is not supplied, it defaults to \code{"coastline"}.
+#'
+#' @param server A string naming the server from which data
+#' are to be acquired.
 #'
 #' @template filenames
 #'
@@ -51,8 +56,8 @@
 #'
 #' @family functions that download ocean-related data
 dc.coastline <- function(resolution, item="coastline",
-                         destdir=".", destfile,
                          server="naturalearth",
+                         destdir=".", destfile, force=FALSE, dryrun=FALSE,
                          debug=getOption("oceDebug"))
 {
     if (missing(resolution))

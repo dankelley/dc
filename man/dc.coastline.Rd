@@ -2,10 +2,11 @@
 % Please edit documentation in R/coastline.R
 \name{dc.coastline}
 \alias{dc.coastline}
-\title{Download a coastline File}
+\title{Download and Cache a Coastline File}
 \usage{
-dc.coastline(resolution, item = "coastline", destdir = ".", destfile,
-  server = "naturalearth", debug = getOption("oceDebug"))
+dc.coastline(resolution, item = "coastline", server = "naturalearth",
+  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
+  debug = getOption("oceDebug"))
 }
 \arguments{
 \item{resolution}{A character value specifying the desired resolution. The permitted
@@ -21,6 +22,9 @@ server has other types, and advanced users can discover their names by inspectin
 the URLs of links on the NaturalEarth site, and use them for \code{item}.
 If \code{item} is not supplied, it defaults to \code{"coastline"}.}
 
+\item{server}{A string naming the server from which data
+are to be acquired.}
+
 \item{destdir}{Optional string indicating the directory in which to store
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
@@ -34,6 +38,14 @@ parameters of the function call, so that subsequent calls with
 the same parameters will yield the same result; this is useful
 for caching.}
 
+\item{force}{A logical value that indicates whether to force the download,
+even if the pathname constructed from \code{destdir} and \code{destfile}
+already exists.}
+
+\item{dryrun}{A logical value that indicates whether to return the constructed
+web query, without attempting to download the file. This can be helpful in
+designing responses to changing URLs.}
+
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
 a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
@@ -42,14 +54,6 @@ more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
 that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
-
-\item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from \code{destdir} and \code{destfile}
-already exists.}
-
-\item{dryrun}{A logical value that indicates whether to return the constructed
-web query, without attempting to download the file. This can be helpful in
-designing responses to changing URLs.}
 }
 \value{
 A character value indicating the filename of the result; if

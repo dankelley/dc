@@ -8,3 +8,4 @@ docs
 ^.*\.nc
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.travis.yml

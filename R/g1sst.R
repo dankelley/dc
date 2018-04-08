@@ -7,21 +7,17 @@
 #' @template intro
 #'
 #' @details
+#'
 #' \code{dc.g1sst} downloads data from a G1SST server.
 #'
 #' @param year,month,day Numerical values of the year, month, and day
 #' of the desired dataset.
 #'
-#' @param lonW, lonE Numerical values, in range -180 to 180, specifying
+#' @param lonW,lonE Numerical values, in range -180 to 180, specifying
 #' the longitudes of the western and eastern boundaries of the focus region.
 #'
-#' @param latS, latN Numerical values, in range -90 to 90, specifying
+#' @param latS,latN Numerical values, in range -90 to 90, specifying
 #' the latitudes of the southern and northern boundaries of the focus region.
-#'
-#' @param destdir A string naming the directory in which to cache the downloaded file.
-#' The default is to store in the present directory, but many users find it more
-#' helpful to use something like \code{"~/data/g1sst"} for this, to collect all
-#' downloaded g1sst files in one place.
 #'
 #' @param server A string naming the server from which data
 #' are to be acquired.

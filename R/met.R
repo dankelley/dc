@@ -1,4 +1,5 @@
 #' Download and Cache a Meteorology File
+#' @name dc.met
 #'
 #' @description
 #'

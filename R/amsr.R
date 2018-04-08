@@ -20,11 +20,6 @@
 #' third option, which is to leave \code{day} unspecified, which
 #' works as though \code{day=3} had been given.
 #'
-#' @param destdir A string naming the directory in which to cache the downloaded file.
-#' The default is to store in the present directory, but many users find it more
-#' helpful to use something like \code{"~/data/amsr"} for this, to collect all
-#' downloaded amsr files in one place.
-#'
 #' @param server A string naming the server from which data
 #' are to be acquired, sans the final underline and characters
 #' after it. For example, the website
