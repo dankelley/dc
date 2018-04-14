@@ -73,7 +73,7 @@ dc.amsr <- function(year, month, day,
     year <- as.integer(year)
     month <- as.integer(month)
     day <- as.integer(day)
-    destfile <- sprintf("f34_%4d%02d%02dv%s.gz", year, month, day, server)
+    destfile <- sprintf("f34_%4d%02d%02d%s.gz", year, month, day, gsub("0", "", version))
     ## example
     ## http://data.remss.com/amsr2/bmaps_v07.2/y2015/m11/f34_20151101v7.2.gz
     ## http://data.remss.com/amsr2/bmaps_v08/y2015/m11/f34_20151101v8.gz
