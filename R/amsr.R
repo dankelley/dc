@@ -74,9 +74,10 @@ dc.amsr <- function(year, month, day,
     month <- as.integer(month)
     day <- as.integer(day)
     destfile <- sprintf("f34_%4d%02d%02d%s.gz", year, month, day, gsub("0", "", version))
-    ## example
-    ## http://data.remss.com/amsr2/bmaps_v07.2/y2015/m11/f34_20151101v7.2.gz
-    ## http://data.remss.com/amsr2/bmaps_v08/y2015/m11/f34_20151101v8.gz
+    ## examples (with dates when tested)
+    ## http://data.remss.com/amsr2/bmaps_v08/y2017/m01/f34_20170114v8.gz # 20180414
+    ## http://data.remss.com/amsr2/bmaps_v08/y2015/m11/f34_20151101v8.gz # 20180414
+    ## http://data.remss.com/amsr2/bmaps_v07.2/y2015/m11/f34_20151101v7.2.gz # unknown date
     url <- sprintf("%s_%s/y%4d/m%02d/%s", server, version, year, month, destfile)
     rval <- dc(url=url, destdir=destdir, destfile=destfile,
                dryrun=dryrun, force=force, debug=debug-1)
