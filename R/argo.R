@@ -260,21 +260,16 @@ dc.argoSearch <- function(id=NULL,
 #' can be downloaded), `longitude` (the listed longitude of the float)
 #' and `latitude` (the listed latitude of the float).
 #'
-#' @param server character value indicating the server.
-#'
+#' @template server
 #' @param file character value indicating the file on the server, also
 #' used for the downloaded file, which is placed in the `destdir` direcory.
-#'
 #' @template destdir
-#'
 #' @param age caching age, in days. The default, 1/24, means to re-download
 #' if the local file is more than 1 hour old.  The point of this argument
 #' is to save slow downloads, for index files (even compressed ones)
 #' are several tens of megabytes.  Set `age=0` to force
 #' a download.
-#'
-#' @param debug integer value indicating whether to print debugging messages;
-#' this is passed to [dcDebug()], which handles messages.
+#' @template debug
 #'
 #' @return a data frame with columns named `url`, `longitude` and `latitude`.
 #'

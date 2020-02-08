@@ -13,7 +13,10 @@ dc.argoIndex(
 )
 }
 \arguments{
-\item{server}{character value indicating the server.}
+\item{server}{character value giving the base name of the server, used in the
+construction of URL queries. Since servers tend to change over time, this
+is a good argument to check, when debugging code that once worked but
+now fails.}
 
 \item{file}{character value indicating the file on the server, also
 used for the downloaded file, which is placed in the `destdir` direcory.}
@@ -31,8 +34,14 @@ is to save slow downloads, for index files (even compressed ones)
 are several tens of megabytes.  Set `age=0` to force
 a download.}
 
-\item{debug}{integer value indicating whether to print debugging messages;
-this is passed to [dcDebug()], which handles messages.}
+\item{debug}{an integer specifying whether debugging information is
+to be printed during processing. The printing is done by
+a call to [dcDebug()].  Setting `debug=0`
+turns off this form of debugging, while higher values yield
+more information. If one `dc` function calls another, it
+passes the value of `debug` but decreased by 1, which means
+that the value of `debug` controls not just the breadth
+of debugging, but also the depth.}
 }
 \value{
 a data frame with columns named `url`, `longitude` and `latitude`.

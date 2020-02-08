@@ -72,23 +72,8 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 #' @param debug an integer, less than or equal to zero for no message, and
 #' greater than zero for increasing levels of debugging.  Values greater than 4
 #' are treated like 4.
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#' @param \dots items to be supplied to [cat()], which does the
-#' printing.  A trailing newline must be given to prevent subsequent
-#' messages from appearing on the same line.
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
-#'
-#' @param debug an integer, less than or equal to zero for no message, and
+#' @param ... one or several character or other values to be printed, analogous
+#' to the `...` argument of [cat()].
 #' @param style either a string or a function. If a string,
 #' it must be `"plain"` (the default) for plain text,
 #' `"bold"`, `"italic"`, `"red"`, `"green"` or `"blue"` (with
@@ -96,11 +81,10 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 #' If `style` is a function, it must prepend and postpend the text
 #' with control codes, as in the cyan-coloured example; note that
 #' \CRANpkg{crayon} provides many functions that work well for `style`.
-##' @param unindent Number of levels to un-indent, e.g. it is common to set
+#' @param unindent Number of levels to un-indent, e.g. it is common to set
 #' this to `-1` for messages about entering or exiting a function.
-#' @author Dan Kelley
-#' @examples
 #'
+#' @examples
 #' foo <- function(debug=1)
 #' {
 #'    dcDebug(debug, "in foo, about to call bar()\n")
@@ -114,6 +98,9 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 #' foo(debug=2)
 #' foo(debug=1)
 #' foo(debug=0)
+#'
+#' @author Dan Kelley
+#'
 #' @importFrom utils flush.console
 #' @export
 dcDebug <- function(debug=0, ..., style="plain", unindent=0)

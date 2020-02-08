@@ -7,11 +7,12 @@
 dcDebug(debug = 0, ..., style = "plain", unindent = 0)
 }
 \arguments{
-\item{debug}{an integer, less than or equal to zero for no message, and}
+\item{debug}{an integer, less than or equal to zero for no message, and
+greater than zero for increasing levels of debugging.  Values greater than 4
+are treated like 4.}
 
-\item{\dots}{items to be supplied to [cat()], which does the
-printing.  A trailing newline must be given to prevent subsequent
-messages from appearing on the same line.}
+\item{...}{one or several character or other values to be printed, analogous
+to the `...` argument of [cat()].}
 
 \item{style}{either a string or a function. If a string,
 it must be `"plain"` (the default) for plain text,
@@ -31,7 +32,6 @@ functions, so the effect is a nesting, with more space for deeper function
 level.
 }
 \examples{
-
 foo <- function(debug=1)
 {
    dcDebug(debug, "in foo, about to call bar()\n")
@@ -45,6 +45,7 @@ bar <- function(debug=1)
 foo(debug=2)
 foo(debug=1)
 foo(debug=0)
+
 }
 \author{
 Dan Kelley
