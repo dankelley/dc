@@ -1,12 +1,6 @@
 #' Download and Cache a World Ocean Atlas File
 #'
-#' @description
-#'
-#' @template intro
-#'
-#' @details
-#'
-#' The data are downloaded with \code{\link[utils]{download.file}}
+#' The data are downloaded with [utils::download.file()]
 #' pointed to links inferred by tracing a NOAA website [ref 1] through a series
 #' of links down to a THREDDS server and finally to an HTTPServer.  At the
 #' moment, there is no choice on which version of the database is used: it is
@@ -15,30 +9,27 @@
 #' release [ref 2].
 #'
 #' @param database String indicating the name of the database. This must be
-#' \code{"woa13"} in this version, but other databases can be added if users
+#' `"woa13"` in this version, but other databases can be added if users
 #' need them.
-#'
 #' @param version String indicating the version of the atlas. This is
 #' ignored in this version, but a future version could allow specification
 #' of either the original or the version-2 data.
-#'
 #' @param time String indicating the time. This is ignored in this version,
 #' but a future version could allow division into months for some fields
 #' and decades for others.
-#'
 #' @param resolution Number indicating the resolution, in degrees
 #' of longitude and latitude. The permitted values are 0.25, 1
 #' and 5. The downloaded files are of typical size 634 Mb, 177 Mb
 #' and 4.1 Mb, respectively. The 1-deg resolution is a good
 #' choice for global-scale applications.
-#'
 #' @param field String indicating the variable. This must be one of
-#' the following: \code{"temperature"}, \code{"temperature"},
-#' \code{"salinity"}, \code{"density"}, \code{"oxygen"},
-#' \code{"phosphate"}, \code{"nitrate"} or \code{"silicate"}.
-#'
-#' @template filenames
-#'
+#' the following: `"temperature"`, `"temperature"`,
+#' `"salinity"`, `"density"`, `"oxygen"`,
+#' `"phosphate"`, `"nitrate"` or `"silicate"`.
+#' @template destdir
+#' @template destfile
+#' @template force
+#' @template dryrun
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
@@ -79,7 +70,7 @@
 #' 	dc.woa(field=field)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc}}.
+#' @seealso The work is done with [dc()].
 #'
 #' @references
 #' 1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}

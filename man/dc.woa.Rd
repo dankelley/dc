@@ -4,13 +4,22 @@
 \alias{dc.woa}
 \title{Download and Cache a World Ocean Atlas File}
 \usage{
-dc.woa(database = "woa13", version = NULL, time = NULL, resolution = 1,
-  field = "temperature", destdir = ".", destfile, force = FALSE,
-  dryrun = FALSE, debug = getOption("dcDebug", 0))
+dc.woa(
+  database = "woa13",
+  version = NULL,
+  time = NULL,
+  resolution = 1,
+  field = "temperature",
+  destdir = ".",
+  destfile,
+  force = FALSE,
+  dryrun = FALSE,
+  debug = getOption("dcDebug", 0)
+)
 }
 \arguments{
 \item{database}{String indicating the name of the database. This must be
-\code{"woa13"} in this version, but other databases can be added if users
+`"woa13"` in this version, but other databases can be added if users
 need them.}
 
 \item{version}{String indicating the version of the atlas. This is
@@ -28,15 +37,15 @@ and 4.1 Mb, respectively. The 1-deg resolution is a good
 choice for global-scale applications.}
 
 \item{field}{String indicating the variable. This must be one of
-the following: \code{"temperature"}, \code{"temperature"},
-\code{"salinity"}, \code{"density"}, \code{"oxygen"},
-\code{"phosphate"}, \code{"nitrate"} or \code{"silicate"}.}
+the following: `"temperature"`, `"temperature"`,
+`"salinity"`, `"density"`, `"oxygen"`,
+`"phosphate"`, `"nitrate"` or `"silicate"`.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+downloaded files. If not supplied, `"."` is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+helpful to create a top-level directory called `data`,
+with a subdirectory for each file type used (e.g. `~/data/met`
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -46,7 +55,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from \code{destdir} and \code{destfile}
+even if the pathname constructed from `destdir` and `destfile`
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -55,24 +64,18 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
+a call to [dcDebug()].  Setting `debug=0`
 turns off this form of debugging, while higher values yield
-more information. If one \code{dc} function calls another, it
-passes the value of \code{debug} but decreased by 1, which means
-that the value of \code{debug} controls not just the breadth
+more information. If one `dc` function calls another, it
+passes the value of `debug` but decreased by 1, which means
+that the value of `debug` controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
 }
 \description{
-
-
-The data are downloaded, and a simple filename convention permits a caching scheme
-in which subsequent calls provide access to these downloaded data.
-}
-\details{
-The data are downloaded with \code{\link[utils]{download.file}}
+The data are downloaded with [utils::download.file()]
 pointed to links inferred by tracing a NOAA website [ref 1] through a series
 of links down to a THREDDS server and finally to an HTTPServer.  At the
 moment, there is no choice on which version of the database is used: it is
@@ -123,13 +126,16 @@ for (field in c("temperature", "salinity", "oxygen", "silicate",
 2. \url{https://www.nodc.noaa.gov/OC5/woa13}
 }
 \seealso{
-The work is done with \code{\link{dc}}.
+The work is done with [dc()].
 
-Other functions that download ocean-related data: \code{\link{dc.amsr}},
-  \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.g1sst}}, \code{\link{dc.hydrography}},
-  \code{\link{dc.met}}, \code{\link{dc.topo}}
+Other functions that download ocean-related data: 
+\code{\link{dc.coastline}()},
+\code{\link{dc.g1sst}()},
+\code{\link{dc.hydrography}()},
+\code{\link{dc.met}()},
+\code{\link{dc.topo}()}
 }
 \author{
 Dan Kelley (2017-09-22)
 }
+\concept{functions that download ocean-related data}

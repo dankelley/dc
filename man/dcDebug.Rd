@@ -4,37 +4,43 @@
 \alias{dcDebug}
 \title{Possibly print a debugging message}
 \usage{
-dcDebug(debug = 0, ..., unindent = 0)
+dcDebug(debug = 0, ..., style = "plain", unindent = 0)
 }
 \arguments{
-\item{debug}{an integer, less than or equal to zero for no message, and
-greater than zero for increasing levels of debugging.  Values greater than 4
-are treated like 4.}
+\item{debug}{an integer, less than or equal to zero for no message, and}
 
-\item{\dots}{items to be supplied to \code{\link{cat}}, which does the
+\item{\dots}{items to be supplied to [cat()], which does the
 printing.  A trailing newline must be given to prevent subsequent
 messages from appearing on the same line.}
 
+\item{style}{either a string or a function. If a string,
+it must be `"plain"` (the default) for plain text,
+`"bold"`, `"italic"`, `"red"`, `"green"` or `"blue"` (with
+obvious meanings).
+If `style` is a function, it must prepend and postpend the text
+with control codes, as in the cyan-coloured example; note that
+\CRANpkg{crayon} provides many functions that work well for `style`.}
+
 \item{unindent}{Number of levels to un-indent, e.g. it is common to set
-this to \code{-1} for messages about entering or exiting a function.}
+this to `-1` for messages about entering or exiting a function.}
 }
 \description{
-\code{dcDebug} prints a message, if its first argument exceeds 0.
-Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
+[dcDebug()] prints a message, if its first argument exceeds 0.
+Many `dc` functions decrease the `debug` level by 1 when they call other
 functions, so the effect is a nesting, with more space for deeper function
-level. Messages are indented according to the value of the \code{debug+indent}.
+level.
 }
 \examples{
 
 foo <- function(debug=1)
 {
-   dcDebug(debug, "in foo, about to call bar()\\n")
+   dcDebug(debug, "in foo, about to call bar()\n")
    bar(debug=debug-1)
-   dcDebug(debug, "in foo, after calling bar()\\n")
+   dcDebug(debug, "in foo, after calling bar()\n")
 }
 bar <- function(debug=1)
 {
-   dcDebug(debug, "in bar()\\n")
+   dcDebug(debug, "in bar()\n")
 }
 foo(debug=2)
 foo(debug=1)

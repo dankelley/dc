@@ -2,27 +2,28 @@
 % Please edit documentation in R/argo.R
 \name{dc.argo}
 \alias{dc.argo}
-\alias{dc.argoID}
-\alias{dc.argoSearch}
 \title{Download and Cache an Argo Dataset}
 \usage{
-dc.argo(id, longitude, latitude, time, server = "www.usgodae.org",
-  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
-  debug = getOption("dcDebug", 0))
-
-dc.argoID(id = NULL, server = "www.usgodae.org", destdir = ".", destfile,
-  force = FALSE, dryrun = FALSE, debug = getOption("dcDebug", 0))
-
-dc.argoSearch(id = NULL, longitude, latitude, time,
-  server = "www.usgodae.org", destdir = ".", destfile, force = FALSE,
-  dryrun = FALSE, debug = getOption("dcDebug", 0))
+dc.argo(
+  id,
+  longitude,
+  latitude,
+  time,
+  server = "ftp://usgodae.org",
+  destdir = ".",
+  destfile,
+  force = FALSE,
+  dryrun = FALSE,
+  debug = getOption("dcDebug", 0)
+)
 }
 \arguments{
-\item{id}{A character value indicating the ID of a particular
-argo float. If this is provided, then \code{longitude}
-\code{latitude} and \code{time} are ignored, and \code{dc.argo}
+\item{id}{a character string giving the
+float ID to be queried. 
+argo float. If this is provided, then `longitude`
+`latitude` and `time` are ignored, and [dc.argo()]
 downloads a file that contains all the profiles for the
-named float.}
+named float. **FIXME(dk): I think this text is garbled and out of date.**}
 
 \item{longitude}{Two-element numerical vector holding the limits
 of longitude (degrees East) to search for Argo profiles.}
@@ -33,16 +34,16 @@ latitude limits (degrees North).}
 \item{time}{Two-element character vector holding the
 time limits in YYYY-MM-DD format.}
 
-\item{server}{String indicating the server. The default is
-\code{"www.usgodae.org"}, and it is unlikely that other values
-will work correctly, unless they are mirrors of this site, using
-the same URL structure and file formats.}
+\item{server}{character value giving the base name of the server, used in the
+construction of URL queries. Since servers tend to change over time, this
+is a good argument to check, when debugging code that once worked but
+now fails.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+downloaded files. If not supplied, `"."` is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+helpful to create a top-level directory called `data`,
+with a subdirectory for each file type used (e.g. `~/data/met`
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -52,7 +53,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from \code{destdir} and \code{destfile}
+even if the pathname constructed from `destdir` and `destfile`
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -61,46 +62,43 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
+a call to [dcDebug()].  Setting `debug=0`
 turns off this form of debugging, while higher values yield
-more information. If one \code{dc} function calls another, it
-passes the value of \code{debug} but decreased by 1, which means
-that the value of \code{debug} controls not just the breadth
+more information. If one `dc` function calls another, it
+passes the value of `debug` but decreased by 1, which means
+that the value of `debug` controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
 }
 \description{
-
-
-The data are downloaded, and a simple filename convention permits a caching scheme
-in which subsequent calls provide access to these downloaded data.
+Download and cache data from an argo profiling float.
 }
 \details{
-\code{dc.argoId} downloads all data for the float with
-a specified identifier, \code{dc.argoSearch} downloads the
+[dc.argoID()] downloads all data for the float with
+a specified identifier, [dc.argoSearch()] downloads the
 most recent profile for all floats in a specified longitude,
-latitude, and time box, and \code{dc.argo} is a wrapper that
+latitude, and time box, and [dc.argo()] is a wrapper that
 calls either of the first two functions, depending on
-whether the \code{id} argument is provided.
+whether the `id` argument is provided.
 
 In any case, the downloads are made from the USGODAE server [1]
 by default (or from any other server that obeys the same directory
 structure). Since the servers do not provide an API for such
-downloads, the \code{dc.argo*} functions are forced to work by
+downloads, the `dc.argo*` functions are forced to work by
 constructing URLs that are devised based on inspection of queries
 constructed from a GUI-style webpage [2]. This leads to a
 brittleness that is discussed in \dQuote{Caution}.
 }
 \section{Caution}{
 
-The queries used by the \code{dc.argo} functions will fail
+The queries used by the [dc.argo()] functions will fail
 if USGODAE changes their system. For an example, USGODAE presently looks
-for the substring \code{".submit=++Go++"} in the query, but if this
-were to be switched to \code{".submit=Go"}, a seemingly trivial
-change, then \code{dc.argo} would fail entirely. For this reason,
-the \code{read.argo*} functions may fail at any time. Users who
+for the substring `".submit=++Go++"` in the query, but if this
+were to be switched to `".submit=Go"`, a seemingly trivial
+change, then [dc.argo()] would fail entirely. For this reason,
+the `read.argo*` functions may fail at any time. Users who
 encounter this problem should contact the author, who may be able
 to find a way to reverse-engineer the updated Argo system.
 }
@@ -124,18 +122,19 @@ plot(A, type="l") # trajectory
 
 }
 \references{
-1. \url{http://www.usgodae.org}
+1. \url{http://.usgodae.org}
 
 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
 }
 \seealso{
-The work is done with \code{\link{dc}}.
+The work is done with [dc()].
 
-Other functions that download ocean-related data: \code{\link{dc.amsr}},
-  \code{\link{dc.coastline}}, \code{\link{dc.g1sst}},
-  \code{\link{dc.hydrography}}, \code{\link{dc.met}},
-  \code{\link{dc.topo}}, \code{\link{dc.woa}}
+Other functions related to argo data: 
+\code{\link{dc.argoID}()},
+\code{\link{dc.argoIndex}()},
+\code{\link{dc.argoSearch}()}
 }
 \author{
-Dan Kelley (2017-11-26)
+Dan Kelley
 }
+\concept{functions related to argo data}

@@ -1,14 +1,6 @@
 #' Download and Cache a G1SST (SST data/model) File
 #'
-#' @name dc.g1sst
-#'
-#' @description
-#'
-#' @template intro
-#'
-#' @details
-#'
-#' \code{dc.g1sst} downloads data from a G1SST server.
+#' [dc.g1sst()] downloads data from a G1SST server.
 #'
 #' @param year,month,day Numerical values of the year, month, and day
 #' of the desired dataset.
@@ -19,10 +11,15 @@
 #' @param latS,latN Numerical values, in range -90 to 90, specifying
 #' the latitudes of the southern and northern boundaries of the focus region.
 #'
-#' @param server A string naming the server from which data
-#' are to be acquired.
+#' @template server
 #'
-#' @template filenames
+#' @template destdir
+#'
+#' @template destfile
+#'
+#' @template force
+#'
+#' @template dryrun
 #'
 #' @template debug
 #'

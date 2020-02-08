@@ -1,41 +1,32 @@
 #' Download and Cache a Coastline File
 #'
-#' @name dc.coastline
-#'
-#' @description
-#'
-#' @template intro
-#'
-#' @details
-#'
 #' Constructs a query to the NaturalEarth server [1] to download coastline
-#' data (or lake data, river data, etc) in any of three resolutions.
+#' data (or lake data, river data, etc) in any of three resolutions,
+#' and caches the resultant file.
 #'
 #' @param resolution A character value specifying the desired resolution. The permitted
-#' choices are \code{"10m"} (for 1:10M resolution, the most detailed),
-#' \code{"50m"} (for 1:50M resolution)
-#' and \code{"110m"} (for 1:110M resolution). If \code{resolution} is not supplied,
-#' \code{"50m"} will be used.
-#'
+#' choices are `"10m"` (for 1:10M resolution, the most detailed),
+#' `"50m"` (for 1:50M resolution)
+#' and `"110m"` (for 1:110M resolution). If `resolution` is not supplied,
+#' `"50m"` will be used.
 #' @param item A character value indicating the quantity to be downloaded.
-#' This is normally one of \code{"coastline"}, \code{"land"}, \code{"ocean"},
-#' \code{"rivers_lakes_centerlines"}, or \code{"lakes"}, but the NaturalEarth
+#' This is normally one of `"coastline"`, `"land"`, `"ocean"`,
+#' `"rivers_lakes_centerlines"`, or `"lakes"`, but the NaturalEarth
 #' server has other types, and advanced users can discover their names by inspecting
-#' the URLs of links on the NaturalEarth site, and use them for \code{item}.
-#' If \code{item} is not supplied, it defaults to \code{"coastline"}.
-#'
-#' @param server A string naming the server from which data
-#' are to be acquired.
-#'
-#' @template filenames
-#'
+#' the URLs of links on the NaturalEarth site, and use them for `item`.
+#' If `item` is not supplied, it defaults to `"coastline"`.
+#' @template server
+#' @template destdir
+#' @template destfile
+#' @template force
+#' @template dryrun
 #' @template debug
 #'
 #' @return A character value indicating the filename of the result; if
 #' there is a problem of any kind, the result will be the empty
 #' string.
 #'
-#' @seealso The work is done with \code{\link[utils]{download.file}}.
+#' @seealso The work is done with [utils::download.file()].
 #'
 #' @examples
 #'\dontrun{
@@ -49,7 +40,7 @@
 #' plot(coastline)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc}}.
+#' @seealso The work is done with [dc()].
 #'
 #' @references
 #' 1. The NaturalEarth server is at \url{http://www.naturalearthdata.com}

@@ -4,29 +4,37 @@
 \alias{dc.hydrography}
 \title{Download and Cache a Hydrographic Dataset}
 \usage{
-dc.hydrography(expocode, type = "bottle", format = "exchange", server,
-  destdir = ".", destfile, force = FALSE, dryrun = FALSE,
-  debug = getOption("dcDebug", 0))
+dc.hydrography(
+  expocode,
+  type = "bottle",
+  format = "exchange",
+  server,
+  destdir = ".",
+  destfile,
+  force = FALSE,
+  dryrun = FALSE,
+  debug = getOption("dcDebug", 0)
+)
 }
 \arguments{
 \item{expocode}{String indicating the cruise (or 'expedition') code.}
 
-\item{type}{String indicating data type, either \code{"bottle"} (the
-default) or \code{"ctd"}.}
+\item{type}{String indicating data type, either `"bottle"` (the
+default) or `"ctd"`.}
 
-\item{format}{String indicating data format, either \code{"exchange"}
-(the default) or \code{"whp_netcdf"}.}
+\item{format}{String indicating data format, either `"exchange"`
+(the default) or `"whp_netcdf"`.}
 
-\item{server}{String indicating the server. The default is
-\code{"cchdo.ucsd.edu"}, and it is unlikely that other values
-will work correctly, unless they are mirrors of this site, using
-the same URL structure.}
+\item{server}{character value giving the base name of the server, used in the
+construction of URL queries. Since servers tend to change over time, this
+is a good argument to check, when debugging code that once worked but
+now fails.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+downloaded files. If not supplied, `"."` is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+helpful to create a top-level directory called `data`,
+with a subdirectory for each file type used (e.g. `~/data/met`
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -36,7 +44,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from \code{destdir} and \code{destfile}
+even if the pathname constructed from `destdir` and `destfile`
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -45,29 +53,23 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
+a call to [dcDebug()].  Setting `debug=0`
 turns off this form of debugging, while higher values yield
-more information. If one \code{dc} function calls another, it
-passes the value of \code{debug} but decreased by 1, which means
-that the value of \code{debug} controls not just the breadth
+more information. If one `dc` function calls another, it
+passes the value of `debug` but decreased by 1, which means
+that the value of `debug` controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
 }
 \description{
-
-
-The data are downloaded, and a simple filename convention permits a caching scheme
-in which subsequent calls provide access to these downloaded data.
-}
-\details{
-\code{dc.hydography} downloads hydographic datasets from the CCHDO archive,
+[dc.hydography()] downloads hydographic datasets from the CCHDO archive,
 (or mirrors that use the exact same URL structure, apart from the
 server name) based on a specified "expocode" that specifies the
 expedition or cruise. This is convenient, because expocodes are how
 cruises are referred to in the literature. See \dQuote{Limitiations} for
-a comments on the brittleness of \code{dc.hydrography}.
+a comments on the brittleness of [dc.hydrography)(].
 }
 \section{Limitations}{
 
@@ -76,7 +78,7 @@ into URLs that can be inferred from the expocode alone, and so the
 procedure used here is to scan the HTML for a summary URL that
 \emph{can} be inferred, and then to discover links from the HTML
 text. This is brittle to changes in the formatting used by CCHDO, which
-means that changes may need to be made to \code{dc.hydography} whenever
+means that changes may need to be made to [dc.hydography()] whenever
 CCHDO changes their website. Another consequence is that a web connection
 is required even if the desired file has already been downloaded.
 }
@@ -102,13 +104,16 @@ plot(transectCTD)
 1. \url{https://cchdo.ucsd.edu}
 }
 \seealso{
-The work is done with \code{\link{dc}}.
+The work is done with [dc()].
 
-Other functions that download ocean-related data: \code{\link{dc.amsr}},
-  \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.g1sst}}, \code{\link{dc.met}},
-  \code{\link{dc.topo}}, \code{\link{dc.woa}}
+Other functions that download ocean-related data: 
+\code{\link{dc.coastline}()},
+\code{\link{dc.g1sst}()},
+\code{\link{dc.met}()},
+\code{\link{dc.topo}()},
+\code{\link{dc.woa}()}
 }
 \author{
 Dan Kelley (2017-11-25)
 }
+\concept{functions that download ocean-related data}

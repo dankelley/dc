@@ -4,10 +4,21 @@
 \alias{dc.g1sst}
 \title{Download and Cache a G1SST (SST data/model) File}
 \usage{
-dc.g1sst(year, month, day, lonW, lonE, latS, latN,
-  server = "https://coastwatch.pfeg.noaa.gov/erddap/griddap", destdir = ".",
-  destfile, force = FALSE, dryrun = FALSE, debug = getOption("dcDebug",
-  0))
+dc.g1sst(
+  year,
+  month,
+  day,
+  lonW,
+  lonE,
+  latS,
+  latN,
+  server = "https://coastwatch.pfeg.noaa.gov/erddap/griddap",
+  destdir = ".",
+  destfile,
+  force = FALSE,
+  dryrun = FALSE,
+  debug = getOption("dcDebug", 0)
+)
 }
 \arguments{
 \item{year, month, day}{Numerical values of the year, month, and day
@@ -19,14 +30,16 @@ the longitudes of the western and eastern boundaries of the focus region.}
 \item{latS, latN}{Numerical values, in range -90 to 90, specifying
 the latitudes of the southern and northern boundaries of the focus region.}
 
-\item{server}{A string naming the server from which data
-are to be acquired.}
+\item{server}{character value giving the base name of the server, used in the
+construction of URL queries. Since servers tend to change over time, this
+is a good argument to check, when debugging code that once worked but
+now fails.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+downloaded files. If not supplied, `"."` is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+helpful to create a top-level directory called `data`,
+with a subdirectory for each file type used (e.g. `~/data/met`
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -36,7 +49,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from \code{destdir} and \code{destfile}
+even if the pathname constructed from `destdir` and `destfile`
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -45,24 +58,18 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}}.  Setting \code{debug=0}
+a call to [dcDebug()].  Setting `debug=0`
 turns off this form of debugging, while higher values yield
-more information. If one \code{dc} function calls another, it
-passes the value of \code{debug} but decreased by 1, which means
-that the value of \code{debug} controls not just the breadth
+more information. If one `dc` function calls another, it
+passes the value of `debug` but decreased by 1, which means
+that the value of `debug` controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
 String indicating the full pathname to the downloaded file.
 }
 \description{
-
-
-The data are downloaded, and a simple filename convention permits a caching scheme
-in which subsequent calls provide access to these downloaded data.
-}
-\details{
-\code{dc.g1sst} downloads data from a G1SST server.
+[dc.g1sst()] downloads data from a G1SST server.
 }
 \section{History}{
 
@@ -86,8 +93,11 @@ mtext(d[["time"]], side=3, line=0, adj=0)
 }
 }
 \seealso{
-Other functions that download ocean-related data: \code{\link{dc.amsr}},
-  \code{\link{dc.argo}}, \code{\link{dc.coastline}},
-  \code{\link{dc.hydrography}}, \code{\link{dc.met}},
-  \code{\link{dc.topo}}, \code{\link{dc.woa}}
+Other functions that download ocean-related data: 
+\code{\link{dc.coastline}()},
+\code{\link{dc.hydrography}()},
+\code{\link{dc.met}()},
+\code{\link{dc.topo}()},
+\code{\link{dc.woa}()}
 }
+\concept{functions that download ocean-related data}

@@ -1,8 +1,8 @@
 #' @param destdir Optional string indicating the directory in which to store
-#' downloaded files. If not supplied, \code{"."} is used, i.e. the data file
+#' downloaded files. If not supplied, `"."` is used, i.e. the data file
 #' is stored in the present working directory.  It can be
-#' helpful to create a top-level directory called \code{data},
-#' with a subdirectory for each file type used (e.g. \code{~/data/met}
+#' helpful to create a top-level directory called `data`,
+#' with a subdirectory for each file type used (e.g. `~/data/met`
 #' to hold meteorological files).
 #'
 #' @param destfile Optional string indicating the name of the file.
@@ -12,7 +12,7 @@
 #' for caching.
 #'
 #' @param force A logical value that indicates whether to force the download,
-#' even if the pathname constructed from \code{destdir} and \code{destfile}
+#' even if the pathname constructed from `destdir` and `destfile`
 #' already exists.
 #'
 #' @param dryrun A logical value that indicates whether to return the constructed

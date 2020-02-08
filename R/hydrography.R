@@ -1,16 +1,11 @@
 #' Download and Cache a Hydrographic Dataset
 #'
-#' @description
-#'
-#' @template intro
-#'
-#' @details
-#' \code{dc.hydography} downloads hydographic datasets from the CCHDO archive,
+#' [dc.hydography()] downloads hydographic datasets from the CCHDO archive,
 #' (or mirrors that use the exact same URL structure, apart from the
 #' server name) based on a specified "expocode" that specifies the
 #' expedition or cruise. This is convenient, because expocodes are how
 #' cruises are referred to in the literature. See \dQuote{Limitiations} for
-#' a comments on the brittleness of \code{dc.hydrography}.
+#' a comments on the brittleness of [dc.hydrography)(].
 #'
 #' @section Limitations:
 #' Unfortunately, \url{cchdo.ucsd.edu} does not provide data organized
@@ -18,24 +13,27 @@
 #' procedure used here is to scan the HTML for a summary URL that
 #' \emph{can} be inferred, and then to discover links from the HTML
 #' text. This is brittle to changes in the formatting used by CCHDO, which
-#' means that changes may need to be made to \code{dc.hydography} whenever
+#' means that changes may need to be made to [dc.hydography()] whenever
 #' CCHDO changes their website. Another consequence is that a web connection
 #' is required even if the desired file has already been downloaded.
 #'
 #' @param expocode String indicating the cruise (or 'expedition') code.
 #'
-#' @param type String indicating data type, either \code{"bottle"} (the
-#' default) or \code{"ctd"}.
+#' @param type String indicating data type, either `"bottle"` (the
+#' default) or `"ctd"`.
 #'
-#' @param format String indicating data format, either \code{"exchange"}
-#' (the default) or \code{"whp_netcdf"}.
+#' @param format String indicating data format, either `"exchange"`
+#' (the default) or `"whp_netcdf"`.
 #'
-#' @param server String indicating the server. The default is
-#' \code{"cchdo.ucsd.edu"}, and it is unlikely that other values
-#' will work correctly, unless they are mirrors of this site, using
-#' the same URL structure.
+#' @template server
 #'
-#' @template filenames
+#' @template destdir
+#'
+#' @template destfile
+#'
+#' @template force
+#'
+#' @template dryrun
 #'
 #' @template debug
 #'
@@ -60,7 +58,7 @@
 #' @references
 #' 1. \url{https://cchdo.ucsd.edu}
 #'
-#' @seealso The work is done with \code{\link{dc}}.
+#' @seealso The work is done with [dc()].
 #'
 #' @author Dan Kelley (2017-11-25)
 #'

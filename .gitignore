@@ -42,3 +42,6 @@ vignettes/*.pdf
 *.swp
 *.csv
 *.nc
+*.txt
+*.txt.gz
+*.rda

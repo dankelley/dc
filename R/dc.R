@@ -5,18 +5,20 @@ NULL
 
 #' Download and Cache a Dataset
 #'
-#' @description
 #' General function for downloading and caching a dataset. This is called
-#' by e.g. \code{\link{dc.argo}} and the other functions in the \code{dc}
+#' by e.g. [dc.argo()] and the other functions in the `dc`
 #' package.
 #'
-#' @template intro
-#' @param url String containing the name of the URL from which the data file
-#' is to be downloaded.
-#' @template filenames
+#' @template url
+#' @template destdir
+#' @template destfile
+#' @template force
+#' @template dryrun
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
+#' @importFrom utils unzip
+#' @export
 dc <- function(url=NULL, destdir=".", destfile=NULL,
                force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
 {
@@ -29,7 +31,7 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
             "destdir='", destdir, "', ",
             "destfile=c('", paste(destfile, collapse="', '"), "'), ",
             "debug=", debug,
-            ") {", sep="", "\n", unindent=1)
+            ") {", sep="", "\n", style="bold", unindent=1)
     destination <- paste(destdir, destfile, sep="/")
     dcDebug(debug, "destination: ", destination, "\n")
     n <- length(url)
@@ -56,25 +58,46 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
             }
         }
     }
-    dcDebug(debug, "} # dc()", sep="", "\n", unindent=1)
+    dcDebug(debug, "} # dc()", sep="", "\n", style="bold", unindent=1)
     destination
 }
 
 #' Possibly print a debugging message
 #'
-#' \code{dcDebug} prints a message, if its first argument exceeds 0.
-#' Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
+#' [dcDebug()] prints a message, if its first argument exceeds 0.
+#' Many `dc` functions decrease the `debug` level by 1 when they call other
 #' functions, so the effect is a nesting, with more space for deeper function
-#' level. Messages are indented according to the value of the \code{debug+indent}.
+#' level.
 #'
 #' @param debug an integer, less than or equal to zero for no message, and
 #' greater than zero for increasing levels of debugging.  Values greater than 4
 #' are treated like 4.
-#' @param \dots items to be supplied to \code{\link{cat}}, which does the
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#' @param \dots items to be supplied to [cat()], which does the
 #' printing.  A trailing newline must be given to prevent subsequent
 #' messages from appearing on the same line.
-#' @param unindent Number of levels to un-indent, e.g. it is common to set
-#' this to \code{-1} for messages about entering or exiting a function.
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#'
+#' @param debug an integer, less than or equal to zero for no message, and
+#' @param style either a string or a function. If a string,
+#' it must be `"plain"` (the default) for plain text,
+#' `"bold"`, `"italic"`, `"red"`, `"green"` or `"blue"` (with
+#' obvious meanings).
+#' If `style` is a function, it must prepend and postpend the text
+#' with control codes, as in the cyan-coloured example; note that
+#' \CRANpkg{crayon} provides many functions that work well for `style`.
+##' @param unindent Number of levels to un-indent, e.g. it is common to set
+#' this to `-1` for messages about entering or exiting a function.
 #' @author Dan Kelley
 #' @examples
 #'
@@ -91,16 +114,58 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 #' foo(debug=2)
 #' foo(debug=1)
 #' foo(debug=0)
-dcDebug <- function(debug=0, ..., unindent=0)
+#' @importFrom utils flush.console
+#' @export
+dcDebug <- function(debug=0, ..., style="plain", unindent=0)
 {
     debug <- if (debug > 4) 4 else max(0, floor(debug + 0.5))
     if (debug > 0) {
         n <- 5 - debug - unindent
-        if (n > 0)
-            cat(paste(rep("  ", n), collapse=""))
-        cat(...)
+        if (is.character(style) && style == "plain") {
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+        } else if (is.character(style) && style == "bold") {
+            cat("\033[1m")
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+            cat("\033[0m")
+        } else if (is.character(style) && style == "italic") {
+            cat("\033[3m")
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+            cat("\033[0m")
+        } else if (is.character(style) && style == "red") {
+            cat("\033[31m")
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+            cat("\033[0m")
+        } else if (is.character(style) && style == "green") {
+            cat("\033[32m")
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+            cat("\033[0m")
+        } else if (is.character(style) && style == "blue") {
+            cat("\033[34m")
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+            cat("\033[0m")
+        } else if (is.function(style)) {
+            if (n > 0)
+                cat(style(paste(rep("  ", n), collapse="")))
+            cat(style(...))
+        } else { # fallback
+            if (n > 0)
+                cat(paste(rep("  ", n), collapse=""))
+            cat(...)
+        }
+        flush.console()
     }
-    flush.console()
     invisible()
 }
 

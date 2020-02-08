@@ -1,20 +1,13 @@
 #' Download and Cache a Meteorology File
-#' @name dc.met
 #'
-#' @description
-#'
-#' @template intro
-#'
-#' @details
-#'
-#' The data are downloaded with \code{\link[utils]{download.file}}
+#' The data are downloaded with [utils::download.file()]
 #' pointed to the Environment Canada website [1]
 #' using queries that had to be devised by reverse-engineering, since the agency
 #' does not provide documentation about how to construct queries. Caution: the
-#' query format changes from time to time, so \code{dc.met} may work one
+#' query format changes from time to time, so `dc.met` may work one
 #' day, and fail the next.
 #'
-#' The constructed query contains Station ID, as provided in the \code{id} argument.
+#' The constructed query contains Station ID, as provided in the `id` argument.
 #' Note that this seems to be a creation of Environment Canada, alone;
 #' it is distinct from the more standard "Climate ID" and "WMO ID".
 #' To make things more difficult, Environment Canada states that the
@@ -26,27 +19,25 @@
 #' and to check it from time to time
 #' during the course of a research project, to see if the Station ID has changed.
 #' It can be very helpful to use Gavin Simpson's
-#' \code{canadaHCD} package [2] to look up Station IDs. This package maintains
+#' `canadaHCD` package [2] to look up Station IDs. This package maintains
 #' a copy of the Environment Canada listing of stations, and its
-#' \code{find_station} function provides an easy way to determine Station IDs.
-#' After that, its \code{hcd_hourly} function (and related functions) make
+#' `find_station()` function provides an easy way to determine Station IDs.
+#' After that, its `hcd_hourly` function (and related functions) make
 #' it easy to read data.
 #'
 #' @param id A number giving the "Station ID" of the station of interest.
-#'
-#' @param year A number giving the year of interest. Ignored unless \code{deltat}
-#' is \code{"hour"}. If \code{year} is not given, it defaults to the present year.
-#'
-#' @param month A number giving the month of interest. Ignored unless \code{deltat}
-#' is \code{"hour"}. If \code{month} is not given, it defaults to the present
+#' @param year A number giving the year of interest. Ignored unless `deltat`
+#' is `"hour"`. If `year` is not given, it defaults to the present year.
+#' @param month A number giving the month of interest. Ignored unless `deltat`
+#' is `"hour"`. If `month` is not given, it defaults to the present
 #' month.
-#'
 #' @param deltat Optional character string indicating the time step of the
-#' desired dataset. Only \code{"hour"} or \code{"month"} are permitted.
-#' If \code{deltat} is not given, it defaults to \code{"hour"}.
-#'
-#' @template filenames
-#'
+#' desired dataset. Only `"hour"` or `"month"` are permitted.
+#' If `deltat` is not given, it defaults to `"hour"`.
+#' @template destdir
+#' @template destfile
+#' @template force
+#' @template dryrun
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
@@ -64,21 +55,21 @@
 #' plot(met)
 #'}
 #'
-#' @seealso The work is done with \code{\link{dc}}.
+#' @seealso The work is done with [dc()].
 #'
 #' @references
 #' 1. Environment Canada website for Historical Climate Data
 #' \url{http://climate.weather.gc.ca/index_e.html}
 #'
-#' 2. Gavin Simpon's \code{canadaHCD} package on GitHub
+#' 2. Gavin Simpon's `canadaHCD` package on GitHub
 #' \url{https://github.com/gavinsimpson/canadaHCD}
 #'
 #' @author Dan Kelley 2017-09-16
 #'
 #' @family functions that download ocean-related data
 dc.met <- function(id, year, month, deltat="hour",
-                         destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
-                         debug=getOption("dcDebug", 0))
+                   destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
+                   debug=getOption("dcDebug", 0))
 {
     if (missing(id))
         stop("must provide a station identifier, as the 'id' argument")
