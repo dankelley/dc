@@ -18,23 +18,15 @@
 #' is required even if the desired file has already been downloaded.
 #'
 #' @param expocode String indicating the cruise (or 'expedition') code.
-#'
-#' @param type String indicating data type, either `"bottle"` (the
-#' default) or `"ctd"`.
-#'
-#' @param format String indicating data format, either `"exchange"`
-#' (the default) or `"whp_netcdf"`.
-#'
+#' @param type String indicating data type, either \code{"bottle"} (the
+#' default) or \code{"ctd"}.
+#' @param format String indicating data format, either \code{"exchange"}
+#' (the default) or \code{"whp_netcdf"}.
 #' @template server
-#'
 #' @template destdir
-#'
 #' @template destfile
-#'
 #' @template force
-#'
 #' @template dryrun
-#'
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.

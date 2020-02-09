@@ -5,16 +5,16 @@
 #' and caches the resultant file.
 #'
 #' @param resolution A character value specifying the desired resolution. The permitted
-#' choices are `"10m"` (for 1:10M resolution, the most detailed),
-#' `"50m"` (for 1:50M resolution)
-#' and `"110m"` (for 1:110M resolution). If `resolution` is not supplied,
-#' `"50m"` will be used.
+#' choices are \code{"10m"} (for 1:10M resolution, the most detailed),
+#' \code{"50m"} (for 1:50M resolution)
+#' and \code{"110m"} (for 1:110M resolution). If \code{resolution} is not supplied,
+#' \code{"50m"} will be used.
 #' @param item A character value indicating the quantity to be downloaded.
-#' This is normally one of `"coastline"`, `"land"`, `"ocean"`,
-#' `"rivers_lakes_centerlines"`, or `"lakes"`, but the NaturalEarth
+#' This is normally one of \code{"coastline"}, \code{"land"}, \code{"ocean"},
+#' \code{"rivers_lakes_centerlines"}, or \code{"lakes"}, but the NaturalEarth
 #' server has other types, and advanced users can discover their names by inspecting
-#' the URLs of links on the NaturalEarth site, and use them for `item`.
-#' If `item` is not supplied, it defaults to `"coastline"`.
+#' the URLs of links on the NaturalEarth site, and use them for \code{item}.
+#' If \code{item} is not supplied, it defaults to \code{"coastline"}.
 #' @template server
 #' @template destdir
 #' @template destfile

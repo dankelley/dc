@@ -9,7 +9,7 @@
 #' release [ref 2].
 #'
 #' @param database String indicating the name of the database. This must be
-#' `"woa13"` in this version, but other databases can be added if users
+#' \code{"woa13"} in this version, but other databases can be added if users
 #' need them.
 #' @param version String indicating the version of the atlas. This is
 #' ignored in this version, but a future version could allow specification
@@ -23,9 +23,9 @@
 #' and 4.1 Mb, respectively. The 1-deg resolution is a good
 #' choice for global-scale applications.
 #' @param field String indicating the variable. This must be one of
-#' the following: `"temperature"`, `"temperature"`,
-#' `"salinity"`, `"density"`, `"oxygen"`,
-#' `"phosphate"`, `"nitrate"` or `"silicate"`.
+#' the following: \code{"temperature"}, \code{"temperature"},
+#' \code{"salinity"}, \code{"density"}, \code{"oxygen"},
+#' \code{"phosphate"}, \code{"nitrate"} or \code{"silicate"}.
 #' @template destdir
 #' @template destfile
 #' @template force

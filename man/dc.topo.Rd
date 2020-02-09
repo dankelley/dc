@@ -27,10 +27,10 @@ dc.topo(
 \item{resolution}{Optional grid spacing, in minutes. If not supplied,
 a default value of 4 (corresponding to 7.4km, or 4 nautical
 miles) is used. Note that (as of August 2016) the original data are on
-a 1-minute grid, which limits the possibilities for `resolution`.}
+a 1-minute grid, which limits the possibilities for \code{resolution}.}
 
 \item{format}{Optional string indicating the type of file to download. If
-not supplied, this defaults to `"gmt"`. See \dQuote{Details}.}
+not supplied, this defaults to \code{"gmt"}. See \dQuote{Details}.}
 
 \item{server}{character value giving the base name of the server, used in the
 construction of URL queries. Since servers tend to change over time, this
@@ -38,10 +38,10 @@ is a good argument to check, when debugging code that once worked but
 now fails.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -51,7 +51,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from `destdir` and `destfile`
+even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -60,11 +60,11 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
@@ -73,32 +73,32 @@ String indicating the full pathname to the downloaded file.
 \description{
 Data are downloaded (from \url{https://maps.ngdc.noaa.gov/viewers/wcs-client}, by
 default) and a string containing the full path
-to the downloaded file is returned. If `destfile` is not supplied,
+to the downloaded file is returned. If \code{destfile} is not supplied,
 then the filename is constructed from the query, which means that
-subsequent calls to [dc.topo()]  with identical parameters will
+subsequent calls to \code{dc.topo}  with identical parameters will
 simply return the name of the cached file, assuming the user has not
 deleted it in the meantime.
 }
 \details{
 The data are downloaded with [utils::download.file()], using a URL
 devised from reverse engineering web-based queries constructed by
-the default `server` used here. Note that the data source is "etopo1",
-which is a 1 arc-second file [1,2].
+the default \code{server} used here. Note that the data source is
+\code{"etopo1"}, which is a 1 arc-second file [1,2].
 
-Three values are permitted for `format`,
+Three values are permitted for \code{format},
 each named after the
 targets of menu items on the
-NOAA website (as of August 2016): (1) `"aaigrid"` (for
+NOAA website (as of August 2016): (1) \code{"aaigrid"} (for
 the menu item "ArcGIS ASCII Grid"), which
-yields a text file, (2) `"netcdf"` (the default,
+yields a text file, (2) \code{"netcdf"} (the default,
 for the menu item named
 "NetCDF"), which yields a NetCDF file
-and (3) `"gmt"` (for the menu item named
+and (3) \code{"gmt"} (for the menu item named
 "GMT NetCDF"), which yields a NetCDF file in
 another format. All of these file formats are
-recognized by [oce::read.topo()] in the `oce` package.
+recognized by \code{\link[oce]{read.topo}} in the \code{oce} package.
 (The NOAA server has more options, and if
-[oce::read.topo()] is extended to handle them, they will
+\code{\link[oce]{read.topo}} is extended to handle them, they will
 also be added here.)
 }
 \section{Webserver history}{
@@ -107,10 +107,10 @@ All versions of [dc.topo()] to date have used a NOAA server as
 the data source, but the URL has not been static. A list of the
 servers that have been used is provided below,
 in hopes that it can help users to make guesses
-for `server`, should `dc.topo` fail because of
+for \code{server}, should \code{dc.topo} fail because of
 a fail to download the data because of a broken link. Another
 hint is to look at the source code for
-[marmap::getNOAA.bathy()] in the \CRANpkg{marmap} package,
+\code{\link[marmap]{getNOAA.bathy}} in the \CRANpkg{marmap} package,
 which is also forced to track the moving target that is NOAA.
 
 \itemize{

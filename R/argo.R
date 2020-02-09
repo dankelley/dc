@@ -1,38 +1,60 @@
+#' Convert string date to POSIXct time
+#'
+#' @param t character value giving the time in yyyymmddHHMMSS format,
+#' as illustrated in \dQuote{Examples}.
+#' @param tz character value holding the timezone.  It seems unlikely
+#' that a value other than \code{"UTC"} will be appropriate, so that
+#' is the default.
+#'
+#' @param tz character string
+#' @return POSIXct time
+#'
+#' @examples
+#' decodeTextDate("19970729200300") ## 1997 07 29 20 03 00
+#'
+#' @export
+decodeTextDate <- function(t, tz="UTC")
+{
+    t <- as.character(t)
+    ISOdatetime(substr(t,1,4), substr(t,5,6), substr(t,7,8),
+                substr(t,9,10), substr(t,11,12), substr(t,13,14))
+}
+
 #' Download and Cache an Argo Dataset
 #'
 #' Download and cache data from an argo profiling float.
 #'
-#' [dc.argoID()] downloads all data for the float with
-#' a specified identifier, [dc.argoSearch()] downloads the
+#' \code{dc.argoID} downloads all data for the float with
+#' a specified identifier, \code{\link{dc.argoSearch}} downloads the
 #' most recent profile for all floats in a specified longitude,
-#' latitude, and time box, and [dc.argo()] is a wrapper that
+#' latitude, and time box, and \code{dc.argo} is a wrapper that
 #' calls either of the first two functions, depending on
-#' whether the `id` argument is provided.
+#' whether the \code{id} argument is provided.
 #'
 #' In any case, the downloads are made from the USGODAE server [1]
 #' by default (or from any other server that obeys the same directory
 #' structure). Since the servers do not provide an API for such
-#' downloads, the `dc.argo*` functions are forced to work by
+#' downloads, the \code{dc.argo*} functions are forced to work by
 #' constructing URLs that are devised based on inspection of queries
 #' constructed from a GUI-style webpage [2]. This leads to a
 #' brittleness that is discussed in \dQuote{Caution}.
 #'
 #' @section Caution:
-#' The queries used by the [dc.argo()] functions will fail
+#' The queries used by the \code{dc.argo} functions will fail
 #' if USGODAE changes their system. For an example, USGODAE presently looks
-#' for the substring `".submit=++Go++"` in the query, but if this
-#' were to be switched to `".submit=Go"`, a seemingly trivial
-#' change, then [dc.argo()] would fail entirely. For this reason,
-#' the `read.argo*` functions may fail at any time. Users who
+#' for the substring \code{".submit=++Go++"} in the query, but if this
+#' were to be switched to \code{".submit=Go"}, a seemingly trivial
+#' change, then \code{dc.argo} would fail entirely. For this reason,
+#' the \code{read.argo*} functions may fail at any time. Users who
 #' encounter this problem should contact the author, who may be able
 #' to find a way to reverse-engineer the updated Argo system.
 #'
 #' @param id a character string giving the
-#' float ID to be queried. 
-#' argo float. If this is provided, then `longitude`
-#' `latitude` and `time` are ignored, and [dc.argo()]
+#' float ID to be queried.
+#' argo float. If this is provided, then \code{longitude},
+#' \code{latitude} and \code{time} are ignored, and \code{dc.argo}
 #' downloads a file that contains all the profiles for the
-#' named float. **FIXME(dk): I think this text is garbled and out of date.**
+#' named float. **FIXME/dk: I think this text is garbled and out of date.**
 #' @param longitude Two-element numerical vector holding the limits
 #' of longitude (degrees East) to search for Argo profiles.
 #' @param latitude Two-element numerical vector holding the
@@ -70,7 +92,7 @@
 #'
 #' 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
 #'
-#' @seealso The work is done with [dc()].
+#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @author Dan Kelley
 #'
@@ -125,7 +147,7 @@ dc.argoID <- function(id=NULL,
     dcDebug(debug, "dc.argoID(id=\"", id, "\", ...) {", sep="", "\n", style="bold", unindent=1)
     ##> http://www.usgodae.org/ftp/outgoing/argo/ar_index_global_meta.txt.gz
     ##> indexURL <- paste("http://", server, "/ftp/outgoing/argo/ar_index_global_meta.txt.gz", sep="")
-    ## 
+    ##
     ## ftp://usgodae.org/pub/outgoing/argo/ar_index_global_meta.txt
     indexURL <- paste0(server, "/pub/outgoing/argo/ar_index_global_meta.txt.gz")
     dcDebug(debug, "indexURL", indexURL, "\n")
@@ -252,37 +274,55 @@ dc.argoSearch <- function(id=NULL,
 
 #' Get an index of available floats
 #'
-#' Constructs a file name and tries to download it to a local file with the
-#' name given as the `file` argument. If there is already a local file, and if
-#' it is less than `age` days old, then the local file is used and the download
-#' is skipped. In either case, this function reads that file, skips the header,
-#' and returns a data frame holding `url` (the spot from which the file
-#' can be downloaded), `longitude` (the listed longitude of the float)
-#' and `latitude` (the listed latitude of the float).
+#' Downloads a file (or uses a cached file) and then reads it to create a
+#' data frame that stores information about available float files.
+#'
+#' The first step is to construct a URL that will yield an index file to be stored in
+#' a file named by the \code{file} argument, stored within the directory named in
+#' the \code{destdir} argument. If that destination file was downloaded less than
+#' \code{age} days ago, it is reused. Otherwise, \code{\link{download.file}}
+#' is used to download the file. Thus, setting \code{age=0} forces a download.
+#'
+#' The next step is to read that file and infers the relevant data, by ignoring
+#' all leading lines that start with the \code{#} character, and determining
+#' column names from the first line after this sequence.
+#' The data are read into a data frame using \code{read.csv}.
 #'
 #' @template server
 #' @param file character value indicating the file on the server, also
-#' used for the downloaded file, which is placed in the `destdir` direcory.
+#' used for the downloaded file, which is placed in the \code{destdir} directory.
+#' For the \code{ftp://usgodae.org/pub/outgoing/argo} server,
+#' two of multiple choices for \code{file} are
+#' \code{ar_index_global_prof.txt.gz}
+#' and
+#' \code{argo_bio-profile_index.txt.gz}
+#' but examination of the server will reveal other possibilities
+#' that might be worth exploring.
 #' @template destdir
-#' @param age caching age, in days. The default, 1/24, means to re-download
-#' if the local file is more than 1 hour old.  The point of this argument
-#' is to save slow downloads, for index files (even compressed ones)
-#' are several tens of megabytes.  Set `age=0` to force
-#' a download.
+#' @param age numeric value indicating how old a downloaded file
+#' must be, for it to be considered out-of-date.  Only files that
+#' are out-of-date are downloaded, as way to avoid slow downloads.
+#' (Even so, reading the file takes of order 10 seconds.)
 #' @template debug
 #'
-#' @return a data frame with columns named `url`, `longitude` and `latitude`.
+#' @return a data frame that has columns named
+#' \code{"file"}, \code{"date"}, \code{"latitude"}, \code{"longitude"},
+#' \code{"ocean"}, \code{"profiler_type"}, \code{"institution"} and \code{"date_update"}.
+#' The dates are stored in the file in numeric (yyyymmddhhmmss) format, but
+#' the return value represents these in POSIXct format, after conversion
+#' with \code{\link{decodeTextDate}}.
 #'
 #' @examples
+#' # The download takes several tens of seconds, so we skip it during routine checks.
 #'\dontrun{
-#' d <- dc.argoIndex() # ftp://usgodae.org/pub/outgoing/argo/ar_index_global_meta.txt
-#' names(d) # reveals 'longitude' and 'latitude', plus other things
-#'
-#' library(oce)
-#' data(coastlineWorld)
-#' par(mar=rep(0.1, 4))
-#' mapPlot(coastlineWorld, projection="+proj=moll", col="lightgray")
-#' mapPoints(d$longitude, d$latitude, pch=".")
+#' # Download whole index
+#' ai <- dc.argoIndex()
+#' # Plot histograms of 'date' and 'date_update'
+#' par(mfrow=c(2, 1), mar=c(3, 3, 1, 1))
+#' hist(ai$date, breaks="years",
+#'      main="", xlab="Time", freq=TRUE)
+#' hist(ai$date_update, breaks="years",
+#'      main="", xlab="Last Update Time", freq=TRUE)
 #'}
 #'
 #' @author
@@ -307,11 +347,13 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     if (file.exists(cache)) {
         cacheAge <- (as.integer(Sys.time()) - as.integer(file.info(cache)$mtime)) / 86400 # in days
         if (cacheAge > age) {
+            message("Downloading local file\n    ", cache, "\nfrom\n    ", url, "\nbecause it is more than", round(age, 4), " days old")
             download.file(url, cache)
         } else {
-            message("The cached file is only ", round(cacheAge, 4), " days old, so it is not downloaded again.")
+            message("The local file\n    ", cache, "\nis not being downloaded from\n    ", url, "\nbecause it is only ", round(cacheAge, 4), " days old")
         }
     } else {
+        message("Downloading local file\n    ", cache, "\nfrom\n    ", url)
         download.file(url, cache)
     }
     first <- readLines(cache, 100)
@@ -319,9 +361,8 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     lastHash <- tail(hash, 1)
     names <- strsplit(first[1 + lastHash], ",")[[1]]
     res <- read.csv(cache, skip=2 + lastHash, col.names=names, stringsAsFactors=FALSE)
-    res$date <- oce::numberAsPOSIXct(res$date)
-    res$date_update <- oce::numberAsPOSIXct(res$date_update)
-    class(res) <- "argoIndex"
-    dcDebug(debug, "} # dc.argoIndex()", sep="", "\n", unindent=1)
+    res$date <- decodeTextDate(res$date)
+    res$date_update <- decodeTextDate(res$date_update)
+    dcDebug(debug, "} # dc.argoIndex()", sep="", "\n", style="bold", unindent=1)
     res
 }

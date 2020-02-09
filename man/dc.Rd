@@ -16,15 +16,15 @@ dc(
 }
 \arguments{
 \item{url}{character value giving the full URL of a file to be downloaded. This is
-constructed by specialized functions, e.g. [dc.argo()] computes this from
-its `server` and other arguments, based on reverse engineering the URLs
+constructed by specialized functions, e.g. \code{\link{dc.argo}()} computes this from
+its \code{server} and other arguments, based on reverse engineering the URLs
 of Argo files provided by a particular server.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -34,7 +34,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from `destdir` and `destfile`
+even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -43,11 +43,11 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
@@ -55,6 +55,6 @@ String indicating the full pathname to the downloaded file.
 }
 \description{
 General function for downloading and caching a dataset. This is called
-by e.g. [dc.argo()] and the other functions in the `dc`
+by e.g. \code{\link{dc.argo}} and the other functions in the \code{dc}
 package.
 }

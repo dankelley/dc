@@ -19,22 +19,22 @@ dc.met(
 \arguments{
 \item{id}{A number giving the "Station ID" of the station of interest.}
 
-\item{year}{A number giving the year of interest. Ignored unless `deltat`
-is `"hour"`. If `year` is not given, it defaults to the present year.}
+\item{year}{A number giving the year of interest. Ignored unless \code{deltat}
+is \code{"hour"}. If \code{year} is not given, it defaults to the present year.}
 
-\item{month}{A number giving the month of interest. Ignored unless `deltat`
-is `"hour"`. If `month` is not given, it defaults to the present
+\item{month}{A number giving the month of interest. Ignored unless \code{deltat}
+is \code{"hour"}. If \code{month} is not given, it defaults to the present
 month.}
 
 \item{deltat}{Optional character string indicating the time step of the
-desired dataset. Only `"hour"` or `"month"` are permitted.
-If `deltat` is not given, it defaults to `"hour"`.}
+desired dataset. Only \code{"hour"} or \code{"month"} are permitted.
+If \code{deltat} is not given, it defaults to \code{"hour"}.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -44,7 +44,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from `destdir` and `destfile`
+even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -53,11 +53,11 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
@@ -68,11 +68,11 @@ The data are downloaded with [utils::download.file()]
 pointed to the Environment Canada website [1]
 using queries that had to be devised by reverse-engineering, since the agency
 does not provide documentation about how to construct queries. Caution: the
-query format changes from time to time, so `dc.met` may work one
+query format changes from time to time, so \code{dc.met} may work one
 day, and fail the next.
 }
 \details{
-The constructed query contains Station ID, as provided in the `id` argument.
+The constructed query contains Station ID, as provided in the \code{id} argument.
 Note that this seems to be a creation of Environment Canada, alone;
 it is distinct from the more standard "Climate ID" and "WMO ID".
 To make things more difficult, Environment Canada states that the
@@ -84,10 +84,10 @@ the Environment Canada website [1] before downloading any data,
 and to check it from time to time
 during the course of a research project, to see if the Station ID has changed.
 It can be very helpful to use Gavin Simpson's
-`canadaHCD` package [2] to look up Station IDs. This package maintains
+\code{canadaHCD} package [2] to look up Station IDs. This package maintains
 a copy of the Environment Canada listing of stations, and its
-`find_station()` function provides an easy way to determine Station IDs.
-After that, its `hcd_hourly` function (and related functions) make
+\code{find_station} function provides an easy way to determine Station IDs.
+After that, its \code{hcd_hourly} function (and related functions) make
 it easy to read data.
 }
 \examples{
@@ -106,7 +106,7 @@ plot(met)
 1. Environment Canada website for Historical Climate Data
 \url{http://climate.weather.gc.ca/index_e.html}
 
-2. Gavin Simpon's `canadaHCD` package on GitHub
+2. Gavin Simpon's \code{canadaHCD} package on GitHub
 \url{https://github.com/gavinsimpson/canadaHCD}
 }
 \seealso{

@@ -19,52 +19,71 @@ is a good argument to check, when debugging code that once worked but
 now fails.}
 
 \item{file}{character value indicating the file on the server, also
-used for the downloaded file, which is placed in the `destdir` direcory.}
+used for the downloaded file, which is placed in the \code{destdir} directory.
+For the \code{ftp://usgodae.org/pub/outgoing/argo} server,
+two of multiple choices for \code{file} are
+\code{ar_index_global_prof.txt.gz}
+and
+\code{argo_bio-profile_index.txt.gz}
+but examination of the server will reveal other possibilities
+that might be worth exploring.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
-\item{age}{caching age, in days. The default, 1/24, means to re-download
-if the local file is more than 1 hour old.  The point of this argument
-is to save slow downloads, for index files (even compressed ones)
-are several tens of megabytes.  Set `age=0` to force
-a download.}
+\item{age}{numeric value indicating how old a downloaded file
+must be, for it to be considered out-of-date.  Only files that
+are out-of-date are downloaded, as way to avoid slow downloads.
+(Even so, reading the file takes of order 10 seconds.)}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
-a data frame with columns named `url`, `longitude` and `latitude`.
+a data frame that has columns named
+\code{"file"}, \code{"date"}, \code{"latitude"}, \code{"longitude"},
+\code{"ocean"}, \code{"profiler_type"}, \code{"institution"} and \code{"date_update"}.
+The dates are stored in the file in numeric (yyyymmddhhmmss) format, but
+the return value represents these in POSIXct format, after conversion
+with \code{\link{decodeTextDate}}.
 }
 \description{
-Constructs a file name and tries to download it to a local file with the
-name given as the `file` argument. If there is already a local file, and if
-it is less than `age` days old, then the local file is used and the download
-is skipped. In either case, this function reads that file, skips the header,
-and returns a data frame holding `url` (the spot from which the file
-can be downloaded), `longitude` (the listed longitude of the float)
-and `latitude` (the listed latitude of the float).
+Downloads a file (or uses a cached file) and then reads it to create a
+data frame that stores information about available float files.
+}
+\details{
+The first step is to construct a URL that will yield an index file to be stored in
+a file named by the \code{file} argument, stored within the directory named in
+the \code{destdir} argument. If that destination file was downloaded less than
+\code{age} days ago, it is reused. Otherwise, \code{\link{download.file}}
+is used to download the file. Thus, setting \code{age=0} forces a download.
+
+The next step is to read that file and infers the relevant data, by ignoring
+all leading lines that start with the \code{#} character, and determining
+column names from the first line after this sequence.
+The data are read into a data frame using \code{read.csv}.
 }
 \examples{
+# The download takes several tens of seconds, so we skip it during routine checks.
 \dontrun{
-d <- dc.argoIndex() # ftp://usgodae.org/pub/outgoing/argo/ar_index_global_meta.txt
-names(d) # reveals 'longitude' and 'latitude', plus other things
-
-library(oce)
-data(coastlineWorld)
-par(mar=rep(0.1, 4))
-mapPlot(coastlineWorld, projection="+proj=moll", col="lightgray")
-mapPoints(d$longitude, d$latitude, pch=".")
+# Download whole index
+ai <- dc.argoIndex()
+# Plot histograms of 'date' and 'date_update'
+par(mfrow=c(2, 1), mar=c(3, 3, 1, 1))
+hist(ai$date, breaks="years",
+     main="", xlab="Time", freq=TRUE)
+hist(ai$date_update, breaks="years",
+     main="", xlab="Last Update Time", freq=TRUE)
 }
 
 }

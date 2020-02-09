@@ -17,17 +17,17 @@ dc.coastline(
 }
 \arguments{
 \item{resolution}{A character value specifying the desired resolution. The permitted
-choices are `"10m"` (for 1:10M resolution, the most detailed),
-`"50m"` (for 1:50M resolution)
-and `"110m"` (for 1:110M resolution). If `resolution` is not supplied,
-`"50m"` will be used.}
+choices are \code{"10m"} (for 1:10M resolution, the most detailed),
+\code{"50m"} (for 1:50M resolution)
+and \code{"110m"} (for 1:110M resolution). If \code{resolution} is not supplied,
+\code{"50m"} will be used.}
 
 \item{item}{A character value indicating the quantity to be downloaded.
-This is normally one of `"coastline"`, `"land"`, `"ocean"`,
-`"rivers_lakes_centerlines"`, or `"lakes"`, but the NaturalEarth
+This is normally one of \code{"coastline"}, \code{"land"}, \code{"ocean"},
+\code{"rivers_lakes_centerlines"}, or \code{"lakes"}, but the NaturalEarth
 server has other types, and advanced users can discover their names by inspecting
-the URLs of links on the NaturalEarth site, and use them for `item`.
-If `item` is not supplied, it defaults to `"coastline"`.}
+the URLs of links on the NaturalEarth site, and use them for \code{item}.
+If \code{item} is not supplied, it defaults to \code{"coastline"}.}
 
 \item{server}{character value giving the base name of the server, used in the
 construction of URL queries. Since servers tend to change over time, this
@@ -35,10 +35,10 @@ is a good argument to check, when debugging code that once worked but
 now fails.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -48,7 +48,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from `destdir` and `destfile`
+even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -57,11 +57,11 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{

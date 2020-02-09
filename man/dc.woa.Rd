@@ -19,7 +19,7 @@ dc.woa(
 }
 \arguments{
 \item{database}{String indicating the name of the database. This must be
-`"woa13"` in this version, but other databases can be added if users
+\code{"woa13"} in this version, but other databases can be added if users
 need them.}
 
 \item{version}{String indicating the version of the atlas. This is
@@ -37,15 +37,15 @@ and 4.1 Mb, respectively. The 1-deg resolution is a good
 choice for global-scale applications.}
 
 \item{field}{String indicating the variable. This must be one of
-the following: `"temperature"`, `"temperature"`,
-`"salinity"`, `"density"`, `"oxygen"`,
-`"phosphate"`, `"nitrate"` or `"silicate"`.}
+the following: \code{"temperature"}, \code{"temperature"},
+\code{"salinity"}, \code{"density"}, \code{"oxygen"},
+\code{"phosphate"}, \code{"nitrate"} or \code{"silicate"}.}
 
 \item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, `"."` is used, i.e. the data file
+downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
-helpful to create a top-level directory called `data`,
-with a subdirectory for each file type used (e.g. `~/data/met`
+helpful to create a top-level directory called \code{data},
+with a subdirectory for each file type used (e.g. \code{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -55,7 +55,7 @@ the same parameters will yield the same result; this is useful
 for caching.}
 
 \item{force}{A logical value that indicates whether to force the download,
-even if the pathname constructed from `destdir` and `destfile`
+even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
 
 \item{dryrun}{A logical value that indicates whether to return the constructed
@@ -64,11 +64,11 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to [dcDebug()].  Setting `debug=0`
+a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
-more information. If one `dc` function calls another, it
-passes the value of `debug` but decreased by 1, which means
-that the value of `debug` controls not just the breadth
+more information. If one \code{dc} function calls another, it
+passes the value of \code{debug} but decreased by 1, which means
+that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
