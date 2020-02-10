@@ -1,15 +1,15 @@
 #' Download and Cache a World Ocean Atlas File
 #'
 #' The data are downloaded with [utils::download.file()]
-#' pointed to links inferred by tracing a NOAA website [ref 1] through a series
+#' pointed to links inferred by tracing a NOAA website (ref 1) through a series
 #' of links down to a THREDDS server and finally to an HTTPServer.  At the
 #' moment, there is no choice on which version of the database is used: it is
 #' WOA13 for all variables except salinity and temperature, and in these latter
 #' two, it is WOA13V2, which is said to be an improvement over the initial
-#' release [ref 2].
+#' release (ref 2).
 #'
 #' @param database String indicating the name of the database. This must be
-#' \code{"woa13"} in this version, but other databases can be added if users
+#' `"woa13"` in this version, but other databases can be added if users
 #' need them.
 #' @param version String indicating the version of the atlas. This is
 #' ignored in this version, but a future version could allow specification
@@ -23,9 +23,9 @@
 #' and 4.1 Mb, respectively. The 1-deg resolution is a good
 #' choice for global-scale applications.
 #' @param field String indicating the variable. This must be one of
-#' the following: \code{"temperature"}, \code{"temperature"},
-#' \code{"salinity"}, \code{"density"}, \code{"oxygen"},
-#' \code{"phosphate"}, \code{"nitrate"} or \code{"silicate"}.
+#' the following: `"temperature"`, `"temperature"`,
+#' `"salinity"`, `"density"`, `"oxygen"`,
+#' `"phosphate"`, `"nitrate"` or `"silicate"`.
 #' @template destdir
 #' @template destfile
 #' @template force
@@ -80,6 +80,7 @@
 #' @author Dan Kelley (2017-09-22)
 #'
 #' @family functions that download ocean-related data
+#' @export
 dc.woa <- function(database="woa13",
                    version=NULL, time=NULL, resolution=1, field="temperature",
                    destdir=".", destfile, force=FALSE, dryrun=FALSE,

@@ -45,7 +45,7 @@ the following: \code{"temperature"}, \code{"temperature"},
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -64,7 +64,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -75,13 +75,13 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-The data are downloaded with [utils::download.file()]
-pointed to links inferred by tracing a NOAA website [ref 1] through a series
+The data are downloaded with \code{\link[utils:download.file]{utils::download.file()}}
+pointed to links inferred by tracing a NOAA website (ref 1) through a series
 of links down to a THREDDS server and finally to an HTTPServer.  At the
 moment, there is no choice on which version of the database is used: it is
 WOA13 for all variables except salinity and temperature, and in these latter
 two, it is WOA13V2, which is said to be an improvement over the initial
-release [ref 2].
+release (ref 2).
 }
 \examples{
 library(dc)
@@ -121,12 +121,13 @@ for (field in c("temperature", "salinity", "oxygen", "silicate",
 
 }
 \references{
-1. \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
-
-2. \url{https://www.nodc.noaa.gov/OC5/woa13}
+\enumerate{
+\item \url{https://www.nodc.noaa.gov/OC5/woa13/woa13data.html}
+\item \url{https://www.nodc.noaa.gov/OC5/woa13}
+}
 }
 \seealso{
-The work is done with [dc()].
+The work is done with \code{\link[=dc]{dc()}}.
 
 Other functions that download ocean-related data: 
 \code{\link{dc.coastline}()},

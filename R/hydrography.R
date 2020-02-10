@@ -1,11 +1,11 @@
 #' Download and Cache a Hydrographic Dataset
 #'
-#' [dc.hydography()] downloads hydographic datasets from the CCHDO archive,
+#' [dc.hydrography()] downloads hydrographic datasets from the CCHDO archive,
 #' (or mirrors that use the exact same URL structure, apart from the
 #' server name) based on a specified "expocode" that specifies the
 #' expedition or cruise. This is convenient, because expocodes are how
 #' cruises are referred to in the literature. See \dQuote{Limitiations} for
-#' a comments on the brittleness of [dc.hydrography)(].
+#' a comments on the brittleness of [dc.hydrography()].
 #'
 #' @section Limitations:
 #' Unfortunately, \url{cchdo.ucsd.edu} does not provide data organized
@@ -13,15 +13,15 @@
 #' procedure used here is to scan the HTML for a summary URL that
 #' \emph{can} be inferred, and then to discover links from the HTML
 #' text. This is brittle to changes in the formatting used by CCHDO, which
-#' means that changes may need to be made to [dc.hydography()] whenever
+#' means that changes may need to be made to [dc.hydrography()] whenever
 #' CCHDO changes their website. Another consequence is that a web connection
 #' is required even if the desired file has already been downloaded.
 #'
 #' @param expocode String indicating the cruise (or 'expedition') code.
-#' @param type String indicating data type, either \code{"bottle"} (the
-#' default) or \code{"ctd"}.
-#' @param format String indicating data format, either \code{"exchange"}
-#' (the default) or \code{"whp_netcdf"}.
+#' @param type String indicating data type, either `"bottle"` (the
+#' default) or `"ctd"`.
+#' @param format String indicating data format, either `"exchange"`
+#' (the default) or `"whp_netcdf"`.
 #' @template server
 #' @template destdir
 #' @template destfile
@@ -55,6 +55,7 @@
 #' @author Dan Kelley (2017-11-25)
 #'
 #' @family functions that download ocean-related data
+#' @export
 dc.hydrography <- function(expocode, type="bottle", format="exchange", server,
                          destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                          debug=getOption("dcDebug", 0))

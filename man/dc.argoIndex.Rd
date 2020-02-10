@@ -20,7 +20,7 @@ now fails.}
 
 \item{file}{character value indicating the file on the server, also
 used for the downloaded file, which is placed in the \code{destdir} directory.
-For the \code{ftp://usgodae.org/pub/outgoing/argo} server,
+For the \verb{ftp://usgodae.org/pub/outgoing/argo} server,
 two of multiple choices for \code{file} are
 \code{ar_index_global_prof.txt.gz}
 and
@@ -32,7 +32,7 @@ that might be worth exploring.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{age}{numeric value indicating how old a downloaded file
@@ -42,7 +42,7 @@ are out-of-date are downloaded, as way to avoid slow downloads.
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -55,7 +55,7 @@ a data frame that has columns named
 \code{"ocean"}, \code{"profiler_type"}, \code{"institution"} and \code{"date_update"}.
 The dates are stored in the file in numeric (yyyymmddhhmmss) format, but
 the return value represents these in POSIXct format, after conversion
-with \code{\link{decodeTextDate}}.
+with \code{\link[=decodeTextDate]{decodeTextDate()}}.
 }
 \description{
 Downloads a file (or uses a cached file) and then reads it to create a
@@ -65,13 +65,13 @@ data frame that stores information about available float files.
 The first step is to construct a URL that will yield an index file to be stored in
 a file named by the \code{file} argument, stored within the directory named in
 the \code{destdir} argument. If that destination file was downloaded less than
-\code{age} days ago, it is reused. Otherwise, \code{\link{download.file}}
+\code{age} days ago, it is reused. Otherwise, \code{\link[=download.file]{download.file()}}
 is used to download the file. Thus, setting \code{age=0} forces a download.
 
 The next step is to read that file and infers the relevant data, by ignoring
-all leading lines that start with the \code{#} character, and determining
+all leading lines that start with the \verb{#} character, and determining
 column names from the first line after this sequence.
-The data are read into a data frame using \code{read.csv}.
+The data are read into a data frame using \code{\link[=read.csv]{read.csv()}}.
 }
 \examples{
 # The download takes several tens of seconds, so we skip it during routine checks.

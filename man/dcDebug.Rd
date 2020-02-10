@@ -12,7 +12,7 @@ greater than zero for increasing levels of debugging.  Values greater than 4
 are treated like 4.}
 
 \item{...}{one or several character or other values to be printed, analogous
-to the \code{...} argument of \code{cat}.}
+to the \code{...} argument of \code{\link[=cat]{cat()}}.}
 
 \item{style}{either a string or a function. If a string,
 it must be \code{"plain"} (the default) for plain text,
@@ -26,7 +26,7 @@ with control codes, as in the cyan-coloured example; note that
 this to \code{-1} for messages about entering or exiting a function.}
 }
 \description{
-\code{dcDebug} prints a message, if its first argument exceeds 0.
+\code{\link[=dcDebug]{dcDebug()}} prints a message, if its first argument exceeds 0.
 Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
 functions, so the effect is a nesting, with more space for deeper function
 level.

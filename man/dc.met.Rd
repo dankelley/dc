@@ -34,7 +34,7 @@ If \code{deltat} is not given, it defaults to \code{"hour"}.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -53,7 +53,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -64,11 +64,11 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-The data are downloaded with [utils::download.file()]
-pointed to the Environment Canada website [1]
+The data are downloaded with \code{\link[utils:download.file]{utils::download.file()}}
+pointed to the Environment Canada website (ref 1)
 using queries that had to be devised by reverse-engineering, since the agency
 does not provide documentation about how to construct queries. Caution: the
-query format changes from time to time, so \code{dc.met} may work one
+query format changes from time to time, so \code{\link[=dc.met]{dc.met()}} may work one
 day, and fail the next.
 }
 \details{
@@ -80,11 +80,11 @@ Station ID is subject to change over time. (Whether this applies to existing
 data is unclear.)
 
 Given these difficulties with Station ID, users are advised to consult
-the Environment Canada website [1] before downloading any data,
+the Environment Canada website (ref 1) before downloading any data,
 and to check it from time to time
 during the course of a research project, to see if the Station ID has changed.
 It can be very helpful to use Gavin Simpson's
-\code{canadaHCD} package [2] to look up Station IDs. This package maintains
+\code{canadaHCD} package (ref 2) to look up Station IDs. This package maintains
 a copy of the Environment Canada listing of stations, and its
 \code{find_station} function provides an easy way to determine Station IDs.
 After that, its \code{hcd_hourly} function (and related functions) make
@@ -103,14 +103,15 @@ plot(met)
 
 }
 \references{
-1. Environment Canada website for Historical Climate Data
+\enumerate{
+\item Environment Canada website for Historical Climate Data
 \url{http://climate.weather.gc.ca/index_e.html}
-
-2. Gavin Simpon's \code{canadaHCD} package on GitHub
+\item Gavin Simpson's \code{canadaHCD} package on GitHub
 \url{https://github.com/gavinsimpson/canadaHCD}
 }
+}
 \seealso{
-The work is done with [dc()].
+The work is done with \code{\link[=dc]{dc()}}.
 
 Other functions that download ocean-related data: 
 \code{\link{dc.coastline}()},

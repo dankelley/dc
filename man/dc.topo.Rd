@@ -41,7 +41,7 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -60,7 +60,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -75,15 +75,15 @@ Data are downloaded (from \url{https://maps.ngdc.noaa.gov/viewers/wcs-client}, b
 default) and a string containing the full path
 to the downloaded file is returned. If \code{destfile} is not supplied,
 then the filename is constructed from the query, which means that
-subsequent calls to \code{dc.topo}  with identical parameters will
+subsequent calls to \code{\link[=dc.topo]{dc.topo()}}  with identical parameters will
 simply return the name of the cached file, assuming the user has not
 deleted it in the meantime.
 }
 \details{
-The data are downloaded with [utils::download.file()], using a URL
+The data are downloaded with \code{\link[utils:download.file]{utils::download.file()}}, using a URL
 devised from reverse engineering web-based queries constructed by
 the default \code{server} used here. Note that the data source is
-\code{"etopo1"}, which is a 1 arc-second file [1,2].
+\code{"etopo1"}, which is a 1 arc-second file (ref 1,2).
 
 Three values are permitted for \code{format},
 each named after the
@@ -96,21 +96,21 @@ for the menu item named
 and (3) \code{"gmt"} (for the menu item named
 "GMT NetCDF"), which yields a NetCDF file in
 another format. All of these file formats are
-recognized by \code{\link[oce]{read.topo}} in the \code{oce} package.
+recognized by \code{\link[oce:read.topo]{oce::read.topo()}} in the \code{oce} package.
 (The NOAA server has more options, and if
-\code{\link[oce]{read.topo}} is extended to handle them, they will
+\code{\link[oce:read.topo]{oce::read.topo()}} is extended to handle them, they will
 also be added here.)
 }
 \section{Webserver history}{
 
-All versions of [dc.topo()] to date have used a NOAA server as
+All versions of \code{\link[=dc.topo]{dc.topo()}} to date have used a NOAA server as
 the data source, but the URL has not been static. A list of the
 servers that have been used is provided below,
 in hopes that it can help users to make guesses
-for \code{server}, should \code{dc.topo} fail because of
+for \code{server}, should \code{\link[=dc.topo]{dc.topo()}} fail because of
 a fail to download the data because of a broken link. Another
 hint is to look at the source code for
-\code{\link[marmap]{getNOAA.bathy}} in the \CRANpkg{marmap} package,
+\code{\link[marmap:getNOAA.bathy]{marmap::getNOAA.bathy()}} in the \CRANpkg{marmap} package,
 which is also forced to track the moving target that is NOAA.
 
 \itemize{
@@ -138,15 +138,16 @@ lines(coastlineWorldFine[["longitude"]], coastlineWorldFine[["latitude"]])
 
 }
 \references{
-1. \samp{https://www.ngdc.noaa.gov/mgg/global/global.html}
-
-2. Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief
+\enumerate{
+\item \samp{https://www.ngdc.noaa.gov/mgg/global/global.html}
+\item Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief
 Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum
 NESDIS NGDC-24. National Geophysical Data Center, NOAA. doi:10.7289/V5C8276M
-[access date: Aug 30, 2017].
+(access date: Aug 30, 2017).
+}
 }
 \seealso{
-The work is done with [utils::download.file()].
+The work is done with \code{\link[utils:download.file]{utils::download.file()}}.
 
 Other functions that download ocean-related data: 
 \code{\link{dc.coastline}()},

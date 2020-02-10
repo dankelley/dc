@@ -6,7 +6,7 @@ NULL
 #' Download and Cache a Dataset
 #'
 #' General function for downloading and caching a dataset. This is called
-#' by e.g. \code{\link{dc.argo}} and the other functions in the \code{dc}
+#' by e.g. [dc.argo()] and the other functions in the `dc`
 #' package.
 #'
 #' @template url
@@ -64,8 +64,8 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 
 #' Possibly print a debugging message
 #'
-#' \code{dcDebug} prints a message, if its first argument exceeds 0.
-#' Many \code{dc} functions decrease the \code{debug} level by 1 when they call other
+#' [dcDebug()] prints a message, if its first argument exceeds 0.
+#' Many `dc` functions decrease the `debug` level by 1 when they call other
 #' functions, so the effect is a nesting, with more space for deeper function
 #' level.
 #'
@@ -73,16 +73,16 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
 #' greater than zero for increasing levels of debugging.  Values greater than 4
 #' are treated like 4.
 #' @param ... one or several character or other values to be printed, analogous
-#' to the \code{...} argument of \code{cat}.
+#' to the `...` argument of [cat()].
 #' @param style either a string or a function. If a string,
-#' it must be \code{"plain"} (the default) for plain text,
-#' \code{"bold"}, \code{"italic"}, \code{"red"}, \code{"green"} or \code{"blue"} (with
+#' it must be `"plain"` (the default) for plain text,
+#' `"bold"`, `"italic"`, `"red"`, `"green"` or `"blue"` (with
 #' obvious meanings).
-#' If \code{style} is a function, it must prepend and postpend the text
+#' If `style` is a function, it must prepend and postpend the text
 #' with control codes, as in the cyan-coloured example; note that
-#' \CRANpkg{crayon} provides many functions that work well for \code{style}.
+#' \CRANpkg{crayon} provides many functions that work well for `style`.
 #' @param unindent Number of levels to un-indent, e.g. it is common to set
-#' this to \code{-1} for messages about entering or exiting a function.
+#' this to `-1` for messages about entering or exiting a function.
 #'
 #' @examples
 #' foo <- function(debug=1)

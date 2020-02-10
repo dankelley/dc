@@ -39,7 +39,7 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -58,7 +58,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -69,7 +69,7 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-[dc.g1sst()] downloads data from a G1SST server.
+\code{\link[=dc.g1sst]{dc.g1sst()}} downloads data from a G1SST server.
 }
 \section{History}{
 

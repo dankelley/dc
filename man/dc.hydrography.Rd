@@ -34,7 +34,7 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -53,7 +53,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -64,12 +64,12 @@ of debugging, but also the depth.}
 String indicating the full pathname to the downloaded file.
 }
 \description{
-[dc.hydography()] downloads hydographic datasets from the CCHDO archive,
+\code{\link[=dc.hydrography]{dc.hydrography()}} downloads hydrographic datasets from the CCHDO archive,
 (or mirrors that use the exact same URL structure, apart from the
 server name) based on a specified "expocode" that specifies the
 expedition or cruise. This is convenient, because expocodes are how
 cruises are referred to in the literature. See \dQuote{Limitiations} for
-a comments on the brittleness of [dc.hydrography)(].
+a comments on the brittleness of \code{\link[=dc.hydrography]{dc.hydrography()}}.
 }
 \section{Limitations}{
 
@@ -78,7 +78,7 @@ into URLs that can be inferred from the expocode alone, and so the
 procedure used here is to scan the HTML for a summary URL that
 \emph{can} be inferred, and then to discover links from the HTML
 text. This is brittle to changes in the formatting used by CCHDO, which
-means that changes may need to be made to [dc.hydography()] whenever
+means that changes may need to be made to \code{\link[=dc.hydrography]{dc.hydrography()}} whenever
 CCHDO changes their website. Another consequence is that a web connection
 is required even if the desired file has already been downloaded.
 }
@@ -101,10 +101,12 @@ plot(transectCTD)
 
 }
 \references{
-1. \url{https://cchdo.ucsd.edu}
+\enumerate{
+\item \url{https://cchdo.ucsd.edu}
+}
 }
 \seealso{
-The work is done with [dc()].
+The work is done with \code{\link[=dc]{dc()}}.
 
 Other functions that download ocean-related data: 
 \code{\link{dc.coastline}()},

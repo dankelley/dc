@@ -3,7 +3,7 @@
 #' @param t character value giving the time in yyyymmddHHMMSS format,
 #' as illustrated in \dQuote{Examples}.
 #' @param tz character value holding the timezone.  It seems unlikely
-#' that a value other than \code{"UTC"} will be appropriate, so that
+#' that a value other than `"UTC"` will be appropriate, so that
 #' is the default.
 #'
 #' @param tz character string
@@ -24,35 +24,35 @@ decodeTextDate <- function(t, tz="UTC")
 #'
 #' Download and cache data from an argo profiling float.
 #'
-#' \code{dc.argoID} downloads all data for the float with
-#' a specified identifier, \code{\link{dc.argoSearch}} downloads the
+#' [dc.argoID()] downloads all data for the float with
+#' a specified identifier, [dc.argoSearch()] downloads the
 #' most recent profile for all floats in a specified longitude,
-#' latitude, and time box, and \code{dc.argo} is a wrapper that
+#' latitude, and time box, and `dc.argo` is a wrapper that
 #' calls either of the first two functions, depending on
-#' whether the \code{id} argument is provided.
+#' whether the `id` argument is provided.
 #'
-#' In any case, the downloads are made from the USGODAE server [1]
+#' In any case, the downloads are made from the USGODAE server (ref 1)
 #' by default (or from any other server that obeys the same directory
 #' structure). Since the servers do not provide an API for such
-#' downloads, the \code{dc.argo*} functions are forced to work by
+#' downloads, the `dc.argo*` functions are forced to work by
 #' constructing URLs that are devised based on inspection of queries
-#' constructed from a GUI-style webpage [2]. This leads to a
+#' constructed from a GUI-style webpage (ref 2). This leads to a
 #' brittleness that is discussed in \dQuote{Caution}.
 #'
 #' @section Caution:
-#' The queries used by the \code{dc.argo} functions will fail
+#' The queries used by the `dc.argo` functions will fail
 #' if USGODAE changes their system. For an example, USGODAE presently looks
-#' for the substring \code{".submit=++Go++"} in the query, but if this
-#' were to be switched to \code{".submit=Go"}, a seemingly trivial
-#' change, then \code{dc.argo} would fail entirely. For this reason,
-#' the \code{read.argo*} functions may fail at any time. Users who
+#' for the substring `".submit=++Go++"` in the query, but if this
+#' were to be switched to `".submit=Go"`, a seemingly trivial
+#' change, then `dc.argo` would fail entirely. For this reason,
+#' the `read.argo*` functions may fail at any time. Users who
 #' encounter this problem should contact the author, who may be able
 #' to find a way to reverse-engineer the updated Argo system.
 #'
 #' @param id a character string giving the
 #' float ID to be queried.
-#' argo float. If this is provided, then \code{longitude},
-#' \code{latitude} and \code{time} are ignored, and \code{dc.argo}
+#' argo float. If this is provided, then `longitude`,
+#' `latitude` and `time` are ignored, and [dc.argo()]
 #' downloads a file that contains all the profiles for the
 #' named float. **FIXME/dk: I think this text is garbled and out of date.**
 #' @param longitude Two-element numerical vector holding the limits
@@ -91,8 +91,6 @@ decodeTextDate <- function(t, tz="UTC")
 #' 1. \url{http://.usgodae.org}
 #'
 #' 2. \url{http://www.usgodae.org/cgi-bin/argo_select.pl}
-#'
-#' @seealso The work is done with \code{\link{dc}}.
 #'
 #' @author Dan Kelley
 #'
@@ -278,24 +276,24 @@ dc.argoSearch <- function(id=NULL,
 #' data frame that stores information about available float files.
 #'
 #' The first step is to construct a URL that will yield an index file to be stored in
-#' a file named by the \code{file} argument, stored within the directory named in
-#' the \code{destdir} argument. If that destination file was downloaded less than
-#' \code{age} days ago, it is reused. Otherwise, \code{\link{download.file}}
-#' is used to download the file. Thus, setting \code{age=0} forces a download.
+#' a file named by the `file` argument, stored within the directory named in
+#' the `destdir` argument. If that destination file was downloaded less than
+#' `age` days ago, it is reused. Otherwise, [download.file()]
+#' is used to download the file. Thus, setting `age=0` forces a download.
 #'
 #' The next step is to read that file and infers the relevant data, by ignoring
-#' all leading lines that start with the \code{#} character, and determining
+#' all leading lines that start with the `#` character, and determining
 #' column names from the first line after this sequence.
-#' The data are read into a data frame using \code{read.csv}.
+#' The data are read into a data frame using [read.csv()].
 #'
 #' @template server
 #' @param file character value indicating the file on the server, also
-#' used for the downloaded file, which is placed in the \code{destdir} directory.
-#' For the \code{ftp://usgodae.org/pub/outgoing/argo} server,
-#' two of multiple choices for \code{file} are
-#' \code{ar_index_global_prof.txt.gz}
+#' used for the downloaded file, which is placed in the `destdir` directory.
+#' For the `ftp://usgodae.org/pub/outgoing/argo` server,
+#' two of multiple choices for `file` are
+#' `ar_index_global_prof.txt.gz`
 #' and
-#' \code{argo_bio-profile_index.txt.gz}
+#' `argo_bio-profile_index.txt.gz`
 #' but examination of the server will reveal other possibilities
 #' that might be worth exploring.
 #' @template destdir
@@ -306,11 +304,11 @@ dc.argoSearch <- function(id=NULL,
 #' @template debug
 #'
 #' @return a data frame that has columns named
-#' \code{"file"}, \code{"date"}, \code{"latitude"}, \code{"longitude"},
-#' \code{"ocean"}, \code{"profiler_type"}, \code{"institution"} and \code{"date_update"}.
+#' `"file"`, `"date"`, `"latitude"`, `"longitude"`,
+#' `"ocean"`, `"profiler_type"`, `"institution"` and `"date_update"`.
 #' The dates are stored in the file in numeric (yyyymmddhhmmss) format, but
 #' the return value represents these in POSIXct format, after conversion
-#' with \code{\link{decodeTextDate}}.
+#' with [decodeTextDate()].
 #'
 #' @examples
 #' # The download takes several tens of seconds, so we skip it during routine checks.

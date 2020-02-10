@@ -38,7 +38,7 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \code{~/data/met}
+with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{destfile}{Optional string indicating the name of the file.
@@ -57,7 +57,7 @@ designing responses to changing URLs.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
-a call to \code{\link{dcDebug}()}.  Setting \code{debug=0}
+a call to \code{\link[=dcDebug]{dcDebug()}}.  Setting \code{debug=0}
 turns off this form of debugging, while higher values yield
 more information. If one \code{dc} function calls another, it
 passes the value of \code{debug} but decreased by 1, which means
@@ -70,7 +70,7 @@ there is a problem of any kind, the result will be the empty
 string.
 }
 \description{
-Constructs a query to the NaturalEarth server [1] to download coastline
+Constructs a query to the NaturalEarth server (ref 1) to download coastline
 data (or lake data, river data, etc) in any of three resolutions,
 and caches the resultant file.
 }
@@ -88,12 +88,14 @@ plot(coastline)
 
 }
 \references{
-1. The NaturalEarth server is at \url{http://www.naturalearthdata.com}
+\enumerate{
+\item The NaturalEarth server is at \url{http://www.naturalearthdata.com}
+}
 }
 \seealso{
-The work is done with [utils::download.file()].
+The work is done with \code{\link[utils:download.file]{utils::download.file()}}.
 
-The work is done with [dc()].
+The work is done with \code{\link[=dc]{dc()}}.
 
 Other functions that download ocean-related data: 
 \code{\link{dc.g1sst}()},
