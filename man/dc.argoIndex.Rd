@@ -8,7 +8,7 @@ dc.argoIndex(
   server = "ftp://usgodae.org/pub/outgoing/argo",
   file = "ar_index_global_prof.txt.gz",
   destdir = ".",
-  age = 1/24,
+  age = 1,
   debug = getOption("dcDebug", 0)
 )
 }
@@ -36,9 +36,11 @@ with a subdirectory for each file type used (e.g. \verb{~/data/met}
 to hold meteorological files).}
 
 \item{age}{numeric value indicating how old a downloaded file
-must be, for it to be considered out-of-date.  Only files that
-are out-of-date are downloaded, as way to avoid slow downloads.
-(Even so, reading the file takes of order 10 seconds.)}
+must be (in days), for it to be considered out-of-date.  The
+default, \code{age=1}, limits downloads to once per day, as a way
+to avoid slowing down a workflow with a download that might take
+a sizeable fraction of an hour. Set \code{age=0} to force a download
+at any time.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
