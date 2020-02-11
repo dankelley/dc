@@ -346,13 +346,13 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
         cacheAge <- (as.integer(Sys.time()) - as.integer(file.info(cache)$mtime)) / 86400 # in days
         if (cacheAge > age) {
             cat("Downloading local file\n    ", cache, "\nfrom\n    ", url, "\nbecause it is more than", round(age, 4), " days old\n")
-            download.file(url, cache)
+            download.file(url, cache, mode="wb")
         } else {
             cat("The local file\n    ", cache, "\nis not being downloaded from\n    ", url, "\nbecause it is only ", round(cacheAge, 4), " days old\n")
         }
     } else {
         cat("Downloading local file\n    ", cache, "\nfrom\n    ", url, "\n")
-        download.file(url, cache)
+        download.file(url, cache, mode="wb")
     }
     first <- readLines(cache, 100)
     hash <- which(grepl("^#", first))
