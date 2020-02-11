@@ -303,6 +303,8 @@ dc.argoSearch <- function(id=NULL,
 #' to avoid slowing down a workflow with a download that might take
 #' a sizeable fraction of an hour. Set `age=0` to force a download
 #' at any time.
+#' @param quiet silence some progress indicators.  The default
+#' is to show such indicators.
 #' @template debug
 #'
 #' @return a data frame that has columns named
@@ -313,7 +315,7 @@ dc.argoSearch <- function(id=NULL,
 #' with [decodeTextDate()].
 #'
 #' @examples
-#' # The download takes several tens of seconds, so we skip it during routine checks.
+#' # The download takes several of order 1 to 10 minutes.
 #'\dontrun{
 #' # Download whole index
 #' ai <- dc.argoIndex()
@@ -336,6 +338,7 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
                          file="ar_index_global_prof.txt.gz",
                          destdir=".",
                          age=1,
+                         quiet=FALSE,
                          debug=getOption("dcDebug", 0))
 {
     ## Sample file
@@ -343,24 +346,33 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     ## ftp://usgodae.org/pub/outgoing/argo/dac/aoml/1900710/1900710_prof.nc
     dcDebug(debug, "dc.argoIndex(server=\"", server, "\", file=\"", file, "\"", ", destdir=\"", destdir, "\") {", sep="", "\n", style="bold", unindent=1)
     url <- paste(server, file, sep="/")
-    cache <- paste(destdir, file, sep="/")
-    if (file.exists(cache)) {
-        cacheAge <- (as.integer(Sys.time()) - as.integer(file.info(cache)$mtime)) / 86400 # in days
-        if (cacheAge > age) {
-            cat("Downloading local file\n    ", cache, "\nfrom\n    ", url, "\nbecause it is more than", round(age, 4), " days old\n")
-            download.file(url, cache, mode="wb")
+    destfile <- paste(destdir, file, sep="/")
+    if (file.exists(destfile)) {
+        destfileAge <- (as.integer(Sys.time()) - as.integer(file.info(destfile)$mtime)) / 86400 # in days
+        if (destfileAge > age) {
+            if (!quiet)
+                cat("Downloading local file\n    ", destfile, "\nfrom\n    ", url, "\nbecause it is more than", round(age, 4), " days old\n")
+            download.file(url=url, destfile=destfile, quiet=quiet)
         } else {
-            cat("The local file\n    ", cache, "\nis not being downloaded from\n    ", url, "\nbecause it is only ", round(cacheAge, 4), " days old\n")
+            if (!quiet)
+                cat("The local file\n    ", destfile, "\nis not being downloaded from\n    ", url, "\nbecause it is only", round(destfileAge, 4), "days old.\n")
         }
     } else {
-        cat("Downloading local file\n    ", cache, "\nfrom\n    ", url, "\n")
-        download.file(url, cache, mode="wb")
+        if (!quiet)
+            cat("Downloading local file\n    ", destfile, "\nfrom\n    ", url, "\n")
+        download.file(url=url, destfile=destfile, quiet=quiet)
     }
-    first <- readLines(cache, 100)
+    if (!quiet)
+        cat("Reading header.\n")
+    first <- readLines(destfile, 100)
     hash <- which(grepl("^#", first))
     lastHash <- tail(hash, 1)
     names <- strsplit(first[1 + lastHash], ",")[[1]]
-    res <- read.csv(cache, skip=2 + lastHash, col.names=names, stringsAsFactors=FALSE)
+    if (!quiet)
+        cat("Reading local index file\n")
+    res <- read.csv(destfile, skip=2 + lastHash, col.names=names, stringsAsFactors=FALSE)
+    if (!quiet)
+        cat("Decoding dates\n")
     res$date <- decodeTextDate(res$date)
     res$date_update <- decodeTextDate(res$date_update)
     dcDebug(debug, "} # dc.argoIndex()", sep="", "\n", style="bold", unindent=1)

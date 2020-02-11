@@ -9,6 +9,7 @@ dc.argoIndex(
   file = "ar_index_global_prof.txt.gz",
   destdir = ".",
   age = 1,
+  quiet = FALSE,
   debug = getOption("dcDebug", 0)
 )
 }
@@ -41,6 +42,9 @@ default, \code{age=1}, limits downloads to once per day, as a way
 to avoid slowing down a workflow with a download that might take
 a sizeable fraction of an hour. Set \code{age=0} to force a download
 at any time.}
+
+\item{quiet}{silence some progress indicators.  The default
+is to show such indicators.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by
@@ -76,7 +80,7 @@ column names from the first line after this sequence.
 The data are read into a data frame using \code{\link[=read.csv]{read.csv()}}.
 }
 \examples{
-# The download takes several tens of seconds, so we skip it during routine checks.
+# The download takes several of order 1 to 10 minutes.
 \dontrun{
 # Download whole index
 ai <- dc.argoIndex()
