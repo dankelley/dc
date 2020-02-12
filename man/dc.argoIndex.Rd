@@ -20,7 +20,8 @@ is a good argument to check, when debugging code that once worked but
 now fails.}
 
 \item{file}{character value indicating the file on the server, also
-used for the downloaded file, which is placed in the \code{destdir} directory.
+used as a pattern for the name of a constructed \code{.rda} file that
+is placed in the \code{destdir} directory.
 For the \verb{ftp://usgodae.org/pub/outgoing/argo} server,
 two of multiple choices for \code{file} are
 \code{ar_index_global_prof.txt.gz}
@@ -33,8 +34,8 @@ that might be worth exploring.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \verb{~/data/met}
-to hold meteorological files).}
+with a subdirectory for each file type used; see
+\dQuote{Examples}.}
 
 \item{age}{numeric value indicating how old a downloaded file
 must be (in days), for it to be considered out-of-date.  The
@@ -56,40 +57,76 @@ that the value of \code{debug} controls not just the breadth
 of debugging, but also the depth.}
 }
 \value{
-a data frame that has columns named
-\code{"file"}, \code{"date"}, \code{"latitude"}, \code{"longitude"},
-\code{"ocean"}, \code{"profiler_type"}, \code{"institution"} and \code{"date_update"}.
-The dates are stored in the file in numeric (yyyymmddhhmmss) format, but
-the return value represents these in POSIXct format, after conversion
-with \code{\link[=decodeTextDate]{decodeTextDate()}}.
+A character value holding the name of the \code{.rda} file,
+which is typically loaded with \code{\link[=load]{load()}}; see \dQuote{Examples}.
 }
 \description{
 Downloads a file (or uses a cached file) and then reads it to create a
-data frame that stores information about available float files.
+local \code{.rda} file that stores information about available float files,
+as explained in \dQuote{Details}.
+The download takes several of order 1 to 60 minutes, so this function
+has an \code{age} argument that lets the user avoid new downloads of
+data that were downloaded recently.
 }
 \details{
-The first step is to construct a URL that will yield an index file to be stored in
-a file named by the \code{file} argument, stored within the directory named in
-the \code{destdir} argument. If that destination file was downloaded less than
-\code{age} days ago, it is reused. Otherwise, \code{\link[curl:curl_download]{curl::curl_download()}}
-from the \CRANpkg{curl} package is used to download the file.
+The first step is to construct a URL for downloading, based on the
+\code{url} and \code{file} arguments. That URL will be a string ending in \code{.gz},
+and from this the name of a local file is constructed by changing the
+suffix to \code{.rda}. If that rda file is less than the age (in days)
+specified by the \code{age} argument, then no downloading takes place,
+and \code{\link[=dc.argoIndex]{dc.argoIndex()}} returns the name of that rda file.
 
-The next step is to read that file and infers the relevant data, by ignoring
-all leading lines that start with the \verb{#} character, and determining
-column names from the first line after this sequence.
-The data are read into a data frame using \code{\link[=read.csv]{read.csv()}}.
+However, if the local rda file is older than \code{age} days, a download
+is started, using \code{\link[curl:curl_download]{curl::curl_download()}} from the \CRANpkg{curl}
+package.  The data file is downloaded to a local temporary file,
+and then the contents of that file are analysed, with the results
+of the analysis being stored in the local rda file.
+
+The resultant \code{.rda} file holds a list named \code{argoIndex}
+that holds following elements:
+\itemize{
+\item \code{ftpRoot}, the FTP root  stored in the header of the source \code{file}.
+\item \code{server}, the argument  provided here.
+\item \code{file}, the argument provided here.
+\item \code{header}, the preliminary lines in the source file that start with the \verb{#} character.
+\item \code{data}, a data frame containing the items in the source file. As of
+files downloaded in February 2020, this has columns named
+\code{file}, \code{date}, \code{longitude}, \code{latitude}, \code{ocean}, \code{profiler_type},
+\code{institution}, and \code{date_update}.
+}
+
+Note that \code{paste0(argoIndex$ftpRoot, argoIndex$data$file)} will
+form a vector of names of files that can be downloaded as local
+Netcdf files (ending in suffix \code{.nc}) that can be read with
+\code{\link[oce:read.argo]{oce::read.argo()}} in the \CRANpkg{oce} packag, creating an
+\code{argo} object.
 }
 \examples{
-# The download takes several of order 1 to 10 minutes.
 \dontrun{
 # Download whole index
-ai <- dc.argoIndex()
+ai <- dc.argoIndex(destdir="~/data/argo")
+load(ai) # defines argoIndex
 # Plot histograms of 'date' and 'date_update'
 par(mfrow=c(2, 1), mar=c(3, 3, 1, 1))
-hist(ai$date, breaks="years",
+hist(argoIndex$data$date, breaks="years",
      main="", xlab="Time", freq=TRUE)
-hist(ai$date_update, breaks="years",
+hist(argoIndex$data$date_update, breaks="years",
      main="", xlab="Last Update Time", freq=TRUE)
+# Download and plot the last file in the index
+url <- paste0(argoIndex$ftpRoot, "/", tail(argoIndex$data$file, 1))
+destfile <- gsub(".*/", "~/data/argo/", url)
+# NOTE: the mode must be specified on Windows platforms
+# but need not be, on other platforms
+curl::curl_download(url, destfile, quiet=FALSE, mode="wb")
+library(oce)
+a <- read.argo(destfile)
+summary(a)
+par(mfrow=c(2, 2))
+plot(a, which="map")
+mtext(a[["time"]], cex=par("cex"))
+plot(a, which="TS")
+plot(a, which="temperature profile")
+plot(a, which="salinity profile")
 }
 
 }

@@ -41,7 +41,7 @@
 #' ## Download Levitus 2013 (Version 2) temperature on a 1-degree grid,
 #' ## in netcdf format, then read the data, and finally, plot sea-surface
 #' ## temperature using oce::imagep() to get an image with a palette.
-#' T1f <- dc.woa(field="temperature")
+#' T1f <- dc.woa(field="temperature", destdir="~/data/woa")
 #' library(ncdf4)
 #' T1nc <- nc_open(T1f) # or nc_open("woa13_decav_t00_01v2.nc")
 #' lon1 <- ncvar_get(T1nc, "lon")
@@ -56,7 +56,7 @@
 #' ## in the downloaded file say that t_an is 4D, with the
 #' ## extra dimension being time, but the time vector in the file
 #' ## is of unit length, so ncdf4 appraently demotes it to 3D.
-#' T5f <- dc.woa(field="temperature", resolution=5)
+#' T5f <- dc.woa(field="temperature", resolution=5, destdir="~/data/woa")
 #' T5nc <- nc_open(T5f)
 #' lon5 <- ncvar_get(T5nc, "lon")
 #' lat5 <- ncvar_get(T5nc, "lat")

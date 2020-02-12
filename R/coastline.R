@@ -35,7 +35,7 @@
 #' # User must create directory ~/data/coastline first.
 #' # As of September 2016, the downloaded file, named
 #' # "ne_50m_coastline.zip", occupies 443K bytes.
-#' filename <- dc.coastline()
+#' filename <- dc.coastline(destdir="~/data/coastline")
 #' coastline <- read.coastline(filename)
 #' plot(coastline)
 #'}

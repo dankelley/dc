@@ -34,8 +34,8 @@ If \code{deltat} is not given, it defaults to \code{"hour"}.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \verb{~/data/met}
-to hold meteorological files).}
+with a subdirectory for each file type used; see
+\dQuote{Examples}.}
 
 \item{destfile}{Optional string indicating the name of the file.
 If not supplied, then the file name is constructed from the other
@@ -95,7 +95,7 @@ it easy to read data.
 ## Download data for Halifax International Airport, in September
 ## of 2003. (This dataset is used for data(met) in the oce package.)
 library(dc)
-metFile <- dc.met(6358, 2003, 9)
+metFile <- dc.met(6358, 2003, 9, destdir="~/data/met")
 library(oce)
 met <- read.met(metFile)
 plot(met)

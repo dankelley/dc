@@ -43,8 +43,8 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \verb{~/data/met}
-to hold meteorological files).}
+with a subdirectory for each file type used; see
+\dQuote{Examples}.}
 
 \item{destfile}{Optional string indicating the name of the file.
 If not supplied, then the file name is constructed from the other
@@ -110,12 +110,12 @@ library(oce)
 ## 1. Get float profiles near Nova Scotia on Remembrance Day, 2017,
 ##    and plot the first one as a CTD.
 n <- dc.argo(longitude=c(-65,-55), latitude=c(40,50),
-             time=c("2017-11-11","2017-11-11"))
+             time=c("2017-11-11","2017-11-11"), destdir="~/data/argo")
 a <- read.argo(n[1])
 plotTS(as.ctd(a))
 
 ## 2. All profiles for a particular float.
-N <- dc.argo(id="4902912")
+N <- dc.argo(id="4902912", destdir="~/data/argo")
 A <- read.argo(N)
 plot(A, type="l") # trajectory
 }

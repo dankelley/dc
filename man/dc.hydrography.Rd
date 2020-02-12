@@ -34,8 +34,8 @@ now fails.}
 downloaded files. If not supplied, \code{"."} is used, i.e. the data file
 is stored in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used (e.g. \verb{~/data/met}
-to hold meteorological files).}
+with a subdirectory for each file type used; see
+\dQuote{Examples}.}
 
 \item{destfile}{Optional string indicating the name of the file.
 If not supplied, then the file name is constructed from the other
@@ -88,12 +88,12 @@ library(dc)
 \dontrun{
 library(oce)
 ## 1. Bottle stations for a Southern Ocean cruise
-bottle <- dc.hydrography("09AR20041223")
+bottle <- dc.hydrography("09AR20041223", destdir="~/data/hydrography")
 plot(read.section(bottle), which="map")
 ##
 ## 2. CTD data from same cruise, subsetted to
 ##    a section between Antarctica and Australia
-ctd <- dc.hydrography("09AR20041223", type="ctd")
+ctd <- dc.hydrography("09AR20041223", type="ctd", destdir="~/data/hydrography")
 secCTD <- read.section(directory=ctd)
 transectCTD <- subset(secCTD, 100 < longitude & longitude < 120)
 plot(transectCTD)

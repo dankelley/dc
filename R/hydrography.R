@@ -36,12 +36,12 @@
 #'\dontrun{
 #' library(oce)
 #' ## 1. Bottle stations for a Southern Ocean cruise
-#' bottle <- dc.hydrography("09AR20041223")
+#' bottle <- dc.hydrography("09AR20041223", destdir="~/data/hydrography")
 #' plot(read.section(bottle), which="map")
 #' ##
 #' ## 2. CTD data from same cruise, subsetted to
 #' ##    a section between Antarctica and Australia
-#' ctd <- dc.hydrography("09AR20041223", type="ctd")
+#' ctd <- dc.hydrography("09AR20041223", type="ctd", destdir="~/data/hydrography")
 #' secCTD <- read.section(directory=ctd)
 #' transectCTD <- subset(secCTD, 100 < longitude & longitude < 120)
 #' plot(transectCTD)

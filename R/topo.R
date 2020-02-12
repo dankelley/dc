@@ -53,7 +53,7 @@
 #' @examples
 #'\dontrun{
 #' library(dc)
-#' topoFile <- dc.topo(west=-64, east=-60, south=43, north=46)
+#' topoFile <- dc.topo(west=-64, east=-60, south=43, north=46, destdir="~/data/topo")
 #' library(oce)
 #' topo <- read.topo(topoFile)
 #' imagep(topo, zlim=c(-400, 400), drawTriangles=TRUE)

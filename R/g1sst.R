@@ -31,9 +31,9 @@
 #' @examples
 #'\dontrun{
 #' ## Scotian Shelf on Oct 14, 2015.
-#' f <- dc.g1sst(2015, 10, 14, -66, -60, 41, 46) # October 14, 2015
+#' f <- dc.g1sst(2015, 10, 14, -66, -60, 41, 46, destdir="~/data/g1sst")
 #' library(oce)
-#' d <- read.g1sst(f)
+#' d <- read.g1sst(f, destdir="~/data/g1sst")
 #' plot(d, "SST")
 #' mtext(d[["time"]], side=3, line=0, adj=0)
 #'}

@@ -25,7 +25,7 @@
 #' @examples
 #'\dontrun{
 #' ## The download takes several seconds.
-#' f <- dc.amsr(2017, 1, 14) # Jan 14, 2017
+#' f <- dc.amsr(2017, 1, 14, destdir="~/data/amsr") # Jan 14, 2017
 #' library(oce)
 #' d <- read.amsr(f)
 #' plot(d)

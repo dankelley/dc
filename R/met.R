@@ -49,7 +49,7 @@
 #' ## Download data for Halifax International Airport, in September
 #' ## of 2003. (This dataset is used for data(met) in the oce package.)
 #' library(dc)
-#' metFile <- dc.met(6358, 2003, 9)
+#' metFile <- dc.met(6358, 2003, 9, destdir="~/data/met")
 #' library(oce)
 #' met <- read.met(metFile)
 #' plot(met)
