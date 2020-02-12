@@ -278,8 +278,8 @@ dc.argoSearch <- function(id=NULL,
 #' The first step is to construct a URL that will yield an index file to be stored in
 #' a file named by the `file` argument, stored within the directory named in
 #' the `destdir` argument. If that destination file was downloaded less than
-#' `age` days ago, it is reused. Otherwise, [download.file()]
-#' is used to download the file. Thus, setting `age=0` forces a download.
+#' `age` days ago, it is reused. Otherwise, [curl::curl_download()]
+#' from the \CRANpkg{curl} package is used to download the file.
 #'
 #' The next step is to read that file and infers the relevant data, by ignoring
 #' all leading lines that start with the `#` character, and determining
@@ -299,7 +299,7 @@ dc.argoSearch <- function(id=NULL,
 #' @template destdir
 #' @param age numeric value indicating how old a downloaded file
 #' must be (in days), for it to be considered out-of-date.  The
-#' default, `age=1`, limits downloads to once per day, as a way
+#' default, `age=2`, limits downloads to once per day, as a way
 #' to avoid slowing down a workflow with a download that might take
 #' a sizeable fraction of an hour. Set `age=0` to force a download
 #' at any time.
@@ -332,12 +332,13 @@ dc.argoSearch <- function(id=NULL,
 #'
 #' @family functions related to argo data
 #'
-#' @importFrom utils download.file read.csv tail
+#' @importFrom utils read.csv tail
+#' @importFrom curl curl_download
 #' @export
 dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
                          file="ar_index_global_prof.txt.gz",
                          destdir=".",
-                         age=1,
+                         age=2,
                          quiet=FALSE,
                          debug=getOption("dcDebug", 0))
 {
@@ -352,7 +353,8 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
         if (destfileAge > age) {
             if (!quiet)
                 cat("Downloading local file\n    ", destfile, "\nfrom\n    ", url, "\nbecause it is more than", round(age, 4), " days old\n")
-            download.file(url=url, destfile=destfile, quiet=quiet)
+            curl::curl_download(url=url, destfile=destfile, quiet=quiet)
+            ##curl_download(url=url, destfile=destfile, quiet=quiet)
         } else {
             if (!quiet)
                 cat("The local file\n    ", destfile, "\nis not being downloaded from\n    ", url, "\nbecause it is only", round(destfileAge, 4), "days old.\n")
@@ -360,7 +362,8 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     } else {
         if (!quiet)
             cat("Downloading local file\n    ", destfile, "\nfrom\n    ", url, "\n")
-        download.file(url=url, destfile=destfile, quiet=quiet)
+        curl::curl_download(url=url, destfile=destfile, quiet=quiet)
+        ##curl_download(url=url, destfile=destfile, quiet=quiet)
     }
     if (!quiet)
         cat("Reading header.\n")

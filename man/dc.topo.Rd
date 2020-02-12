@@ -96,7 +96,7 @@ for the menu item named
 and (3) \code{"gmt"} (for the menu item named
 "GMT NetCDF"), which yields a NetCDF file in
 another format. All of these file formats are
-recognized by \code{\link[oce:read.topo]{oce::read.topo()}} in the \code{oce} package.
+recognized by \code{\link[oce:read.topo]{oce::read.topo()}} in the \CRANpkg{oce} package.
 (The NOAA server has more options, and if
 \code{\link[oce:read.topo]{oce::read.topo()}} is extended to handle them, they will
 also be added here.)

@@ -17,7 +17,7 @@ NULL
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
-#' @importFrom utils unzip
+#' @importFrom utils download.file unzip
 #' @export
 dc <- function(url=NULL, destdir=".", destfile=NULL,
                force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))

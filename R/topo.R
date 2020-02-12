@@ -26,7 +26,7 @@
 #' and (3) `"gmt"` (for the menu item named
 #' "GMT NetCDF"), which yields a NetCDF file in
 #' another format. All of these file formats are
-#' recognized by [oce::read.topo()] in the `oce` package.
+#' recognized by [oce::read.topo()] in the \CRANpkg{oce} package.
 #' (The NOAA server has more options, and if
 #' [oce::read.topo()] is extended to handle them, they will
 #' also be added here.)

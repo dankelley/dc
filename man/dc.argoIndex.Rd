@@ -8,7 +8,7 @@ dc.argoIndex(
   server = "ftp://usgodae.org/pub/outgoing/argo",
   file = "ar_index_global_prof.txt.gz",
   destdir = ".",
-  age = 1,
+  age = 2,
   quiet = FALSE,
   debug = getOption("dcDebug", 0)
 )
@@ -38,7 +38,7 @@ to hold meteorological files).}
 
 \item{age}{numeric value indicating how old a downloaded file
 must be (in days), for it to be considered out-of-date.  The
-default, \code{age=1}, limits downloads to once per day, as a way
+default, \code{age=2}, limits downloads to once per day, as a way
 to avoid slowing down a workflow with a download that might take
 a sizeable fraction of an hour. Set \code{age=0} to force a download
 at any time.}
@@ -71,8 +71,8 @@ data frame that stores information about available float files.
 The first step is to construct a URL that will yield an index file to be stored in
 a file named by the \code{file} argument, stored within the directory named in
 the \code{destdir} argument. If that destination file was downloaded less than
-\code{age} days ago, it is reused. Otherwise, \code{\link[=download.file]{download.file()}}
-is used to download the file. Thus, setting \code{age=0} forces a download.
+\code{age} days ago, it is reused. Otherwise, \code{\link[curl:curl_download]{curl::curl_download()}}
+from the \CRANpkg{curl} package is used to download the file.
 
 The next step is to read that file and infers the relevant data, by ignoring
 all leading lines that start with the \verb{#} character, and determining
