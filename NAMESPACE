@@ -2,8 +2,7 @@
 
 export(dc)
 export(dc.amsr)
-export(dc.argo)
-export(dc.argoID)
+export(dc.argoById)
 export(dc.argoIndex)
 export(dc.argoSearch)
 export(dc.coastline)

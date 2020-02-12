@@ -30,9 +30,9 @@ and
 but examination of the server will reveal other possibilities
 that might be worth exploring.}
 
-\item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.  It can be
+\item{destdir}{character value indicating the directory in which to store
+downloaded files. The default value of \code{"."} means to store the
+downloaded file in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
 with a subdirectory for each file type used; see
 \dQuote{Examples}.}
@@ -113,13 +113,10 @@ hist(argoIndex$data$date, breaks="years",
 hist(argoIndex$data$date_update, breaks="years",
      main="", xlab="Last Update Time", freq=TRUE)
 # Download and plot the last file in the index
-url <- paste0(argoIndex$ftpRoot, "/", tail(argoIndex$data$file, 1))
-destfile <- gsub(".*/", "~/data/argo/", url)
-# NOTE: the mode must be specified on Windows platforms
-# but need not be, on other platforms
-curl::curl_download(url, destfile, quiet=FALSE, mode="wb")
+id <- paste0(argoIndex$ftpRoot, "/", tail(argoIndex$data$file, 1))
+f <- dc.argoById(id)
 library(oce)
-a <- read.argo(destfile)
+a <- read.oce(f)
 summary(a)
 par(mfrow=c(2, 2))
 plot(a, which="map")
@@ -132,7 +129,7 @@ plot(a, which="salinity profile")
 }
 \seealso{
 Other functions related to argo data: 
-\code{\link{dc.argoID}()},
+\code{\link{dc.argoById}()},
 \code{\link{dc.argoSearch}()},
 \code{\link{dc.argo}()}
 }

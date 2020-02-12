@@ -25,7 +25,7 @@
 #'
 #' Download and cache data from an argo profiling float.
 #'
-#' [dc.argoID()] downloads all data for the float with
+#' [dc.argoById()] downloads data for the float with
 #' a specified identifier, [dc.argoSearch()] downloads the
 #' most recent profile for all floats in a specified longitude,
 #' latitude, and time box, and `dc.argo` is a wrapper that
@@ -96,7 +96,7 @@
 #' @author Dan Kelley
 #'
 #' @family functions related to argo data
-#' @export
+## @export
 dc.argo <- function(id,
                     longitude, latitude, time, server="ftp://usgodae.org",
                     destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
@@ -115,9 +115,9 @@ dc.argo <- function(id,
             warning("latitude must not be provided, if id was provided\n")
         if (timeGiven)
             warning("time must not be provided, if id was provided\n")
-        rval <- dc.argoID(id=id,
-                          server=server, destdir=destdir, destfile=destfile,
-                          force=force, dryrun=dryrun, debug=debug-1)
+        rval <- dc.argoById(id=id,
+                            server=server, destdir=destdir, destfile=destfile,
+                            force=force, dryrun=dryrun, debug=debug-1)
     } else {
         rval <- dc.argoSearch(longitude=longitude, latitude=latitude, time=time,
                               server=server, destdir=destdir, destfile=destfile,
@@ -127,66 +127,110 @@ dc.argo <- function(id,
     rval
 }
 
-#' FIXME(dk): I'll document this later, if I decide it's still useful.
-#' @template id
-#' @template server
+#' Download and cache an argo file specified by id
+#'
+#' @param id character value giving the Argo float id. In this version
+#' of [dc.argoById()], the value of `id` must be a full URL for the netcdf
+#' file, and an error is reported if `id` does not start with `ftp://`.
+#' @param server ignored
 #' @template destdir
-#' @template destfile
+#' @param destfile optional character value that specifies the name to be used
+#' for the downloaded file. If this is not specified, then a name is determined
+#' from the value of `id`.
 #' @template force
 #' @template dryrun
+#' @template quiet
 #' @template debug
 #' @family functions related to argo data
 #' @export
-dc.argoID <- function(id=NULL,
-                      ##server="www.usgodae.org",
-                      server="ftp://usgodae.org",
-                      destdir=".", destfile, force=FALSE, dryrun=FALSE,
-                      debug=getOption("dcDebug", 0))
+#' @examples
+#' # These examples assume that the ~/data/argo directory exists and is readable.
+#'\dontrun{
+#' library(oce)
+#' # Case 1: id is a URL; server is ignored.
+#' id <- "ftp://ftp.ifremer.fr/ifremer/argo/dac/nmdis/2901633/profiles/R2901633_071.nc"
+#' f <- dc.argoById(id, destdir="~/data/argo")
+#' a <- read.oce(f)
+#' summary(a) # an oce object of class 'argo'
+#' par(mfrow=c(2, 2))
+#' plot(a, which="map")
+#' mtext(a[["time"]], cex=par("cex"))
+#' mtext(gsub(".*/", "", f), cex=par("cex"), line=-1)
+#' plot(a, which="TS")
+#' plot(a, which="temperature profile")
+#' plot(a, which="salinity profile")
+#'}
+#' @importFrom curl curl_download
+#' @export
+dc.argoById <- function(id=NULL,
+                        server,
+                        destdir=".", destfile,
+                        force=FALSE, dryrun=FALSE,
+                        quiet=FALSE, debug=getOption("dcDebug", 0))
 {
-    dcDebug(debug, "dc.argoID(id=\"", id, "\", ...) {", sep="", "\n", style="bold", unindent=1)
-    ##> http://www.usgodae.org/ftp/outgoing/argo/ar_index_global_meta.txt.gz
-    ##> indexURL <- paste("http://", server, "/ftp/outgoing/argo/ar_index_global_meta.txt.gz", sep="")
-    ##
-    ## ftp://usgodae.org/pub/outgoing/argo/ar_index_global_meta.txt
-    indexURL <- paste0(server, "/pub/outgoing/argo/ar_index_global_meta.txt.gz")
-    dcDebug(debug, "indexURL", indexURL, "\n")
-    con <- gzcon(url(indexURL))
-    index <- readLines(con)
-    ## An example file starts as follows (downloaded 2017-12-01)
-    ## # Title : Metadata directory file of the Argo Global Data Assembly Center
-    ## # Description : The directory file describes all metadata files of the argo GDAC ftp site.
-    ## # Project : ARGO
-    ## # Format version : 2.0
-    ## # Date of update : 20171202121617
-    ## # FTP root number 1 : ftp://ftp.ifremer.fr/ifremer/argo/dac
-    ## # FTP root number 2 : ftp://usgodae.org/pub/outgoing/argo/dac
-    ## # GDAC node : NRL-MRY
-    ## file,profiler_type,institution,date_update
-    ## aoml/13857/13857_meta.nc,845,AO,20120521144513
-    ## aoml/13858/13858_meta.nc,845,AO,20130222100319
-    dcDebug(debug, "downloaded index file containing", length(index), "lines\n")
-    close(con)
-    header <- which(grepl("^#.*$", index))
-    if (length(header))
-        index <- index[-header]
-    i <- read.csv(text=index, header=TRUE, stringsAsFactors=FALSE)
-    if (is.null(id)) {
+    dcDebug(debug, "dc.argoById(id=\"", id, "\", destdir=\"", destdir, "\", ...) {", sep="", "\n", style="bold", unindent=1)
+    ## If the ID starts with ftp://, thn we just download the file directly, ignoring server
+    if (grepl("^ftp://", id)) {
+        if (missing(destfile))
+            destfile <- gsub(".*/(.*).nc", "\\1.nc", id)
+        dcDebug(debug, "originally, destfile='", destfile, "'\n", sep="")
+        destfile <- paste0(destdir, "/", destfile)
+        dcDebug(debug, "after resolving destdir, destfile='", destfile, "'\n", sep="")
+        if (!dryrun && (force || !file.exists(destfile)))
+            curl::curl_download(url=id, destfile=destfile, quiet=quiet, mode="wb")
+        dcDebug(debug, "} # dc.argoById()", sep="", "\n", style="bold", unindent=1)
+        return(destfile)
     } else {
-        lines <- grep(id, i$file)
-        if (0 == length(lines))
-            stop("No id '", id, "' found in index file ", indexURL)
-        lines <- lines[1]
-        dcDebug(debug, "line ", lines, " of index file refers to id \"", id, "\"\n", sep="")
-        ## e.g. aoml/4902912/4902912_meta.nc
-        dac <- gsub("^([^/]*)/.*$", "\\1", i$file[lines])
-        dcDebug(debug, "infer dac \"", dac, "\"\n", sep="")
-        ## e.g. http://www.usgodae.org/ftp/outgoing/argo/dac/aoml/4902912/4902912_prof.nc
-        destfile <- paste(id, "_prof.nc", sep="")
-        url <- paste("http://", server, "/ftp/outgoing/argo/dac/", dac, "/", id, "/", destfile, sep="")
-        rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+        stop("the id must start with \"ftp://\" -- contact author if you need this limitation to be lifed")
     }
-    dcDebug(debug, "} # dc.argoID", sep="", "\n", style="bold", unindent=1)
-    rval
+    ##> ##
+    ##> ## FIXME(dk): see how much of the following, which is a remnant from an older
+    ##> ## FIXME(dk): version, is useful. My current thinking is that it is not, i.e.
+    ##> ## FIXME(dk): I think users ought to be working from full indices.
+    ##> ##
+    ##> ##> http://www.usgodae.org/ftp/outgoing/argo/ar_index_global_meta.txt.gz
+    ##> ##> indexURL <- paste("http://", server, "/ftp/outgoing/argo/ar_index_global_meta.txt.gz", sep="")
+    ##> ##
+    ##> ## ftp://usgodae.org/pub/outgoing/argo/ar_index_global_meta.txt
+    ##> indexURL <- paste0(server, "/pub/outgoing/argo/ar_index_global_meta.txt.gz")
+    ##> dcDebug(debug, "indexURL", indexURL, "\n")
+    ##> con <- gzcon(url(indexURL))
+    ##> index <- readLines(con)
+    ##> ## An example file starts as follows (downloaded 2017-12-01)
+    ##> ## # Title : Metadata directory file of the Argo Global Data Assembly Center
+    ##> ## # Description : The directory file describes all metadata files of the argo GDAC ftp site.
+    ##> ## # Project : ARGO
+    ##> ## # Format version : 2.0
+    ##> ## # Date of update : 20171202121617
+    ##> ## # FTP root number 1 : ftp://ftp.ifremer.fr/ifremer/argo/dac
+    ##> ## # FTP root number 2 : ftp://usgodae.org/pub/outgoing/argo/dac
+    ##> ## # GDAC node : NRL-MRY
+    ##> ## file,profiler_type,institution,date_update
+    ##> ## aoml/13857/13857_meta.nc,845,AO,20120521144513
+    ##> ## aoml/13858/13858_meta.nc,845,AO,20130222100319
+    ##> dcDebug(debug, "downloaded index file containing", length(index), "lines\n")
+    ##> close(con)
+    ##> header <- which(grepl("^#.*$", index))
+    ##> if (length(header))
+    ##>     index <- index[-header]
+    ##> i <- read.csv(text=index, header=TRUE, stringsAsFactors=FALSE)
+    ##> if (is.null(id)) {
+    ##> } else {
+    ##>     lines <- grep(id, i$file)
+    ##>     if (0 == length(lines))
+    ##>         stop("No id '", id, "' found in index file ", indexURL)
+    ##>     lines <- lines[1]
+    ##>     dcDebug(debug, "line ", lines, " of index file refers to id \"", id, "\"\n", sep="")
+    ##>     ## e.g. aoml/4902912/4902912_meta.nc
+    ##>     dac <- gsub("^([^/]*)/.*$", "\\1", i$file[lines])
+    ##>     dcDebug(debug, "infer dac \"", dac, "\"\n", sep="")
+    ##>     ## e.g. http://www.usgodae.org/ftp/outgoing/argo/dac/aoml/4902912/4902912_prof.nc
+    ##>     destfile <- paste(id, "_prof.nc", sep="")
+    ##>     url <- paste("http://", server, "/ftp/outgoing/argo/dac/", dac, "/", id, "/", destfile, sep="")
+    ##>     rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    ##> }
+    ##> dcDebug(debug, "} # dc.argoID", sep="", "\n", style="bold", unindent=1)
+    ##> rval
 }
 
 #' FIXME: this function is in flux: do not use
@@ -347,13 +391,10 @@ dc.argoSearch <- function(id=NULL,
 #' hist(argoIndex$data$date_update, breaks="years",
 #'      main="", xlab="Last Update Time", freq=TRUE)
 #' # Download and plot the last file in the index
-#' url <- paste0(argoIndex$ftpRoot, "/", tail(argoIndex$data$file, 1))
-#' destfile <- gsub(".*/", "~/data/argo/", url)
-#' # NOTE: the mode must be specified on Windows platforms
-#' # but need not be, on other platforms
-#' curl::curl_download(url, destfile, quiet=FALSE, mode="wb")
+#' id <- paste0(argoIndex$ftpRoot, "/", tail(argoIndex$data$file, 1))
+#' f <- dc.argoById(id)
 #' library(oce)
-#' a <- read.argo(destfile)
+#' a <- read.oce(f)
 #' summary(a)
 #' par(mfrow=c(2, 2))
 #' plot(a, which="map")
@@ -375,8 +416,7 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
                          file="ar_index_global_prof.txt.gz",
                          destdir=".",
                          age=2,
-                         quiet=FALSE,
-                         debug=getOption("dcDebug", 0))
+                         quiet=FALSE, debug=getOption("dcDebug", 0))
 {
     if (!requireNamespace("curl", quietly=TRUE))
         stop('must install.packages("curl") to download Argo data')
@@ -400,33 +440,26 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     ## We need to download data. We do that to a temporary file, because we will be saving
     ## an .rda file, not the data on the server.
     destfileTemp <- tempfile(pattern="argo", fileext=".gz")
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " downloading temporary index file\n    ", destfileTemp, "\nfrom\n    ", url, "\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " downloading temporary index file\n    ", destfileTemp, "\nfrom\n    ", url, "\n", sep="")
     curl::curl_download(url=url, destfile=destfileTemp, quiet=quiet, mode="wb")
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " about to read header.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " about to read header.\n", sep="")
     first <- readLines(destfileTemp, 100)
     hash <- which(grepl("^#", first))
     ftpRoot <- gsub("^[^:]*:[ ]*(.*)$", "\\1", first[which(grepl("^# FTP", first))[1]])
     header <- first[hash]
     lastHash <- tail(hash, 1)
     names <- strsplit(first[1 + lastHash], ",")[[1]]
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " about to read the newly-downloaded index file.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " about to read the newly-downloaded index file.\n", sep="")
     data <- read.csv(destfileTemp, skip=2 + lastHash, col.names=names, stringsAsFactors=FALSE)
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " removing temporary file '", destfileTemp, "'.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " removing temporary file '", destfileTemp, "'.\n", sep="")
     unlink(destfileTemp)
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " about to decode dates.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " about to decode dates.\n", sep="")
     data$date <- as.POSIXct(as.character(data$date), format="%Y%m%d%H%M%S", tz="UTC")
     data$date_update <- as.POSIXct(as.character(data$date_update), format="%Y%m%d%H%M%S",tz="UTC")
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " about to save to rda file '", destfileRda, "'.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " about to save to rda file '", destfileRda, "'.\n", sep="")
     argoIndex <- list(ftpRoot=ftpRoot, server=server, file=file, header=header, data=data)
     save(argoIndex, file=destfileRda)
-    if (!quiet)
-        cat(format(Sys.time(), "[%H:%M:%S]"), " dc.argoIndex() has saved results to '", destfileRda, "'.\n", sep="")
+    dcDebug(debug, format(Sys.time(), "[%H:%M:%S]"), " dc.argoIndex() has saved results to '", destfileRda, "'.\n", sep="")
     dcDebug(debug, "} # dc.argoIndex()", sep="", "\n", style="bold", unindent=1)
     destfileRda
 }

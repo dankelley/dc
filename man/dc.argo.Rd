@@ -39,14 +39,14 @@ construction of URL queries. Since servers tend to change over time, this
 is a good argument to check, when debugging code that once worked but
 now fails.}
 
-\item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.  It can be
+\item{destdir}{character value indicating the directory in which to store
+downloaded files. The default value of \code{"."} means to store the
+downloaded file in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
 with a subdirectory for each file type used; see
 \dQuote{Examples}.}
 
-\item{destfile}{Optional string indicating the name of the file.
+\item{destfile}{character value indicating the name of the file.
 If not supplied, then the file name is constructed from the other
 parameters of the function call, so that subsequent calls with
 the same parameters will yield the same result; this is useful
@@ -76,7 +76,7 @@ String indicating the full pathname to the downloaded file.
 Download and cache data from an argo profiling float.
 }
 \details{
-\code{\link[=dc.argoID]{dc.argoID()}} downloads all data for the float with
+\code{\link[=dc.argoById]{dc.argoById()}} downloads data for the float with
 a specified identifier, \code{\link[=dc.argoSearch]{dc.argoSearch()}} downloads the
 most recent profile for all floats in a specified longitude,
 latitude, and time box, and \code{dc.argo} is a wrapper that
@@ -129,7 +129,7 @@ plot(A, type="l") # trajectory
 }
 \seealso{
 Other functions related to argo data: 
-\code{\link{dc.argoID}()},
+\code{\link{dc.argoById}()},
 \code{\link{dc.argoIndex}()},
 \code{\link{dc.argoSearch}()}
 }

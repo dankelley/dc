@@ -30,14 +30,14 @@ month.}
 desired dataset. Only \code{"hour"} or \code{"month"} are permitted.
 If \code{deltat} is not given, it defaults to \code{"hour"}.}
 
-\item{destdir}{Optional string indicating the directory in which to store
-downloaded files. If not supplied, \code{"."} is used, i.e. the data file
-is stored in the present working directory.  It can be
+\item{destdir}{character value indicating the directory in which to store
+downloaded files. The default value of \code{"."} means to store the
+downloaded file in the present working directory.  It can be
 helpful to create a top-level directory called \code{data},
 with a subdirectory for each file type used; see
 \dQuote{Examples}.}
 
-\item{destfile}{Optional string indicating the name of the file.
+\item{destfile}{character value indicating the name of the file.
 If not supplied, then the file name is constructed from the other
 parameters of the function call, so that subsequent calls with
 the same parameters will yield the same result; this is useful
