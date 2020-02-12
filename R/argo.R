@@ -342,6 +342,8 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
                          quiet=FALSE,
                          debug=getOption("dcDebug", 0))
 {
+    if (!requireNamespace("curl", quietly=TRUE))
+        stop('must install.packages("curl") to download Argo data')
     ## Sample file
     ## ftp://ftp.ifremer.fr/ifremer/argo/dac/aoml/1900710/1900710_prof.nc
     ## ftp://usgodae.org/pub/outgoing/argo/dac/aoml/1900710/1900710_prof.nc
@@ -372,10 +374,10 @@ dc.argoIndex <- function(server="ftp://usgodae.org/pub/outgoing/argo",
     lastHash <- tail(hash, 1)
     names <- strsplit(first[1 + lastHash], ",")[[1]]
     if (!quiet)
-        cat("Reading local index file\n")
+        cat("Reading local index file.\n")
     res <- read.csv(destfile, skip=2 + lastHash, col.names=names, stringsAsFactors=FALSE)
     if (!quiet)
-        cat("Decoding dates\n")
+        cat("Decoding dates.\n")
     res$date <- decodeTextDate(res$date)
     res$date_update <- decodeTextDate(res$date_update)
     dcDebug(debug, "} # dc.argoIndex()", sep="", "\n", style="bold", unindent=1)
