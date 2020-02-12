@@ -181,7 +181,7 @@ dc.argoById <- function(id=NULL,
         dcDebug(debug, "} # dc.argoById()", sep="", "\n", style="bold", unindent=1)
         return(destfile)
     } else {
-        stop("the id must start with \"ftp://\" -- contact author if you need this limitation to be lifed")
+        stop("the id must start with \"ftp://\" -- contact author if you need this limitation to be lifted")
     }
     ##> ##
     ##> ## FIXME(dk): see how much of the following, which is a remnant from an older
