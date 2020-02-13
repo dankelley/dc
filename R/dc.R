@@ -12,20 +12,28 @@ NULL
 #' @template url
 #' @template destdir
 #' @template destfile
+#' @template mode
+#' @template quiet
 #' @template force
 #' @template dryrun
+#' @template ntrials
 #' @template debug
 #'
 #' @return String indicating the full pathname to the downloaded file.
-#' @importFrom utils download.file unzip
+#' @importFrom utils unzip
+#' @importFrom curl curl_download
 #' @export
-dc <- function(url=NULL, destdir=".", destfile=NULL,
-               force=FALSE, dryrun=FALSE, debug=getOption("dcDebug", 0))
+dc <- function(url=NULL, destdir=".", destfile=NULL, mode="wb",
+               quiet=FALSE, force=FALSE, dryrun=FALSE, ntrials=3,
+               debug=getOption("dcDebug", 0))
 {
     if (missing(url))
         stop("missing url")
     if (missing(destdir))
         stop("missing destdir")
+    ntrials <- as.integer(ntrials)
+    if (ntrials < 1)
+        ntrials <- 1
     dcDebug(debug, "dc(",
             "url=c('", paste(url, collapse="', '"), "'), ",
             "destdir='", destdir, "', ",
@@ -39,14 +47,23 @@ dc <- function(url=NULL, destdir=".", destfile=NULL,
         stop("length(url) must equal length(destfile)")
     if (dryrun) {
         for (i in 1:n) {
-            cat("download.file(\"", url[i], "\", \"", destination[i], "\")\n", sep="")
+            cat("curl::curl_download(\"", url[i], "\", \"", destination[i], "\")\n", sep="")
         }
     } else {
         if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
             dcDebug(debug, "Skipping \"", destfile, "\" because it is already in \"", destdir, "\n", sep="")
         } else {
             for (i in 1:n) {
-                download.file(url[i], destination[i], mode="wb")
+                success <- FALSE
+                for (trial in seq_len(ntrials)) {
+                    t <- try(curl::curl_download(url=url, destfile=destfile, quiet=quiet, mode=mode))
+                    if (!inherits(t, "try-error")) {
+                        success <- TRUE
+                        break
+                    }
+                }
+                if (!success)
+                    stop("failed to download, after ", ntrials, " trial")
                 if (1 == length(grep(".zip$", destfile[i]))) {
                     destinationClean <- gsub(".zip$", "", destination[i])
                     unzip(destination[i], exdir=destinationClean)

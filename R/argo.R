@@ -137,6 +137,7 @@ dc.argo <- function(id,
 #' @param destfile optional character value that specifies the name to be used
 #' for the downloaded file. If this is not specified, then a name is determined
 #' from the value of `id`.
+#' @template ntrials
 #' @template force
 #' @template dryrun
 #' @template quiet
@@ -165,7 +166,7 @@ dc.argo <- function(id,
 dc.argoById <- function(id=NULL,
                         server,
                         destdir=".", destfile,
-                        force=FALSE, dryrun=FALSE,
+                        ntrials=3, force=FALSE, dryrun=FALSE,
                         quiet=FALSE, debug=getOption("dcDebug", 0))
 {
     dcDebug(debug, "dc.argoById(id=\"", id, "\", destdir=\"", destdir, "\", ...) {", sep="", "\n", style="bold", unindent=1)
@@ -176,8 +177,9 @@ dc.argoById <- function(id=NULL,
         dcDebug(debug, "originally, destfile='", destfile, "'\n", sep="")
         destfile <- paste0(destdir, "/", destfile)
         dcDebug(debug, "after resolving destdir, destfile='", destfile, "'\n", sep="")
-        if (!dryrun && (force || !file.exists(destfile)))
-            curl::curl_download(url=id, destfile=destfile, quiet=quiet, mode="wb")
+        dc(url, destdir=NULL, destfile=destfile, force=force, dryrun=dryrun, ntrials=ntrials, debug=debug)
+        ## if (!dryrun && (force || !file.exists(destfile)))
+        ##    curl::curl_download(url=id, destfile=destfile, quiet=quiet, mode="wb")
         dcDebug(debug, "} # dc.argoById()", sep="", "\n", style="bold", unindent=1)
         return(destfile)
     } else {

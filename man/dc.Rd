@@ -9,8 +9,11 @@ dc(
   url = NULL,
   destdir = ".",
   destfile = NULL,
+  mode = "wb",
+  quiet = FALSE,
   force = FALSE,
   dryrun = FALSE,
+  ntrials = 3,
   debug = getOption("dcDebug", 0)
 )
 }
@@ -22,9 +25,10 @@ of Argo files provided by a particular server.}
 
 \item{destdir}{character value indicating the directory in which to store
 downloaded files. The default value of \code{"."} means to store the
-downloaded file in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used; see
+downloaded file in the present working directory.  Set \code{destdir=NULL}
+if \code{destfile} is a filename with full path information.
+File clutter is reduced by creating a top-level directory called
+\code{data}, with subdirectories for various file types; see
 \dQuote{Examples}.}
 
 \item{destfile}{character value indicating the name of the file.
@@ -33,6 +37,19 @@ parameters of the function call, so that subsequent calls with
 the same parameters will yield the same result; this is useful
 for caching.}
 
+\item{mode}{character value passed to \code{\link[curl:curl_download]{curl::curl_download()}},
+controlling the mode used in writing the local file. The default
+value, \code{mode="wb"}, means to set the write format to binary. This
+is necessary on Windows machines, which otherwise will alter newline
+characters, ruining file integrity for binary files (such as
+netcdf files). The setting is not required on other machines, but
+it makes sense to use this default in all instances.  See the
+documentation for \code{\link[curl:curl_download]{curl::curl_download()}}.}
+
+\item{quiet}{logical value, passed to \code{\link[curl:curl_download]{curl::curl_download()}},
+that indicates whether to download silently.  Since some downloads
+can be slow, the default value is \code{quiet=FALSE}.}
+
 \item{force}{A logical value that indicates whether to force the download,
 even if the pathname constructed from \code{destdir} and \code{destfile}
 already exists.}
@@ -40,6 +57,11 @@ already exists.}
 \item{dryrun}{A logical value that indicates whether to return the constructed
 web query, without attempting to download the file. This can be helpful in
 designing responses to changing URLs.}
+
+\item{ntrials}{integer controlling the number of times to attempt
+to download the file. The default value, \code{ntrials=3}, indicates
+to try a second time if the first one fails, and a third time if
+the second one fails, but to stop with an error, if all three fail.}
 
 \item{debug}{an integer specifying whether debugging information is
 to be printed during processing. The printing is done by

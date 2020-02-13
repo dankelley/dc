@@ -41,9 +41,10 @@ now fails.}
 
 \item{destdir}{character value indicating the directory in which to store
 downloaded files. The default value of \code{"."} means to store the
-downloaded file in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used; see
+downloaded file in the present working directory.  Set \code{destdir=NULL}
+if \code{destfile} is a filename with full path information.
+File clutter is reduced by creating a top-level directory called
+\code{data}, with subdirectories for various file types; see
 \dQuote{Examples}.}
 
 \item{destfile}{character value indicating the name of the file.

@@ -9,6 +9,7 @@ dc.argoById(
   server,
   destdir = ".",
   destfile,
+  ntrials = 3,
   force = FALSE,
   dryrun = FALSE,
   quiet = FALSE,
@@ -24,14 +25,20 @@ file, and an error is reported if \code{id} does not start with \verb{ftp://}.}
 
 \item{destdir}{character value indicating the directory in which to store
 downloaded files. The default value of \code{"."} means to store the
-downloaded file in the present working directory.  It can be
-helpful to create a top-level directory called \code{data},
-with a subdirectory for each file type used; see
+downloaded file in the present working directory.  Set \code{destdir=NULL}
+if \code{destfile} is a filename with full path information.
+File clutter is reduced by creating a top-level directory called
+\code{data}, with subdirectories for various file types; see
 \dQuote{Examples}.}
 
 \item{destfile}{optional character value that specifies the name to be used
 for the downloaded file. If this is not specified, then a name is determined
 from the value of \code{id}.}
+
+\item{ntrials}{integer controlling the number of times to attempt
+to download the file. The default value, \code{ntrials=3}, indicates
+to try a second time if the first one fails, and a third time if
+the second one fails, but to stop with an error, if all three fail.}
 
 \item{force}{A logical value that indicates whether to force the download,
 even if the pathname constructed from \code{destdir} and \code{destfile}
