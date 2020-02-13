@@ -50,7 +50,9 @@ dc <- function(url=NULL, destdir=".", destfile=NULL, mode="wb",
             cat("curl::curl_download(\"", url[i], "\", \"", destination[i], "\")\n", sep="")
         }
     } else {
-        if (!force && 1 == length(list.files(path=destdir, pattern=paste("^", destfile, "$", sep="")))) {
+        ## overwrite destfile, making it include the full path
+        destfile <- if (is.null(destdir)) destfile else paste0(destdir, "/", destfile)
+        if (!force && file.exists(destfile)) {
             dcDebug(debug, "Skipping \"", destfile, "\" because it is already in \"", destdir, "\n", sep="")
         } else {
             for (i in 1:n) {

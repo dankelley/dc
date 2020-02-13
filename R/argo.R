@@ -177,7 +177,7 @@ dc.argoById <- function(id=NULL,
         dcDebug(debug, "originally, destfile='", destfile, "'\n", sep="")
         destfile <- paste0(destdir, "/", destfile)
         dcDebug(debug, "after resolving destdir, destfile='", destfile, "'\n", sep="")
-        dc(url, destdir=NULL, destfile=destfile, force=force, dryrun=dryrun, ntrials=ntrials, debug=debug)
+        dc(url=id, destdir=NULL, destfile=destfile, force=force, dryrun=dryrun, ntrials=ntrials, debug=debug)
         ## if (!dryrun && (force || !file.exists(destfile)))
         ##    curl::curl_download(url=id, destfile=destfile, quiet=quiet, mode="wb")
         dcDebug(debug, "} # dc.argoById()", sep="", "\n", style="bold", unindent=1)
