@@ -11,4 +11,5 @@ docs
 ^ar_.*txt$
 ^ar_.*txt.gz$
 ^met_.*.csv$
+^issues$
 

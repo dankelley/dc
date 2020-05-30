@@ -7,9 +7,8 @@ Authors@R: c(
 URL: https://dankelley.github.io/dc/index.html
 Maintainer: Dan Kelley <dan.kelley@dal.ca>
 Description: The point of this package is to save users from having to look up data-archiving sources, and to learn how to structure web queries to access data from those sources.
-Suggests: oce, marmap
-Imports: curl
+Imports: curl, marmap (>= 1.0.4), oce
 License: GPL (>= 2)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Encoding: UTF-8

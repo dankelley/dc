@@ -37,8 +37,7 @@
 #' a default value of 4 (corresponding to 7.4km, or 4 nautical
 #' miles) is used. Note that (as of August 2016) the original data are on
 #' a 1-minute grid, which limits the possibilities for `resolution`.
-#' @param format Optional string indicating the type of file to download. If
-#' not supplied, this defaults to `"gmt"`. See \dQuote{Details}.
+#' @param format ignored, as of May 30, 2020.
 #' @template server
 #' @template destdir
 #' @template destfile
@@ -62,26 +61,33 @@
 #'}
 #'
 #' @section Webserver history:
-#' All versions of [dc.topo()] to date have used a NOAA server as
-#' the data source, but the URL has not been static. A list of the
-#' servers that have been used is provided below,
-#' in hopes that it can help users to make guesses
-#' for `server`, should [dc.topo()] fail because of
-#' a fail to download the data because of a broken link. Another
-#' hint is to look at the source code for
-#' [marmap::getNOAA.bathy()] in the \CRANpkg{marmap} package,
-#' which is also forced to track the moving target that is NOAA.
+#' This function has been changed repeatedly over the years, to keep up
+#' with changes in server URLs and query strings. Until May 2020, the
+#' NOAA server was set up to supply data in netcdf and other formats,
+#' but then there was a change to only supply image (tiff) format
+#' or JSON format, neither of which is particularly useful for reading
+#' in R.  To get around this, a scheme used by [marmap::getNOAA.bathy()] 
+#' was mimicked here, to convert a TIFF object into a raster object,
+#' and then the result was written into a local netcdf file.  In this way,
+#' `dc.topo()` is still able to accomplish what it has before May 2020,
+#' although it stopped paying attention to the `format` argument.
 #'
-#' \itemize{
-#' \item August 2016.
-#' \samp{http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy}
-#'
-#' \item December 2016.
-#' \samp{http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
-#'
-#' \item June-September 2017.
-#' \samp{https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
-#' }
+## In case it will be of any use to users or developers, the following
+## is a rough sketch of the changes in the server.
+##
+## \itemize{
+## \item August 2016.
+## \samp{http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy}
+##
+## \item December 2016.
+## \samp{http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
+##
+## \item June-September 2017.
+## \samp{https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
+##
+## \item May 2020.
+## \samp{https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
+## }
 #'
 #' @seealso The work is done with [utils::download.file()].
 #'
@@ -93,70 +99,99 @@
 #' NESDIS NGDC-24. National Geophysical Data Center, NOAA. doi:10.7289/V5C8276M
 #' (access date: Aug 30, 2017).
 #'
-#' @author Dan Kelley 2017-09-16
+#' @author Dan Kelley 2020-05-30
+#'
+#' @examples
+#'\dontrun{
+#' # not run because it is slow, and downloads files
+#' library(dc)
+#' library(oce)
+#' f <- dc.topo(-70, -50, 35, 50, resolution=2, force=TRUE)
+#' topo <- read.topo(f)
+#' summary(topo)
+#' imagep(topo, colormap(name="gmt_globe"))}
 #'
 #' @family functions that download ocean-related data
+#' @importFrom raster flip raster
+#' @importFrom ncdf4 nc_create ncdim_def ncvar_def
 #' @export
-dc.topo <- function(west, east, south, north, resolution, format, server,
+dc.topo <- function(west, east, south, north, resolution, format=NULL, server,
                           destdir=".", destfile, force=FALSE, dryrun=FALSE, # standard args
                           debug=getOption("dcDebug", 0))
 {
+    debug <- max(0, min(1, debug))
+    dcDebug(debug, "dc.topo(west=", west, ", east=", east, ", south=", south,
+            ", north=", north, ", resolution=",
+            if (missing(resolution)) "(missing)" else resolution,
+            ", ...) {", sep="", "\n", unindent=1)
     if (missing(server)) {
-        server <- "https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
+        server <- "https://gis.ngdc.noaa.gov"
+        ## server <- "https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
         ## server <- "http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz"
         ## server <- "http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy"
     }
     if (missing(destdir))
         destdir <- "."
-    if (missing(format))
-        format <- "gmt"
-    if (missing(resolution))
+    if (missing(resolution)) {
         resolution <- 4
-    res <- resolution / 60
+        dcDebug(debug, "using default resolution", resolution, "minutes\n")
+    }
+    resolution <- resolution / 60
     if (west > 180)
         west <- west - 360
     if (east > 180)
         east <- east - 360
+    if (east <= west)
+        stop("must have 'west' > 'east'")
+    if (north <= south)
+        stop("must have 'north' > 'south'")
     wName <- paste(abs(round(west,2)), if (west <= 0) "W" else "E", sep="")
     eName <- paste(abs(round(east,2)), if (east <= 0) "W" else "E", sep="")
     sName <- paste(abs(round(south,2)), if (south <= 0) "S" else "N", sep="")
     nName <- paste(abs(round(north,2)), if (north <= 0) "S" else "N", sep="")
     resolutionName <- paste(resolution, "min", sep="")
     if (missing(destfile))
-        destfile <- paste("topo", wName, eName, sName, nName, resolutionName, sep="_")
-    formatChoices <- c("aaigrid", "gmt", "netcdf")
-    formatId <- pmatch(format, formatChoices)
-    if (is.na(formatId))
-        stop("'format' must be one of the following: '", paste(formatChoices, collapse="' '"), "', but it is '", format, "'")
-    format <- formatChoices[formatId]
-    filename <- ""
-    if (format=="netcdf") {
-        destfile <- paste(destfile, "_netcdf.nc", sep="")
-        filename <- "etopo1.nc"
-    } else if (format=="gmt") {
-        destfile <- paste(destfile, "_gmt.nc", sep="")
-        filename <- "etopo1.grd"
-    } else if (format=="aiagrid") {
-        destfile <- paste(destfile, "_aiagrid.asc", sep="")
-        filename <- "etopo1.asc"
-    } else {
-        stop("unrecognized file format")
+        destfile <- paste0(paste("topo", wName, eName, sName, nName, resolutionName, sep="_"), ".nc")
+    destfile <- paste0(destdir, "/", destfile)
+    if (!force && file.exists(paste0(destdir, "/", destfile))) {
+        dcDebug(debug, "using existing file \"", destfile, "\"\n", sep="")
+        dcDebug(debug, "} # dc.topo\n", unindent=1, sep="")
+        return(destfile)
     }
-    ## The URLS are reverse engineered from the website
-    ##
-    ## Menu item 'ArcGIS ASCII Grid'
-    ## http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy?filename=etopo1.asc&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=aaigrid&resx=0.016666666666666667&resy=0.016666666666666667&bbox=-66.26953124998283,42.03297433243247,-57.788085937485086,46.95026224217615
-
-    ## Menu item 'NetCDF' yields format="netcdf", as below
-    ## http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy?filename=etopo1.nc&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=netcdf&resx=0.016666666666666667&resy=0.016666666666666667&bbox=-63.69873046873296,44.824708282290764,-62.3803710937333,45.259422036342194
-    ##
-    ## Menu item 'GMT NetCDF' yields format="gmt", as below
-    ## http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy?filename=etopo1.grd&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=gmt&resx=0.016666666666666667&resy=0.016666666666666667&bbox=-66.26953124998283,42.03297433243247,-57.788085937485086,46.95026224217615
-    ## http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy?filename=etopo1.grd&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=gmt&resx=0.016666666666666667&resy=0.016666666666666667&bbox=-63.69873046873296,44.824708282290764,-62.3803710937333,45.259422036342194
-    url <- sprintf("%s?filename=%s&request=getcoverage&version=1.0.0&service=wcs&coverage=etopo1&CRS=EPSG:4326&format=%s&resx=%f&resy=%f&bbox=%f,%f,%f,%f",
-                   server, filename, format, res, res, west, south, east, north)
-    rval <- dc(url=url, destdir=destdir, destfile=destfile, dryrun=dryrun, force=force, debug=debug-1)
+    nlon <- (east - west) * 60 / resolution
+    nlat <- (north - south) * 60 / resolution
+    url <- paste0(server, "/arcgis/rest/services/DEM_mosaics/ETOPO1_bedrock/ImageServer/exportImage",
+                  "?bbox=", west, ",", south, ",", east, ",", north,
+                  "&bboxSR=4326",
+                  "&size=", nlon, ",", nlat,
+                  "&imageSR=4326",
+                  "&format=tiff",
+                  "&pixelType=S16",
+                  "&interpolation=+RSP_NearestNeighbor",
+                  "&compression=LZW",
+                  "&f=image")
+    dcDebug(debug, "querying \"", url, "\"\n", sep="")
+    r <- raster::raster(x=url)
+    dcDebug(debug, "converting data\n", sep="")
+    longitude <- seq(r@extent@xmin, r@extent@xmax, length.out=r@ncols)
+    latitude <- seq(r@extent@ymin, r@extent@ymax, length.out=r@nrows)
+    z <- t(raster::as.matrix(raster::flip(r, direction="y")))
+    dcDebug(debug, "saving to \"", destfile, "\"\n", sep="")
+    ## create netcdf file
+    ## dimensions
+    #side <- ncdf4::ncdim_def("side", units="", vals=2.0)
+    fillvalue <- 1e32
+    lonDim <- ncdf4::ncdim_def("lon", "degrees_east", as.double(longitude))
+    #lonVar <- ncdf4::ncvar_def("lon", "degrees_east", lonDim, fillValue, "lon", prec="double")
+    latDim <- ncdf4::ncdim_def("lat", "degrees_north", as.double(latitude))
+    #latVar <- ncdf4::ncvar_def("lat", "degrees_north", latDim, fillValue, "lat", prec="double")
+    Band1 <- ncdf4::ncvar_def("Band1", "m", list(lonDim, latDim), fillvalue, "elevation m", prec="double")
+    nc <- ncdf4::nc_create(destfile, list(Band1))
+    ncdf4::ncvar_put(nc, "Band1", z)
+    ##x_range <- ncdf4::ncvar_put(nc, "x_range", "meters", as.double(range(longitude)), start=1, count=2)
+    ##y_range <- ncdf4::ncvar_put(nc, "y_range", "meters", as.double(range(latitude)), start=1, count=2)
+    ncdf4::nc_close(nc)
     dcDebug(debug, "} # dc.topo", sep="", "\n", unindent=1)
-    rval
+    destfile
 }
 

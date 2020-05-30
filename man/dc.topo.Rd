@@ -10,7 +10,7 @@ dc.topo(
   south,
   north,
   resolution,
-  format,
+  format = NULL,
   server,
   destdir = ".",
   destfile,
@@ -29,8 +29,7 @@ a default value of 4 (corresponding to 7.4km, or 4 nautical
 miles) is used. Note that (as of August 2016) the original data are on
 a 1-minute grid, which limits the possibilities for \code{resolution}.}
 
-\item{format}{Optional string indicating the type of file to download. If
-not supplied, this defaults to \code{"gmt"}. See \dQuote{Details}.}
+\item{format}{ignored, as of May 30, 2020.}
 
 \item{server}{character value giving the base name of the server, used in the
 construction of URL queries. Since servers tend to change over time, this
@@ -104,26 +103,16 @@ also be added here.)
 }
 \section{Webserver history}{
 
-All versions of \code{\link[=dc.topo]{dc.topo()}} to date have used a NOAA server as
-the data source, but the URL has not been static. A list of the
-servers that have been used is provided below,
-in hopes that it can help users to make guesses
-for \code{server}, should \code{\link[=dc.topo]{dc.topo()}} fail because of
-a fail to download the data because of a broken link. Another
-hint is to look at the source code for
-\code{\link[marmap:getNOAA.bathy]{marmap::getNOAA.bathy()}} in the \CRANpkg{marmap} package,
-which is also forced to track the moving target that is NOAA.
-
-\itemize{
-\item August 2016.
-\samp{http://maps.ngdc.noaa.gov/mapviewer-support/wcs-proxy/wcs.groovy}
-
-\item December 2016.
-\samp{http://mapserver.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
-
-\item June-September 2017.
-\samp{https://gis.ngdc.noaa.gov/cgi-bin/public/wcs/etopo1.xyz}
-}
+This function has been changed repeatedly over the years, to keep up
+with changes in server URLs and query strings. Until May 2020, the
+NOAA server was set up to supply data in netcdf and other formats,
+but then there was a change to only supply image (tiff) format
+or JSON format, neither of which is particularly useful for reading
+in R.  To get around this, a scheme used by \code{\link[marmap:getNOAA.bathy]{marmap::getNOAA.bathy()}}
+was mimicked here, to convert a TIFF object into a raster object,
+and then the result was written into a local netcdf file.  In this way,
+\code{dc.topo()} is still able to accomplish what it has before May 2020,
+although it stopped paying attention to the \code{format} argument.
 }
 
 \examples{
@@ -136,6 +125,15 @@ imagep(topo, zlim=c(-400, 400), drawTriangles=TRUE)
 data(coastlineWorldFine, package="ocedata")
 lines(coastlineWorldFine[["longitude"]], coastlineWorldFine[["latitude"]])
 }
+
+\dontrun{
+# not run because it is slow, and downloads files
+library(dc)
+library(oce)
+f <- dc.topo(-70, -50, 35, 50, resolution=2, force=TRUE)
+topo <- read.topo(f)
+summary(topo)
+imagep(topo, colormap(name="gmt_globe"))}
 
 }
 \references{
@@ -160,6 +158,6 @@ Other functions that download ocean-related data:
 \author{
 Dan Kelley
 
-Dan Kelley 2017-09-16
+Dan Kelley 2020-05-30
 }
 \concept{functions that download ocean-related data}
